@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
     <Header></Header>
-    <main className="p-12">
+    <main className="px-12 py-6">
       <Search></Search>
     </main>
     </>

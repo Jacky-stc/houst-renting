@@ -1,11 +1,16 @@
+import Image from 'next/image'
 import React from 'react'
+import company_logo from '../../public/image/house-renting-logo2.png'
 
 const Header = () => {
   return (
     <header>
-        <nav className=' px-12 py-6'>
+        <nav className=' px-12 py-6 flex items-center justify-between'>
             <div>
-              <svg className='inline' fill="#d57225" height="50px" width="50px" version="1.1" id="Layer_1" viewBox="0 0 512 512">
+              {/* <img src='image/house-renting-logo2.png' width={250}/> */}
+              <img src='image/house-renting-logo.png' width={250}/>
+              {/* <Image alt='company logo' src={company_logo} width={50} height={50}></Image> */}
+              {/* <svg className='inline' fill="#d57225" height="50px" width="50px" version="1.1" id="Layer_1" viewBox="0 0 512 512">
   <g>
     <g>
       <path d="M375.546,330.71h-47.453c-4.328,0-7.837,3.509-7.837,7.837v78.411c0,4.328,3.509,7.837,7.837,7.837h47.453    c4.328,0,7.837-3.509,7.837-7.837v-78.411C383.382,334.219,379.875,330.71,375.546,330.71z M367.709,409.122h-31.78v-62.739h31.78    V409.122z"/>
@@ -42,8 +47,13 @@ const Header = () => {
     </g>
   </g>
               </svg>
-              <span className=' align-sub ml-2 text-xl'>寓聖租屋</span>
+              <span className=' align-sub ml-2 text-xl'>寓聖租屋</span> */}
             </div>
+            <ul className='flex gap-6 mt-6 mr-8'>
+              <li className=' border-b border-b-slate-400'>回報表單</li>
+              <li className=' border-b border-b-slate-400'>開發表單</li>
+              <li className=' border-b border-b-slate-400'>test</li>
+            </ul>
         </nav>
     </header>
   )

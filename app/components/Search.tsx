@@ -3,6 +3,10 @@ import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../lib/store'
 import { changeSearchNumber } from '../../lib/features/search/searchSlice'
+import { IoSearchOutline } from 'react-icons/io5'
+import { FaLocationDot, FaPhone } from 'react-icons/fa6'
+import { MdBedroomParent, MdOutlineBed, MdOutlineMeetingRoom } from 'react-icons/md'
+import { BsHouses } from 'react-icons/bs'
 
 interface Props {
     apiKey: string,
@@ -45,14 +49,14 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
     }
     // Sheets 中要取得的資料範圍，格式如下
     // Sheets API 的 URL
-    const handleClick = ()=>{
+    const handleSearch = ()=>{
         const regionCode = inputValue[0]
         const range = regionList[regionCode]
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
-        console.log("clicked")
-        console.log(inputValue)
         dispatch(changeSearchNumber(inputValue))
         async function getGoogleSheetData(){
+            console.log(apiKey)
+            console.log(url)
             const response = await fetch(url)
             const data = await response.json()
             console.log(data)
@@ -95,18 +99,33 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
         getGoogleSheetData()
     }
   return (
-    <div>
-        <div>物件查詢系統</div>
-        <input value={inputValue} onChange={e=> setInputValue(e.target.value)} className="border-2 rounded-sm px-2 py-1" placeholder="搜尋"></input><button onClick={handleClick}>搜尋</button>
+    <div className='mx-6'>
+        <div className='flex items-center border px-2 py-1 w-80 rounded'>
+            <IoSearchOutline></IoSearchOutline>
+            <input value={inputValue} onChange={e=> setInputValue(e.target.value)} className="rounded-sm px-2 py-1 mx-1" placeholder="輸入物件編號或區域"></input>
+            <button onClick={handleSearch}>搜尋</button>
+        </div>
         {rentingData &&
         <>
         <div className='py-4'>
-        <div className='inline-block align-sub text-3xl'>{rentingData.編號}</div>
-        <span className='py-1 px-2 tracking-wider ml-2 rounded-xl text-xs bg-red-500 text-slate-100'>{rentingData.物件狀態}</span>
-        <div className=' text-lg align-text-top mr-2'></div>
-        <div className=' text-lg align-text-top mr-2'>{rentingData.姓名} {rentingData.電話}</div>
-        <div>{rentingData.格局} / {rentingData.坪數}坪 / {rentingData.型態}</div>
-        <div className='text-red-600'><span className='text-2xl font-medium'>{rentingData.租金}</span> <span>元/月</span></div>
+        <div className='my-4'>
+            <div className='inline-block align-sub text-3xl'>{rentingData.編號}</div>
+            <span className='py-1 px-2 tracking-wider ml-2 rounded-xl text-xs bg-red-500 text-slate-100'>{rentingData.物件狀態}</span>
+        </div>
+        <div className='my-1'>
+            <FaLocationDot className='inline-block'></FaLocationDot>
+            <span className='mx-2'>{rentingData.地址}</span>
+        </div>
+        <div className='my-1'>
+            <FaPhone className='inline-block'></FaPhone>
+            <div className='inline-block mx-2 align-text-top mr-2'>{rentingData.姓名} {rentingData.電話}</div>
+        </div>
+        <div className='my-1'>
+            <MdOutlineBed className='inline-block' color='green'></MdOutlineBed><span className='mx-2'>{rentingData.格局}</span>
+            <MdOutlineMeetingRoom className='inline-block' color='green'></MdOutlineMeetingRoom><span className='mx-2'>{rentingData.坪數}坪</span>
+            <BsHouses className='inline-block' color='green'></BsHouses><span className='mx-2'>{rentingData.型態}</span>
+        </div>
+        <div className='text-red-600'><span className='text-xl font-medium'>{rentingData.租金}</span> <span>元/月</span></div>
         </div>
         </>
         }

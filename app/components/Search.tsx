@@ -39,6 +39,7 @@ interface rentingDataType  {
 
 const Search:FC<Props> = ({apiKey, sheetId}) => {
     const [inputValue, setInputValue] = useState<string>('')
+    const [inputFocus, setInputFocus] = useState<Boolean>(false)
     const [rentingData, setRentingData] = useState<rentingDataType>()
     const [errorMessage, setErrorMessage] = useState<string>('')
     const searchNumber = useSelector((state: RootState)=> state.search.searchNumber)
@@ -108,9 +109,9 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
     }
   return (
     <div className='mx-6 font-inter tracking-wide'>
-        <div className='flex items-center border px-2 py-1 w-full sm:w-72 rounded'>
+        <div className={`flex items-center px-2 py-1 w-full sm:w-72 rounded ${inputFocus?' border-2 border-sky-400':'border'}`}>
             <IoSearchOutline></IoSearchOutline>
-            <input value={inputValue} onChange={e=> setInputValue(e.target.value)} onKeyDown={(e)=>{handleEnter(e)}} className="rounded-sm px-2 py-1 mx-1" placeholder="輸入物件編號或區域"></input>
+            <input value={inputValue} onFocus={()=>{setInputFocus(true)}} onBlur={()=>{setInputFocus(false)}} onChange={e=> setInputValue(e.target.value)} onKeyDown={(e)=>{handleEnter(e)}} className="rounded-sm px-2 py-1 mx-1 focus:outline-0" placeholder="輸入物件編號或區域"></input>
         </div>
         {rentingData &&
         <>

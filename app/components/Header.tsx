@@ -8,7 +8,7 @@ const Header = () => {
         <nav className=' px-12 py-6 flex items-center justify-between'>
             <div>
               {/* <img src='image/house-renting-logo2.png' width={250}/> */}
-              <img src='image/house-renting-logo.png' width={200}/>
+              <img src='image/house-renting-logo.png' className='w-36 sm:w-44'/>
               {/* <Image alt='company logo' src={company_logo} width={50} height={50}></Image> */}
               {/* <svg className='inline' fill="#d57225" height="50px" width="50px" version="1.1" id="Layer_1" viewBox="0 0 512 512">
   <g>
@@ -49,11 +49,11 @@ const Header = () => {
               </svg>
               <span className=' align-sub ml-2 text-xl'>寓聖租屋</span> */}
             </div>
-            <ul className='flex gap-6 mt-6 mr-8'>
+            {/* <ul className='flex gap-6 mt-6 mr-8'>
               <li className=' border-b border-b-slate-400'>回報表單</li>
               <li className=' border-b border-b-slate-400'>開發表單</li>
               <li className=' border-b border-b-slate-400'>test</li>
-            </ul>
+            </ul> */}
         </nav>
     </header>
   )

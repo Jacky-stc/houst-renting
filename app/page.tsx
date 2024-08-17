@@ -6,7 +6,7 @@ export default function Home() {
   const apiKey:string = process.env.APIKEY || ''
   const sheetId:string = process.env.SHEETID || ''
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col font-inter">
     <Header></Header>
     <main className="px-2 py-6 flex flex-grow">
       <Navbar></Navbar>

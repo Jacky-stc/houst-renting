@@ -5,8 +5,11 @@ import { RootState } from '../../lib/store'
 import { changeSearchNumber } from '../../lib/features/search/searchSlice'
 import { IoSearchOutline } from 'react-icons/io5'
 import { FaLocationDot, FaPhone } from 'react-icons/fa6'
-import { MdBedroomParent, MdOutlineBed, MdOutlineMeetingRoom } from 'react-icons/md'
+import { MdOutlineBed, MdOutlineMeetingRoom } from 'react-icons/md'
 import { BsHouses } from 'react-icons/bs'
+import { LuDog } from 'react-icons/lu'
+import { PiCookingPotBold } from 'react-icons/pi'
+import { TbManFilled } from 'react-icons/tb'
 
 interface Props {
     apiKey: string,
@@ -98,12 +101,16 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
         }
         getGoogleSheetData()
     }
+    const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>)=>{
+        if(e.code === 'Enter'){
+            handleSearch()
+        }
+    }
   return (
-    <div className='mx-6'>
-        <div className='flex items-center border px-2 py-1 w-80 rounded'>
+    <div className='mx-6 font-inter tracking-wide'>
+        <div className='flex items-center border px-2 py-1 w-auto sm:w-72 rounded'>
             <IoSearchOutline></IoSearchOutline>
-            <input value={inputValue} onChange={e=> setInputValue(e.target.value)} className="rounded-sm px-2 py-1 mx-1" placeholder="輸入物件編號或區域"></input>
-            <button onClick={handleSearch}>搜尋</button>
+            <input value={inputValue} onChange={e=> setInputValue(e.target.value)} onKeyDown={(e)=>{handleEnter(e)}} className="rounded-sm px-2 py-1 mx-1" placeholder="輸入物件編號或區域"></input>
         </div>
         {rentingData &&
         <>
@@ -111,19 +118,26 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
         <div className='my-4'>
             <div className='inline-block align-sub text-3xl'>{rentingData.編號}</div>
             <span className='py-1 px-2 tracking-wider ml-2 rounded-xl text-xs bg-red-500 text-slate-100'>{rentingData.物件狀態}</span>
+            <span className=' align-sub text-lg ml-4'>{rentingData.租金} <span className='text-sm'>元/月</span></span>
         </div>
         <div className='my-1'>
             <FaLocationDot className='inline-block'></FaLocationDot>
             <span className='mx-2'>{rentingData.地址}</span>
         </div>
         <div className='my-1'>
+            <TbManFilled className='inline-block'></TbManFilled><span className='mx-2'>{rentingData.姓名} </span>
             <FaPhone className='inline-block'></FaPhone>
-            <div className='inline-block mx-2 align-text-top mr-2'>{rentingData.姓名} {rentingData.電話}</div>
+            <div className='inline-block mx-2 align-text-top mr-2'>{rentingData.電話}</div>
         </div>
         <div className='my-1'>
-            <MdOutlineBed className='inline-block' color='green'></MdOutlineBed><span className='mx-2'>{rentingData.格局}</span>
-            <MdOutlineMeetingRoom className='inline-block' color='green'></MdOutlineMeetingRoom><span className='mx-2'>{rentingData.坪數}坪</span>
-            <BsHouses className='inline-block' color='green'></BsHouses><span className='mx-2'>{rentingData.型態}</span>
+            <MdOutlineBed className='inline-block' color='green'></MdOutlineBed><span className='ml-1.5 mr-6 align-middle'>{rentingData.格局}</span>
+            <MdOutlineMeetingRoom className='inline-block' color='green'></MdOutlineMeetingRoom><span className='ml-1.5 mr-6 align-middle'>{rentingData.坪數}坪</span>
+            <BsHouses className='inline-block' color='green'></BsHouses><span className='ml-1.5 mr-6 align-middle'>{rentingData.型態}</span>
+            <BsHouses className='inline-block' color='green'></BsHouses><span className='ml-1.5 mr-6 align-middle'>{rentingData.現況}</span>
+        </div>
+        <div className='my-1'>
+            <LuDog className='inline-block' color='#df8a02'></LuDog><span className='mx-2'>{rentingData.寵物}</span>
+            <PiCookingPotBold className='inline-block'></PiCookingPotBold><span className='mx-2'>{rentingData.開伙}</span>
         </div>
         <div className='text-red-600'><span className='text-xl font-medium'>{rentingData.租金}</span> <span>元/月</span></div>
         </div>

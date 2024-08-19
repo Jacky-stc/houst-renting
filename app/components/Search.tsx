@@ -123,7 +123,7 @@ const calendar = new Calendar(event);
 // 生成 iCal 連結
 const icalLink = calendar.generateICS();
 console.log('iCal 連結:', icalLink);
-const icalLinkNode = document.querySelector("#icalLink")
+const icalLinkNode = document.querySelector("#icalLink") as HTMLAnchorElement
 if(icalLinkNode){
     icalLinkNode.textContent = icalLink
     icalLinkNode.href = icalLink
@@ -132,7 +132,7 @@ if(icalLinkNode){
 // 生成 Google Calendar 連結
 const googleCalendarLink = calendar.generateGoogleCalendarURL();
 console.log('Google Calendar 連結:', googleCalendarLink);
-const googleLink = document.querySelector("#googleLink")
+const googleLink = document.querySelector("#googleLink") as HTMLAnchorElement
 if(googleLink){
     googleLink.textContent = googleCalendarLink
     googleLink.href = googleCalendarLink

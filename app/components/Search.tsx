@@ -10,6 +10,7 @@ import { BsHouses } from 'react-icons/bs'
 import { LuDog } from 'react-icons/lu'
 import { PiCookingPotBold } from 'react-icons/pi'
 import { TbManFilled } from 'react-icons/tb'
+import { Calendar } from './calendar'
 
 interface Props {
     apiKey: string,
@@ -36,6 +37,14 @@ interface rentingDataType  {
     開伙:string,
     寵物:string,
 }
+
+const event = {
+    DTSTART: '20240817T120000Z', // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+    DTEND: '20240817T130000Z',   // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+    SUMMARY: '會議',             // 標題
+    DESCRIPTION: '團隊會議',     // 描述
+    TZID: 'Asia/Taipei'          // 時區
+  };
 
 const Search:FC<Props> = ({apiKey, sheetId}) => {
     const [inputValue, setInputValue] = useState<string>('')
@@ -108,23 +117,47 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
         }
     }
     const handleCalendar = ()=>{
-        const event = `BEGIN:VCALENDAR
-            VERSION:2.0
-            BEGIN:VEVENT
-            DTSTART:20240819T170000Z
-            DTEND:20240819T180000Z
-            SUMMARY:Sample Event
-            DESCRIPTION:This is a sample event description.
-            END:VEVENT
-            END:VCALENDAR`;
-        const blob = new Blob([event], {type: 'text/calendar'})
-        const url = URL.createObjectURL(blob)
-        console.log(url)
-        const link = document.createElement('a')
-        link.href = url
-        link.textContent = 'link'
-        link.download = 'event.ics'
-        document.querySelector("#cLink")?.appendChild(link)
+        // 建立 Calendar 實例
+const calendar = new Calendar(event);
+
+// 生成 iCal 連結
+const icalLink = calendar.generateICS();
+console.log('iCal 連結:', icalLink);
+const icalLinkNode = document.querySelector("#icalLink")
+if(icalLinkNode){
+    icalLinkNode.textContent = icalLink
+    icalLinkNode.href = icalLink
+}
+
+// 生成 Google Calendar 連結
+const googleCalendarLink = calendar.generateGoogleCalendarURL();
+console.log('Google Calendar 連結:', googleCalendarLink);
+const googleLink = document.querySelector("#googleLink")
+if(googleLink){
+    googleLink.textContent = googleCalendarLink
+    googleLink.href = googleCalendarLink
+}
+
+// 生成 Yahoo Calendar 連結
+const yahooCalendarLink = calendar.generateYahooCalendarURL();
+console.log('Yahoo Calendar 連結:', yahooCalendarLink);
+        // const event = `BEGIN:VCALENDAR
+        //     VERSION:2.0
+        //     BEGIN:VEVENT
+        //     DTSTART:20240819T170000Z
+        //     DTEND:20240819T180000Z
+        //     SUMMARY:Sample Event
+        //     DESCRIPTION:This is a sample event description.
+        //     END:VEVENT
+        //     END:VCALENDAR`;
+        // const blob = new Blob([event], {type: 'text/calendar'})
+        // const url = URL.createObjectURL(blob)
+        // console.log(url)
+        // const link = document.createElement('a')
+        // link.href = url
+        // link.textContent = 'link'
+        // link.download = 'event.ics'
+        // document.querySelector("#cLink")?.appendChild(link)
         // const OAuth2Client = new 
         // async function getCalendar(){
         //     const response = await fetch(`https://www.googleapis.com/calendar/v3/users/me/calendarList?key=${apiKey}`)
@@ -169,6 +202,18 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
             <PiCookingPotBold className='inline-block'></PiCookingPotBold><span className='mx-2'>{rentingData.開伙}</span>
         </div>
         <div className='text-red-600'><span className='text-xl font-medium'>{rentingData.租金}</span> <span>元/月</span></div>
+        <div>
+            <div>ical Link</div>
+        <a id='icalLink'></a>
+        </div>
+        <div>
+            <div>google Link</div>
+        <a id='googleLink'></a><br/>
+        </div>
+        <div>
+            <div>yahoo Link</div>
+        <a id='yahooLink'></a>
+        </div>
         </div>
         </>
         }

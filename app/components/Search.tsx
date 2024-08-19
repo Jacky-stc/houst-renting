@@ -107,11 +107,38 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
             handleSearch()
         }
     }
+    const handleCalendar = ()=>{
+        const event = `BEGIN:VCALENDAR
+            VERSION:2.0
+            BEGIN:VEVENT
+            DTSTART:20240819T170000Z
+            DTEND:20240819T180000Z
+            SUMMARY:Sample Event
+            DESCRIPTION:This is a sample event description.
+            END:VEVENT
+            END:VCALENDAR`;
+        const blob = new Blob([event], {type: 'text/calendar'})
+        const url = URL.createObjectURL(blob)
+        console.log(url)
+        const link = document.createElement('a')
+        link.href = url
+        link.textContent = 'link'
+        link.download = 'event.ics'
+        document.querySelector("#cLink")?.appendChild(link)
+        // const OAuth2Client = new 
+        // async function getCalendar(){
+        //     const response = await fetch(`https://www.googleapis.com/calendar/v3/users/me/calendarList?key=${apiKey}`)
+        //     const result = await response.json()
+        //     console.log(result)
+        // }
+        // getCalendar()
+    }
   return (
     <div className='mx-6 font-inter tracking-wide'>
-        <div className={`flex items-center px-2 py-1 w-full sm:w-72 rounded ${inputFocus?' border-2 border-sky-400':'border'}`}>
+        <div className={`flex items-center px-2 py-1 w-full sm:w-72 rounded ${inputFocus?' border border-sky-400':'border'}`}>
             <IoSearchOutline></IoSearchOutline>
             <input value={inputValue} onFocus={()=>{setInputFocus(true)}} onBlur={()=>{setInputFocus(false)}} onChange={e=> setInputValue(e.target.value)} onKeyDown={(e)=>{handleEnter(e)}} className="rounded-sm px-2 py-1 mx-1 focus:outline-0" placeholder="輸入物件編號或區域"></input>
+            <button onClick={handleSearch}>搜尋</button>
         </div>
         {rentingData &&
         <>
@@ -120,6 +147,7 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
             <div className='inline-block align-sub text-3xl'>{rentingData.編號}</div>
             <span className='py-1 px-2 tracking-wider ml-2 rounded-xl text-xs bg-red-500 text-slate-100'>{rentingData.物件狀態}</span>
             <span className=' align-sub text-lg ml-4'>{rentingData.租金} <span className='text-sm'>元/月</span></span>
+            <button id='cLink' type='button' className='align-sub ml-4 underline' onClick={handleCalendar}>test</button>
         </div>
         <div className='my-1'>
             <FaLocationDot className='inline-block'></FaLocationDot>

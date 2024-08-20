@@ -128,6 +128,13 @@ if(icalLinkNode){
     icalLinkNode.textContent = icalLink
     icalLinkNode.href = icalLink
 }
+const webCalLink = calendar.generateWEBCAL()
+console.log('webCal 連結:', webCalLink);
+const webCalLinkNode = document.querySelector("#webCalLink") as HTMLAnchorElement
+if(webCalLinkNode){
+    webCalLinkNode.textContent = webCalLink
+    webCalLinkNode.href = webCalLink
+}
 
 // 生成 Google Calendar 連結
 const googleCalendarLink = calendar.generateGoogleCalendarURL();
@@ -205,6 +212,10 @@ console.log('Yahoo Calendar 連結:', yahooCalendarLink);
         <div>
             <div>ical Link</div>
         <a id='icalLink'></a>
+        </div>
+        <div>
+            <div>web cal Link</div>
+        <a id='webCalLink'></a>
         </div>
         <div>
             <div>google Link</div>

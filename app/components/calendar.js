@@ -46,6 +46,19 @@ END:VEVENT
 END:VCALENDAR`;
     return "data:text/calendar;charset=utf-8," + encodeURIComponent(icsMSG);
   }
+  generateWEBCAL(){
+    const { DTSTART, DTEND, SUMMARY, DESCRIPTION, TZID } = this.event;
+    const icsMSG = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART;VALUE=DATE;TZID=${TZID}:${DTSTART}
+DTEND;VALUE=DATE;TZID=${TZID}:${DTEND}
+SUMMARY:${SUMMARY}
+DESCRIPTION:${DESCRIPTION}
+END:VEVENT
+END:VCALENDAR`;
+    return "webcal:text/calendar;charset=utf-8," + encodeURIComponent(icsMSG);
+  }
 
   /**
    * 產生 Google Calendar 的連結

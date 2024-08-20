@@ -4,13 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../lib/store'
 import { changeSearchNumber } from '../../lib/features/search/searchSlice'
 import { IoSearchOutline } from 'react-icons/io5'
-import { FaLocationDot, FaPhone } from 'react-icons/fa6'
+import { FaLocationDot, FaPhone, FaRegCalendar } from 'react-icons/fa6'
 import { MdOutlineBed, MdOutlineMeetingRoom } from 'react-icons/md'
 import { BsHouses } from 'react-icons/bs'
 import { LuDog } from 'react-icons/lu'
 import { PiCookingPotBold } from 'react-icons/pi'
 import { TbManFilled } from 'react-icons/tb'
 import { Calendar } from './calendar'
+import Loader from './Loader'
+import { FcCalendar } from 'react-icons/fc'
+import { FaRegCalendarAlt } from 'react-icons/fa'
 
 interface Props {
     apiKey: string,
@@ -51,6 +54,7 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
     const [inputFocus, setInputFocus] = useState<Boolean>(false)
     const [rentingData, setRentingData] = useState<rentingDataType>()
     const [errorMessage, setErrorMessage] = useState<string>('')
+    const [loading, setLoading] = useState<Boolean>(false)
     const searchNumber = useSelector((state: RootState)=> state.search.searchNumber)
     const dispatch = useDispatch()
     
@@ -70,11 +74,11 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
         async function getGoogleSheetData(){
             console.log(apiKey)
             console.log(url)
+            setLoading(true)
             const response = await fetch(url)
             const data = await response.json()
             console.log(data)
             if(data.values){
-                console.log("yes")
                 const displayText = data.values.filter((item: Array<string>)=> item[1] === inputValue)
                 console.log(displayText)
                 if(displayText.length > 0){
@@ -103,6 +107,7 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
                     console.log(rentingResource)
                     setRentingData(rentingResource)
                     setErrorMessage("")
+                    setLoading(false)
                     console.log(rentingData)
                 }else{
                     setErrorMessage("no item")
@@ -118,116 +123,86 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
     }
     const handleCalendar = ()=>{
         // 建立 Calendar 實例
-const calendar = new Calendar(event);
+        const calendar = new Calendar(event);
 
-// 生成 iCal 連結
-const icalLink = calendar.generateICS();
-console.log('iCal 連結:', icalLink);
-const icalLinkNode = document.querySelector("#icalLink") as HTMLAnchorElement
-if(icalLinkNode){
-    icalLinkNode.textContent = icalLink
-    icalLinkNode.href = icalLink
-}
-const webCalLink = calendar.generateWEBCAL()
-console.log('webCal 連結:', webCalLink);
-const webCalLinkNode = document.querySelector("#webCalLink") as HTMLAnchorElement
-if(webCalLinkNode){
-    webCalLinkNode.textContent = webCalLink
-    webCalLinkNode.href = webCalLink
-}
-
-// 生成 Google Calendar 連結
-const googleCalendarLink = calendar.generateGoogleCalendarURL();
-console.log('Google Calendar 連結:', googleCalendarLink);
-const googleLink = document.querySelector("#googleLink") as HTMLAnchorElement
-if(googleLink){
-    googleLink.textContent = googleCalendarLink
-    googleLink.href = googleCalendarLink
-}
-
-// 生成 Yahoo Calendar 連結
-const yahooCalendarLink = calendar.generateYahooCalendarURL();
-console.log('Yahoo Calendar 連結:', yahooCalendarLink);
-        // const event = `BEGIN:VCALENDAR
-        //     VERSION:2.0
-        //     BEGIN:VEVENT
-        //     DTSTART:20240819T170000Z
-        //     DTEND:20240819T180000Z
-        //     SUMMARY:Sample Event
-        //     DESCRIPTION:This is a sample event description.
-        //     END:VEVENT
-        //     END:VCALENDAR`;
-        // const blob = new Blob([event], {type: 'text/calendar'})
-        // const url = URL.createObjectURL(blob)
-        // console.log(url)
-        // const link = document.createElement('a')
-        // link.href = url
-        // link.textContent = 'link'
-        // link.download = 'event.ics'
-        // document.querySelector("#cLink")?.appendChild(link)
-        // const OAuth2Client = new 
-        // async function getCalendar(){
-        //     const response = await fetch(`https://www.googleapis.com/calendar/v3/users/me/calendarList?key=${apiKey}`)
-        //     const result = await response.json()
-        //     console.log(result)
+        // 生成 iCal 連結
+        // const icalLink = calendar.generateICS();
+        // console.log('iCal 連結:', icalLink);
+        // const icalLinkNode = document.querySelector("#icalLink") as HTMLAnchorElement
+        // if(icalLinkNode){
+        //     icalLinkNode.textContent = icalLink
+        //     icalLinkNode.href = icalLink
         // }
-        // getCalendar()
+        // const webCalLink = calendar.generateWEBCAL()
+        // console.log('webCal 連結:', webCalLink);
+        // const webCalLinkNode = document.querySelector("#webCalLink") as HTMLAnchorElement
+        // if(webCalLinkNode){
+        //     webCalLinkNode.textContent = webCalLink
+        //     webCalLinkNode.href = webCalLink
+        // }
+
+        // 生成 Google Calendar 連結
+        const googleCalendarLink = calendar.generateGoogleCalendarURL();
+        const googleLinkContainer = document.createElement('a')
+        googleLinkContainer.href = googleCalendarLink
+        googleLinkContainer.click()
+        // console.log('Google Calendar 連結:', googleCalendarLink);
+        // const googleLink = document.querySelector("#googleLink") as HTMLAnchorElement
+        // if(googleLink){
+        //     googleLink.textContent = googleCalendarLink
+        //     googleLink.href = googleCalendarLink
+        // }
+
+        // 生成 Yahoo Calendar 連結
+        // const yahooCalendarLink = calendar.generateYahooCalendarURL();
+        // console.log('Yahoo Calendar 連結:', yahooCalendarLink);
     }
   return (
     <div className='mx-6 font-inter tracking-wide'>
         <div className={`flex items-center px-2 py-1 w-full sm:w-72 rounded ${inputFocus?' border border-sky-400':'border'}`}>
             <IoSearchOutline></IoSearchOutline>
-            <input value={inputValue} onFocus={()=>{setInputFocus(true)}} onBlur={()=>{setInputFocus(false)}} onChange={e=> setInputValue(e.target.value)} onKeyDown={(e)=>{handleEnter(e)}} className="rounded-sm px-2 py-1 mx-1 focus:outline-0" placeholder="輸入物件編號或區域"></input>
+            <input style={{WebkitTapHighlightColor: 'transparent'}} type='search' value={inputValue} onFocus={()=>{setInputFocus(true)}} onBlur={()=>{setInputFocus(false)}} onChange={e=> setInputValue(e.target.value)} onKeyDown={(e)=>{handleEnter(e)}} className="rounded-sm px-2 py-1 mx-1 focus:outline-0" placeholder="輸入物件編號或區域"></input>
             <button onClick={handleSearch}>搜尋</button>
         </div>
-        {rentingData &&
-        <>
-        <div className='py-4'>
-        <div className='my-4'>
-            <div className='inline-block align-sub text-3xl'>{rentingData.編號}</div>
-            <span className='py-1 px-2 tracking-wider ml-2 rounded-xl text-xs bg-red-500 text-slate-100'>{rentingData.物件狀態}</span>
-            <span className=' align-sub text-lg ml-4'>{rentingData.租金} <span className='text-sm'>元/月</span></span>
-            <button id='cLink' type='button' className='align-sub ml-4 underline' onClick={handleCalendar}>test</button>
-        </div>
-        <div className='my-1'>
-            <FaLocationDot className='inline-block'></FaLocationDot>
-            <span className='mx-2'>{rentingData.地址}</span>
-        </div>
-        <div className='my-1'>
-            <TbManFilled className='inline-block'></TbManFilled><span className='mx-2'>{rentingData.姓名} </span>
-            <FaPhone className='inline-block'></FaPhone>
-            <div className='inline-block mx-2 align-text-top mr-2'>{rentingData.電話}</div>
-        </div>
-        <div className='my-1'>
-            <MdOutlineBed className='inline-block' color='green'></MdOutlineBed><span className='ml-1.5 mr-6 align-middle'>{rentingData.格局}</span>
-            <MdOutlineMeetingRoom className='inline-block' color='green'></MdOutlineMeetingRoom><span className='ml-1.5 mr-6 align-middle'>{rentingData.坪數}坪</span>
-            <BsHouses className='inline-block' color='green'></BsHouses><span className='ml-1.5 mr-6 align-middle'>{rentingData.型態}</span>
-            <BsHouses className='inline-block' color='green'></BsHouses><span className='ml-1.5 mr-6 align-middle'>{rentingData.現況}</span>
-        </div>
-        <div className='my-1'>
-            <LuDog className='inline-block' color='#df8a02'></LuDog><span className='mx-2'>{rentingData.寵物}</span>
-            <PiCookingPotBold className='inline-block'></PiCookingPotBold><span className='mx-2'>{rentingData.開伙}</span>
-        </div>
-        <div className='text-red-600'><span className='text-xl font-medium'>{rentingData.租金}</span> <span>元/月</span></div>
-        <div>
-            <div>ical Link</div>
-        <a id='icalLink'></a>
-        </div>
-        <div>
-            <div>web cal Link</div>
-        <a id='webCalLink'></a>
-        </div>
-        <div>
-            <div>google Link</div>
-        <a id='googleLink'></a><br/>
-        </div>
-        <div>
-            <div>yahoo Link</div>
-        <a id='yahooLink'></a>
-        </div>
-        </div>
-        </>
-        }
+        {loading? <Loader></Loader>:rentingData &&
+            <>
+            <div className='py-4'>
+                <div className='my-4'>
+                    <div className='inline-block align-sub text-3xl'>{rentingData.編號}</div>
+                    <span className='py-1 px-2 ml-2 rounded-xl text-xs bg-red-500 text-slate-100'>{rentingData.物件狀態}</span>
+                    <span className=' align-sub text-lg ml-4'>{rentingData.租金} <span className='text-sm'>元/月</span></span>
+                    <div className='inline-block align-sub ml-4 cursor-pointer' onClick={handleCalendar}>
+                    <FaRegCalendarAlt className='inline-block align-text-top'></FaRegCalendarAlt>
+                    </div>
+                </div>
+                <div className='tracking-wider'>
+                    <div className='my-2'>
+                        <FaLocationDot className='inline-block'></FaLocationDot>
+                        <span className='mx-2'>{rentingData.地址}</span>
+                    </div>
+                    <div className='my-2'>
+                        <MdOutlineBed className='inline-block' color='green'></MdOutlineBed><span className='ml-1.5 mr-5 align-middle'>{rentingData.格局}</span>
+                        <MdOutlineMeetingRoom className='inline-block' color='green'></MdOutlineMeetingRoom><span className='ml-1.5 mr-5 align-middle'>{rentingData.坪數}坪</span>
+                        <BsHouses className='inline-block' color='green'></BsHouses><span className='ml-1.5 mr-5 align-middle'>{rentingData.型態}</span>
+                        <BsHouses className='inline-block' color='green'></BsHouses><span className='ml-1.5 mr-5 align-middle'>{rentingData.現況}</span>
+                    </div>
+                    <div className='my-2'>
+                        <LuDog className='inline-block' color='#df8a02'></LuDog><span className='ml-1.5 mr-5 align-middle'>{rentingData.寵物}</span>
+                        <PiCookingPotBold className='inline-block'></PiCookingPotBold><span className='ml-1.5 mr-5 align-middle'>{rentingData.開伙}</span>
+                    </div>
+                    <div className='my-2'>
+                        <TbManFilled className='inline-block'></TbManFilled><span className='ml-1.5 mr-5 align-middle'>{rentingData.姓名} </span>
+                        <FaPhone className='inline-block'></FaPhone>
+                        <div className='inline-block ml-1.5 mr-5 align-middle'>{rentingData.電話}</div>
+                    </div>
+                </div>
+                <div>
+                    <h2 className='mt-8 mb-2 text-lg font-bold'>對話要點</h2>
+                    <div>{rentingData.對話要點}</div>
+                </div>
+            </div>
+            </>
+            }    
         {errorMessage && <div>{errorMessage}</div> }
     </div>
   )

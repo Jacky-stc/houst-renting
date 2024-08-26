@@ -14,7 +14,7 @@ const Hamburger = () => {
   return (
     <>
         <button onClick={handleClick} 
-         className="flex flex-col justify-center items-center block sm:hidden z-50">
+         className="flex flex-col justify-center items-center sm:hidden z-50">
             <span className={`bg-slate-700 block transition-all duration-300 ease-out 
                             h-0.5 w-6 rounded-sm ${isOpen ? 
                             'rotate-45 translate-y-1' : '-translate-y-0.5'

@@ -6,7 +6,7 @@ import { VscSearch } from 'react-icons/vsc'
 
 const Navbar = () => {
   return (
-    <div className='w-30 border-r border-slate-400 hidden sm:block'>
+    <nav className='w-30 border-r border-slate-400 hidden sm:block'>
       <ul className='mx-4'>
         <li className='my-2 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer bg-[#0831fe26]'><VscSearch className='inline-block mr-2'></VscSearch>物件查詢</li>
         <li className='my-2 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer'>
@@ -19,7 +19,7 @@ const Navbar = () => {
             <HiOutlineDocumentReport className='inline-block mr-2'></HiOutlineDocumentReport>
             開發表單</li>
       </ul>
-    </div>
+    </nav>
   )
 }
 

@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import company_logo from '../../public/image/house-renting-logo2.png'
+import Hamburger from './Hamburger'
 
 const Header = () => {
   return (
@@ -54,6 +55,7 @@ const Header = () => {
               <li className=' border-b border-b-slate-400'>開發表單</li>
               <li className=' border-b border-b-slate-400'>test</li>
             </ul> */}
+            <Hamburger></Hamburger>
         </nav>
     </header>
   )

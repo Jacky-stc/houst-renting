@@ -118,6 +118,9 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
     }
     const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>)=>{
         if(e.code === 'Enter'){
+            // 防止form submit redirect
+            e.preventDefault()
+            
             handleSearch()
         }
     }
@@ -158,11 +161,15 @@ const Search:FC<Props> = ({apiKey, sheetId}) => {
         // console.log('Yahoo Calendar 連結:', yahooCalendarLink);
     }
   return (
-    <div className='mx-6 font-inter tracking-wide'>
+    <div className='mx-6 font-inter tracking-wide w-11/12 sm:w-auto'>
         <div className={`flex items-center px-2 py-1 w-full sm:w-72 rounded ${inputFocus?' border border-sky-400':'border'}`}>
             <IoSearchOutline></IoSearchOutline>
-            <input style={{WebkitTapHighlightColor: 'transparent'}} type='search' value={inputValue} onFocus={()=>{setInputFocus(true)}} onBlur={()=>{setInputFocus(false)}} onChange={e=> setInputValue(e.target.value)} onKeyDown={(e)=>{handleEnter(e)}} className="rounded-sm px-2 py-1 mx-1 focus:outline-0" placeholder="輸入物件編號或區域"></input>
-            <button onClick={handleSearch}>搜尋</button>
+            <div className='flex justify-between'>
+                <form action={"."} className='flex' >
+                    <input style={{WebkitTapHighlightColor: 'transparent'}} type='search' value={inputValue} onFocus={()=>{setInputFocus(true)}} onBlur={()=>{setInputFocus(false)}} onChange={e=> setInputValue(e.target.value)} onKeyDown={(e)=>{handleEnter(e)}} className="rounded-sm px-2 py-1 mx-1 focus:outline-0 outline-0"  placeholder="輸入物件編號或區域"></input>
+                    <button onClick={handleSearch} className='hidden sm:block'>搜尋</button>
+                </form>
+            </div>
         </div>
         {loading? <Loader></Loader>:rentingData &&
             <>

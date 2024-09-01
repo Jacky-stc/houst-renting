@@ -14,7 +14,7 @@ const Hamburger = () => {
   return (
     <>
         <button onClick={handleClick} 
-         className="flex flex-col justify-center items-center sm:hidden z-50">
+         className="flex flex-col justify-center items-center lg:hidden z-50">
             <span className={`bg-slate-700 block transition-all duration-300 ease-out 
                             h-0.5 w-6 rounded-sm ${isOpen ? 
                             'rotate-45 translate-y-1' : '-translate-y-0.5'
@@ -31,7 +31,7 @@ const Hamburger = () => {
 
         </button>
         {isOpen && 
-        <div className='absolute w-screen h-screen bg-white opacity-85 top-0 right-0 block sm:hidden'>
+        <div className='absolute w-screen h-screen bg-white opacity-95 top-0 right-0 block sm:hidden'>
         <nav className='w-30 border-r border-slate-400 py-24'>
       <ul className='mx-4'>
         <li className='my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer bg-[#0831fe26]'><VscSearch className='inline-block mr-2'></VscSearch>物件查詢</li>

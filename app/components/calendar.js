@@ -16,7 +16,7 @@ export class Calendar {
     this.event = {
       ...event,
       DTSTART: this.formatTime(event.DTSTART),
-      DTEND: this.formatTime(event.DTEND)
+      DTEND: this.formatTime(event.DTEND),
     };
   }
 
@@ -26,6 +26,7 @@ export class Calendar {
    * @returns {String} - 轉換後的時間
    */
   formatTime(time) {
+    console.log(moment(time).utc().format("YYYYMMDDTHHmmss") + "Z");
     return moment(time).utc().format("YYYYMMDDTHHmmss") + "Z";
   }
 
@@ -46,7 +47,7 @@ END:VEVENT
 END:VCALENDAR`;
     return "data:text/calendar;charset=utf-8," + encodeURIComponent(icsMSG);
   }
-  generateWEBCAL(){
+  generateWEBCAL() {
     const { DTSTART, DTEND, SUMMARY, DESCRIPTION, TZID } = this.event;
     const icsMSG = `BEGIN:VCALENDAR
 VERSION:2.0

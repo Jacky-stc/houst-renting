@@ -71,8 +71,8 @@ const handleCalendar = () => {
   // console.log('Yahoo Calendar 連結:', yahooCalendarLink);
 };
 
-let hourArray = [];
-let minuteArray = [];
+let hourArray: string[] = [];
+let minuteArray: string[] = [];
 for (let i = 1; i <= 24; i++) {
   hourArray.push(i.toString());
 }
@@ -122,7 +122,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     const googleCalendarLink = calendar.generateGoogleCalendarURL();
     const googleLinkContainer = document.createElement("a");
     googleLinkContainer.href = googleCalendarLink;
-    googleLinkContainer.click();
+    googleLinkContainer.target = "_blank";
+    // googleLinkContainer.click();
   };
   return (
     <>
@@ -245,7 +246,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
             </div>
             <div>
               <select
-                className="inline-block border border-gray-300 text-gray-900 text-sm rounded-lg block py-1.5 px-2.5 my-1"
+                className="inline-block border border-gray-300 text-gray-900 text-sm rounded-lg  py-1.5 px-2.5 my-1"
                 onChange={(e) => {
                   console.log(e.target.value);
                   setReserVationHour(e.target.value);
@@ -257,7 +258,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
               </select>
               <span className="mx-1">時</span>
               <select
-                className="inline-block border border-gray-300 text-gray-900 text-sm rounded-lg block py-1.5 px-2.5 my-1"
+                className="inline-block border border-gray-300 text-gray-900 text-sm rounded-lg py-1.5 px-2.5 my-1"
                 onChange={(e) => {
                   console.log(e.target.value);
                   setReserVationMinute(e.target.value);

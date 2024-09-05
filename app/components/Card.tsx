@@ -13,9 +13,12 @@ const Card: React.FC<CardProps> = ({searchStatus}) => {
         <div className='w-4/5 sm:w-1/2'>
         <CatSVG></CatSVG> 
         </div>
-        <div className='text-center py-6 sm:text-start sm:pt-0 flex flex-col justify-evenly'>
+        <div className='text-center py-8 sm:text-start sm:pt-0 flex flex-col justify-evenly'>
         <h1 className='font-bold text-2xl sm:text-3xl text-[#ef9371]'>物件查詢</h1>
-        <div className='text-xs sm:text-sm pt-2 text-[#b18853]'>輸入物件編號或是物件所在地區進行查詢</div>
+        <div>
+        <div className='text-xs sm:text-sm pt-2 text-[#b18853]'>輸入物件編號或物件所在地區進行查詢</div>
+        <div className='text-xs sm:text-sm pt-1 text-[#b18853]'>例如：N816B、文山區</div>
+        </div>
         </div>
         </>
         :

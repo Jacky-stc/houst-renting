@@ -1,120 +1,315 @@
-import React from 'react'
-import { RentingData } from '../types/search'
-import { FaLocationDot, FaPhone, FaRegCalendar } from 'react-icons/fa6'
-import { MdElectricBolt, MdOutlineBed, MdOutlineMeetingRoom } from 'react-icons/md'
-import { BsFillDoorOpenFill, BsHouseFill, BsHouses, BsPeopleFill } from 'react-icons/bs'
-import { LuDog } from 'react-icons/lu'
-import { PiCookingPotBold } from 'react-icons/pi'
-import { TbManFilled } from 'react-icons/tb'
-import { FaRegCalendarAlt } from 'react-icons/fa'
-import { GiElectric } from 'react-icons/gi'
-import { Calendar } from './calendar'
-import { BiSolidBed, BiSolidBuildingHouse } from 'react-icons/bi'
+import React, { useState } from "react";
+import { RentingData } from "../types/search";
+import { FaLocationDot, FaPhone, FaRegCalendar } from "react-icons/fa6";
+import {
+  MdElectricBolt,
+  MdOutlineBed,
+  MdOutlineMeetingRoom,
+} from "react-icons/md";
+import {
+  BsFillDoorOpenFill,
+  BsHouseFill,
+  BsHouses,
+  BsPeopleFill,
+} from "react-icons/bs";
+import { LuDog } from "react-icons/lu";
+import { PiCookingPotBold } from "react-icons/pi";
+import { TbManFilled } from "react-icons/tb";
+import { FaRegCalendarAlt } from "react-icons/fa";
+import { GiElectric } from "react-icons/gi";
+import { Calendar } from "./calendar";
+import { BiSolidBed, BiSolidBuildingHouse } from "react-icons/bi";
+import DatePicker from "react-datepicker";
+import test from "node:test";
+import CalendarCard from "./CalendarCard";
 
 interface HouseInfoProps {
-    rentingData: RentingData
+  rentingData: RentingData;
 }
 
-const handleCalendar = ()=>{
+const handleCalendar = () => {
+  const event = {
+    DTSTART: "20240817T120000Z", // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+    DTEND: "20240817T130000Z", // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+    SUMMARY: "會議", // 標題
+    DESCRIPTION: "團隊會議", // 描述
+    TZID: "Asia/Taipei", // 時區
+  };
+  // 建立 Calendar 實例
+  const calendar = new Calendar(event);
+
+  // 生成 iCal 連結
+  // const icalLink = calendar.generateICS();
+  // console.log('iCal 連結:', icalLink);
+  // const icalLinkNode = document.querySelector("#icalLink") as HTMLAnchorElement
+  // if(icalLinkNode){
+  //     icalLinkNode.textContent = icalLink
+  //     icalLinkNode.href = icalLink
+  // }
+  // const webCalLink = calendar.generateWEBCAL()
+  // console.log('webCal 連結:', webCalLink);
+  // const webCalLinkNode = document.querySelector("#webCalLink") as HTMLAnchorElement
+  // if(webCalLinkNode){
+  //     webCalLinkNode.textContent = webCalLink
+  //     webCalLinkNode.href = webCalLink
+  // }
+
+  // 生成 Google Calendar 連結
+  const googleCalendarLink = calendar.generateGoogleCalendarURL();
+  const googleLinkContainer = document.createElement("a");
+  googleLinkContainer.href = googleCalendarLink;
+  googleLinkContainer.click();
+  // console.log('Google Calendar 連結:', googleCalendarLink);
+  // const googleLink = document.querySelector("#googleLink") as HTMLAnchorElement
+  // if(googleLink){
+  //     googleLink.textContent = googleCalendarLink
+  //     googleLink.href = googleCalendarLink
+  // }
+
+  // 生成 Yahoo Calendar 連結
+  // const yahooCalendarLink = calendar.generateYahooCalendarURL();
+  // console.log('Yahoo Calendar 連結:', yahooCalendarLink);
+};
+
+let hourArray = [];
+let minuteArray = [];
+for (let i = 1; i <= 24; i++) {
+  hourArray.push(i.toString());
+}
+for (let i = 0; i < 60; i++) {
+  minuteArray.push(i.toString());
+}
+
+const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [reservationDate, setReserVationDate] = useState<string>("");
+  const [reservationMinute, setReserVationMinute] = useState<string>("");
+  const [reservationHour, setReserVationHour] = useState<string>("");
+  const [reservationName, setReservationName] = useState<string>("");
+  const [reservationText, setReservationText] = useState<string>("");
+  let includeTitle = "";
+  if (rentingData.含) {
+    includeTitle = "含";
+  } else {
+    includeTitle = "";
+  }
+
+  const handleAddCalendar = () => {
+    console.log(selectedDate?.toLocaleDateString().split("/"));
+    console.log(
+      selectedDate,
+      reservationHour,
+      reservationMinute,
+      reservationName,
+      reservationText,
+    );
+    const dateStringArray = selectedDate?.toLocaleDateString().split("/");
+    const dtStart = `${dateStringArray[0]}${dateStringArray[1].length > 1 ? dateStringArray[1] : "0" + dateStringArray[1]}${dateStringArray[2]}T${reservationHour}${reservationMinute === "0" ? "00" : reservationMinute}00Z`; // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+    const dtEND = `${dateStringArray[0]}${dateStringArray[1].length > 1 ? dateStringArray[1] : "0" + dateStringArray[1]}${dateStringArray[2]}T${(parseInt(reservationHour) + 1).toString()}${reservationMinute === "0" ? "00" : reservationMinute}00Z`; // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+    console.log(dateStringArray);
+    console.log(dtStart);
+    console.log(dtEND);
     const event = {
-        DTSTART: '20240817T120000Z', // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-        DTEND: '20240817T130000Z',   // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
-        SUMMARY: '會議',             // 標題
-        DESCRIPTION: '團隊會議',     // 描述
-        TZID: 'Asia/Taipei'          // 時區
-      };
-    // 建立 Calendar 實例
+      DTSTART: `${dateStringArray[0]}${dateStringArray[1].length > 1 ? dateStringArray[1] : "0" + dateStringArray[1]}${dateStringArray[2]}T${reservationHour}${reservationMinute === "0" ? "00" : reservationMinute}00Z`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTEND: `${dateStringArray[0]}${dateStringArray[1].length > 1 ? dateStringArray[1] : "0" + dateStringArray[1]}${dateStringArray[2]}T${(parseInt(reservationHour) + 1).toString()}${reservationMinute === "0" ? "00" : reservationMinute}00Z`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+      SUMMARY: `${reservationName}預約看房`, // 標題
+      DESCRIPTION: reservationText, // 描述
+      TZID: "Asia/Taipei", // 時區
+    };
+    //   // 建立 Calendar 實例
     const calendar = new Calendar(event);
-
-    // 生成 iCal 連結
-    // const icalLink = calendar.generateICS();
-    // console.log('iCal 連結:', icalLink);
-    // const icalLinkNode = document.querySelector("#icalLink") as HTMLAnchorElement
-    // if(icalLinkNode){
-    //     icalLinkNode.textContent = icalLink
-    //     icalLinkNode.href = icalLink
-    // }
-    // const webCalLink = calendar.generateWEBCAL()
-    // console.log('webCal 連結:', webCalLink);
-    // const webCalLinkNode = document.querySelector("#webCalLink") as HTMLAnchorElement
-    // if(webCalLinkNode){
-    //     webCalLinkNode.textContent = webCalLink
-    //     webCalLinkNode.href = webCalLink
-    // }
-
     // 生成 Google Calendar 連結
     const googleCalendarLink = calendar.generateGoogleCalendarURL();
-    const googleLinkContainer = document.createElement('a')
-    googleLinkContainer.href = googleCalendarLink
-    googleLinkContainer.click()
-    // console.log('Google Calendar 連結:', googleCalendarLink);
-    // const googleLink = document.querySelector("#googleLink") as HTMLAnchorElement
-    // if(googleLink){
-    //     googleLink.textContent = googleCalendarLink
-    //     googleLink.href = googleCalendarLink
-    // }
-
-    // 生成 Yahoo Calendar 連結
-    // const yahooCalendarLink = calendar.generateYahooCalendarURL();
-    // console.log('Yahoo Calendar 連結:', yahooCalendarLink);
-}
-
-const HouseInfo: React.FC<HouseInfoProps> = ({rentingData}) => {
-    let includeTitle = ''
-    if(rentingData.含){
-        includeTitle = '含'
-    }else{
-        includeTitle = ''
-    }
+    const googleLinkContainer = document.createElement("a");
+    googleLinkContainer.href = googleCalendarLink;
+    googleLinkContainer.click();
+  };
   return (
     <>
-            <div className='py-4 flex-1 '>
-                <div className='my-4'>
-                    <div className='inline-block align-sub text-3xl'>{rentingData.編號}</div>
-                    <span className='py-1 px-2 ml-2 rounded-xl text-xs bg-red-500 text-slate-100'>{rentingData.物件狀態}</span>
-                    <span className=' align-sub text-lg ml-4'>{rentingData.租金} <span className='text-sm'>元/月</span></span>
-                    <div className='inline-block align-sub ml-4 cursor-pointer' onClick={handleCalendar}>
-                    <FaRegCalendarAlt className='inline-block align-text-top'></FaRegCalendarAlt>
-                    </div>
-                </div>
-                <div className='tracking-wider flex justify-between '>
-                    <div>
-                        <div className='my-2'>
-                            <BsPeopleFill className='inline-block'></BsPeopleFill><span className='ml-1 mr-5 align-middle'>{rentingData.姓名} </span>
-                            <FaPhone className='inline-block'></FaPhone>
-                            <div className='inline-block ml-1 mr-5 align-middle'>{rentingData.電話}</div>
-                            <div className='my-1 text-xs text-gray-500'>{rentingData.地址}</div>
-                        </div>
-                        <div className='mt-6 mb-1'>
-                            <BiSolidBed className='inline-block' color='green'></BiSolidBed><span className='ml-1 mr-5 align-middle'>{rentingData.格局}</span>
-                            <BsFillDoorOpenFill className='inline-block' color='green'></BsFillDoorOpenFill><span className='ml-1 mr-5 align-middle'>{rentingData.坪數}坪</span>
-                            <BsHouseFill className='inline-block' color='green'></BsHouseFill><span className='ml-1 mr-5 align-middle'>{rentingData.型態}</span>
-                            <BiSolidBuildingHouse className='inline-block' color='green'></BiSolidBuildingHouse><span className='ml-1 mr-5 align-middle'>{rentingData.現況}</span>
-                        </div>
-                        <div className='mb-6'>
-                            <LuDog className='inline-block' color='#df8a02'></LuDog><span className='ml-1 mr-5 align-middle'>{rentingData.寵物}</span>
-                            <PiCookingPotBold className='inline-block' color='#df8a02'></PiCookingPotBold><span className='ml-1 mr-5 align-middle'>{rentingData.開伙}</span>
-                            <MdElectricBolt className='inline-block' color='#df8a02'></MdElectricBolt><span className='ml-1 mr-5 align-middle'>{rentingData.電}</span>
-                        </div>
-                        <div className='my-2'>
-                            <div className='text-xs text-gray-500'>備註：服務費{rentingData.服務費}，{includeTitle}{rentingData.含}</div>
-                        </div>
-                    </div>
-                    <div className='border rounded border-sky-500 p-3'>
-                        <input type='date'/>
-                        <div className="relative">
-    </div>
-                        <div>姓名</div>
-                        <div>其他事項</div>
-                    </div>
-                </div>
-                <div>
-                    <h2 className='mt-8 mb-2 text-lg font-bold'>對話要點</h2>
-                    <div className='rounded border w-full border-gray-800 p-3'>{rentingData.對話要點}</div>
-                </div>
+      <div className="py-4 flex-1 ">
+        <div className="my-4">
+          <div className="inline-block align-sub text-3xl">
+            {rentingData.編號}
+          </div>
+          <span className="py-1 px-2 ml-2 rounded-xl text-xs bg-red-500 text-slate-100">
+            {rentingData.物件狀態}
+          </span>
+          <span className=" align-sub text-lg ml-4">
+            {rentingData.租金} <span className="text-sm">元/月</span>
+          </span>
+          <div
+            className="inline-block align-sub ml-4 cursor-pointer"
+            onClick={handleCalendar}
+          >
+            <FaRegCalendarAlt className="inline-block align-text-top"></FaRegCalendarAlt>
+          </div>
+        </div>
+        <div className="tracking-wider flex justify-between ">
+          <div>
+            <div className="my-2">
+              <BsPeopleFill className="inline-block"></BsPeopleFill>
+              <span className="ml-1 mr-5 align-middle">
+                {rentingData.姓名}{" "}
+              </span>
+              <FaPhone className="inline-block"></FaPhone>
+              <div className="inline-block ml-1 mr-5 align-middle">
+                {rentingData.電話}
+              </div>
+              <div className="my-1 text-xs text-gray-500">
+                {rentingData.地址}
+              </div>
             </div>
-            </>
-  )
-}
+            <div className="mt-6 mb-1">
+              <BiSolidBed className="inline-block" color="green"></BiSolidBed>
+              <span className="ml-1 mr-5 align-middle">{rentingData.格局}</span>
+              <BsFillDoorOpenFill
+                className="inline-block"
+                color="green"
+              ></BsFillDoorOpenFill>
+              <span className="ml-1 mr-5 align-middle">
+                {rentingData.坪數}坪
+              </span>
+              <BsHouseFill className="inline-block" color="green"></BsHouseFill>
+              <span className="ml-1 mr-5 align-middle">{rentingData.型態}</span>
+              <BiSolidBuildingHouse
+                className="inline-block"
+                color="green"
+              ></BiSolidBuildingHouse>
+              <span className="ml-1 mr-5 align-middle">{rentingData.現況}</span>
+            </div>
+            <div className="mb-6">
+              <LuDog className="inline-block" color="#df8a02"></LuDog>
+              <span className="ml-1 mr-5 align-middle">{rentingData.寵物}</span>
+              <PiCookingPotBold
+                className="inline-block"
+                color="#df8a02"
+              ></PiCookingPotBold>
+              <span className="ml-1 mr-5 align-middle">{rentingData.開伙}</span>
+              <MdElectricBolt
+                className="inline-block"
+                color="#df8a02"
+              ></MdElectricBolt>
+              <span className="ml-1 mr-5 align-middle">{rentingData.電}</span>
+            </div>
+            <div className="my-2">
+              <div className="text-xs text-gray-500">
+                備註：服務費{rentingData.服務費}，{includeTitle}
+                {rentingData.含}
+              </div>
+            </div>
+          </div>
+          <div className="border rounded border-sky-200 p-4 w-2/5 text-sm">
+            <div className="relative"></div>
+            <div>
+              <DatePicker
+                showIcon
+                toggleCalendarOnIconClick
+                selected={selectedDate}
+                onChange={(date) => {
+                  if (date) {
+                    setSelectedDate(date);
+                  }
+                }}
+                icon={
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 48 48"
+                  >
+                    <mask id="ipSApplication0">
+                      <g
+                        fill="none"
+                        stroke="#fff"
+                        strokeLinejoin="round"
+                        strokeWidth="4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          d="M40.04 22v20h-32V22"
+                        ></path>
+                        <path
+                          fill="#fff"
+                          d="M5.842 13.777C4.312 17.737 7.263 22 11.51 22c3.314 0 6.019-2.686 6.019-6a6 6 0 0 0 6 6h1.018a6 6 0 0 0 6-6c0 3.314 2.706 6 6.02 6c4.248 0 7.201-4.265 5.67-8.228L39.234 6H8.845l-3.003 7.777Z"
+                        ></path>
+                      </g>
+                    </mask>
+                    <path
+                      fill="currentColor"
+                      d="M0 0h48v48H0z"
+                      mask="url(#ipSApplication0)"
+                    ></path>
+                  </svg>
+                }
+              />
+            </div>
+            <div>
+              <select
+                className="inline-block border border-gray-300 text-gray-900 text-sm rounded-lg block py-1.5 px-2.5 my-1"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setReserVationHour(e.target.value);
+                }}
+              >
+                {hourArray.map((hour) => (
+                  <option key={hour}>{hour}</option>
+                ))}
+              </select>
+              <span className="mx-1">時</span>
+              <select
+                className="inline-block border border-gray-300 text-gray-900 text-sm rounded-lg block py-1.5 px-2.5 my-1"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setReserVationMinute(e.target.value);
+                }}
+              >
+                {minuteArray.map((minute) => (
+                  <option key={minute}>{minute}</option>
+                ))}
+              </select>
+              <span className="mx-1">分</span>
+            </div>
+            <div className="my-2">
+              <span className="mr-2 text-sm">姓名</span>
+              <input
+                type="name"
+                className="border rounded inline=block w-1/2 focus:outline-sky-300 focus:outline-1 pl-1"
+                onChange={(e) => {
+                  setReservationName(e.target.value);
+                }}
+                value={reservationName}
+              ></input>
+            </div>
+            <div className="my-2">
+              <span className="mr-2 text-sm flex-1 text-nowrap">備註</span>
+              <input
+                type="text"
+                className="border rounded inline-block focus:outline-sky-300 focus:outline-1 pl-1"
+                onChange={(e) => {
+                  setReservationText(e.target.value);
+                }}
+                value={reservationText}
+              ></input>
+            </div>
+            <button
+              className="border rounded border-gray-500 py-1 px-8 mx-auto block mt-4 hover:bg-slate-200"
+              onClick={handleAddCalendar}
+            >
+              <FaRegCalendarAlt className="inline-block mr-2"></FaRegCalendarAlt>
+              <span className="text-sm">添加到行事曆</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2 className="mt-8 mb-2 text-lg font-bold">對話要點</h2>
+        <div className="rounded border w-full border-gray-800 p-3">
+          {rentingData.對話要點}
+        </div>
+      </div>
+      {/* <div className="w-full h-full fixed top-0 right-0 left-0 bottom-0 bg-black/40 z-[1065] animate-[fade-in_0.15s_both] px-[auto] motion-reduce:transition-none motion-reduce:animate-none" data-twe-dropdown-backdrop-ref=""></div> */}
+    </>
+  );
+};
 
-export default HouseInfo
+export default HouseInfo;

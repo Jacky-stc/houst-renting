@@ -87,6 +87,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   const [reservationHour, setReserVationHour] = useState<string>("");
   const [reservationName, setReservationName] = useState<string>("");
   const [reservationText, setReservationText] = useState<string>("");
+  const [showCalendarForm, setShowCalendarForm] = useState<Boolean>(false);
   let includeTitle = "";
   if (rentingData.含) {
     includeTitle = "含";
@@ -95,27 +96,34 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   }
 
   const handleAddCalendar = () => {
-    console.log(selectedDate?.toLocaleDateString().split("/"));
     console.log(
-      selectedDate,
-      reservationHour,
-      reservationMinute,
-      reservationName,
-      reservationText,
+      selectedDate.setHours(
+        parseInt(reservationHour),
+        parseInt(reservationMinute),
+      ),
     );
-    const dateStringArray = selectedDate?.toLocaleDateString().split("/");
-    const dtStart = `${dateStringArray[0]}${dateStringArray[1].length > 1 ? dateStringArray[1] : "0" + dateStringArray[1]}${dateStringArray[2]}T${reservationHour}${reservationMinute === "0" ? "00" : reservationMinute}00Z`; // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-    const dtEND = `${dateStringArray[0]}${dateStringArray[1].length > 1 ? dateStringArray[1] : "0" + dateStringArray[1]}${dateStringArray[2]}T${(parseInt(reservationHour) + 1).toString()}${reservationMinute === "0" ? "00" : reservationMinute}00Z`; // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
-    console.log(dateStringArray);
-    console.log(dtStart);
-    console.log(dtEND);
+    console.log(selectedDate.toISOString());
+    console.log(selectedDate.toISOString().slice(0, 4));
+    console.log(selectedDate.toISOString().slice(5, 7));
+    console.log(selectedDate.toISOString().slice(8, 10));
+    console.log(selectedDate.toISOString().slice(11, 13));
+    console.log(selectedDate.toISOString().slice(14, 16));
+    const UTCyear = selectedDate.toISOString().slice(0, 4);
+    const UTCmonth = selectedDate.toISOString().slice(5, 7);
+    const UTCday = selectedDate.toISOString().slice(8, 10);
+    const UTChour = selectedDate.toISOString().slice(11, 13);
+    const UTCmin = selectedDate.toISOString().slice(14, 16);
+    const UTChourPlus = (parseInt(UTChour) + 1).toString();
+
     const event = {
-      DTSTART: `${dateStringArray[0]}${dateStringArray[1].length > 1 ? dateStringArray[1] : "0" + dateStringArray[1]}${dateStringArray[2]}T${reservationHour}${reservationMinute === "0" ? "00" : reservationMinute}00Z`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-      DTEND: `${dateStringArray[0]}${dateStringArray[1].length > 1 ? dateStringArray[1] : "0" + dateStringArray[1]}${dateStringArray[2]}T${(parseInt(reservationHour) + 1).toString()}${reservationMinute === "0" ? "00" : reservationMinute}00Z`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTSTART: `${UTCyear}${UTCmonth}${UTCday}T${UTChour}${UTCmin}00Z`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTEND: `${UTCyear}${UTCmonth}${UTCday}T${UTChourPlus.length > 1 ? UTChourPlus : "0" + UTChourPlus}${UTCmin}00Z`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
       SUMMARY: `${reservationName}預約看房`, // 標題
-      DESCRIPTION: reservationText, // 描述
+      DESCRIPTION: reservationText, // 描述,
+      LOCATION: rentingData.地址,
       TZID: "Asia/Taipei", // 時區
     };
+    console.log(event);
     //   // 建立 Calendar 實例
     const calendar = new Calendar(event);
     // 生成 Google Calendar 連結
@@ -123,7 +131,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     const googleLinkContainer = document.createElement("a");
     googleLinkContainer.href = googleCalendarLink;
     googleLinkContainer.target = "_blank";
-    // googleLinkContainer.click();
+    googleLinkContainer.click();
+    setShowCalendarForm(false);
   };
   return (
     <>
@@ -138,14 +147,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
           <span className=" align-sub text-lg ml-4">
             {rentingData.租金} <span className="text-sm">元/月</span>
           </span>
-          <div
-            className="inline-block align-sub ml-4 cursor-pointer"
-            onClick={handleCalendar}
-          >
-            <FaRegCalendarAlt className="inline-block align-text-top"></FaRegCalendarAlt>
-          </div>
         </div>
-        <div className="tracking-wider flex justify-between ">
+        <div className="tracking-wider flex justify-between flex-col md:flex-row">
           <div>
             <div className="my-2">
               <BsPeopleFill className="inline-block"></BsPeopleFill>
@@ -170,6 +173,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
               <span className="ml-1 mr-5 align-middle">
                 {rentingData.坪數}坪
               </span>
+              <div className="my-1 block md:hidden"></div>
               <BsHouseFill className="inline-block" color="green"></BsHouseFill>
               <span className="ml-1 mr-5 align-middle">{rentingData.型態}</span>
               <BiSolidBuildingHouse
@@ -199,8 +203,9 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
               </div>
             </div>
           </div>
-          <div className="border rounded border-sky-200 p-4 w-2/5 text-sm">
-            <div className="relative"></div>
+          <div
+            className={`${showCalendarForm ? "block bg-white z-50" : "hidden bg-white md:block"} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto bg-white -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}
+          >
             <div>
               <DatePicker
                 showIcon
@@ -285,7 +290,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
               <span className="mr-2 text-sm flex-1 text-nowrap">備註</span>
               <input
                 type="text"
-                className="border rounded inline-block focus:outline-sky-300 focus:outline-1 pl-1"
+                className="border rounded inline-block w-3/4 focus:outline-sky-300 focus:outline-1 pl-1"
                 onChange={(e) => {
                   setReservationText(e.target.value);
                 }}
@@ -293,7 +298,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
               ></input>
             </div>
             <button
-              className="border rounded border-gray-500 py-1 px-8 mx-auto block mt-4 hover:bg-slate-200"
+              className="block  border rounded border-gray-500 py-2 md:py-1 px-8 mx-auto mt-8 md:mt-4 hover:bg-slate-200"
               onClick={handleAddCalendar}
             >
               <FaRegCalendarAlt className="inline-block mr-2"></FaRegCalendarAlt>
@@ -301,6 +306,15 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
             </button>
           </div>
         </div>
+        <button
+          className="border rounded border-gray-500 py-2 px-8 mr-auto block md:hidden mt-4 w-5/6 hover:bg-slate-200"
+          onClick={() => {
+            setShowCalendarForm(!showCalendarForm);
+          }}
+        >
+          <FaRegCalendarAlt className="inline-block mr-2"></FaRegCalendarAlt>
+          <span className="text-sm">建立行事曆</span>
+        </button>
       </div>
       <div>
         <h2 className="mt-8 mb-2 text-lg font-bold">對話要點</h2>
@@ -308,7 +322,15 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
           {rentingData.對話要點}
         </div>
       </div>
-      {/* <div className="w-full h-full fixed top-0 right-0 left-0 bottom-0 bg-black/40 z-[1065] animate-[fade-in_0.15s_both] px-[auto] motion-reduce:transition-none motion-reduce:animate-none" data-twe-dropdown-backdrop-ref=""></div> */}
+      {showCalendarForm && (
+        <div
+          className="block md:hidden w-full h-full fixed top-0 right-0 left-0 bottom-0 bg-black/40 z-10 animate-[fade-in_0.15s_both] px-[auto] motion-reduce:transition-none motion-reduce:animate-none"
+          data-twe-dropdown-backdrop-ref=""
+          onClick={() => {
+            setShowCalendarForm(false);
+          }}
+        ></div>
+      )}
     </>
   );
 };

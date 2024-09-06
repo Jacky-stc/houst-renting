@@ -66,8 +66,8 @@ END:VCALENDAR`;
    * @returns {String} - Google Calendar 的連結
    */
   generateGoogleCalendarURL() {
-    const { DTSTART, DTEND, SUMMARY, DESCRIPTION, TZID } = this.event;
-    return `https://calendar.google.com/calendar/u/0/r/eventedit?dates=${DTSTART}/${DTEND}&text=${encodeURIComponent(SUMMARY)}&details=${encodeURIComponent(DESCRIPTION)}&ctz=${encodeURIComponent(TZID)}`;
+    const { DTSTART, DTEND, SUMMARY, DESCRIPTION, LOCATION, TZID } = this.event;
+    return `https://calendar.google.com/calendar/u/0/r/eventedit?dates=${DTSTART}/${DTEND}&text=${encodeURIComponent(SUMMARY)}&details=${encodeURIComponent(DESCRIPTION)}&location=${LOCATION}&ctz=${encodeURIComponent(TZID)}`;
   }
 
   /**

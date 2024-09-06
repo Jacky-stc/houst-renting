@@ -132,6 +132,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     googleLinkContainer.href = googleCalendarLink;
     googleLinkContainer.target = "_blank";
     googleLinkContainer.click();
+    setReservationName("");
+    setReservationText("");
     setShowCalendarForm(false);
   };
   return (

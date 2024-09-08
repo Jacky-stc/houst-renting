@@ -126,6 +126,10 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     // 生成 Google Calendar 連結
     const googleCalendarLink = calendar.generateGoogleCalendarURL();
     const googleLinkContainer = document.createElement("a");
+    const testDate2 = document.querySelector("#test2");
+    if (testDate2) {
+      testDate2.textContent = googleCalendarLink;
+    }
     googleLinkContainer.href = googleCalendarLink;
     googleLinkContainer.target = "_blank";
     // googleLinkContainer.click();
@@ -204,6 +208,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
             className={`${showCalendarForm ? "block bg-white z-50" : "hidden bg-white md:block"} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto bg-white -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}
           >
             <div id="test"></div>
+            <div id="test2"></div>
             <div>
               <DatePicker
                 showIcon

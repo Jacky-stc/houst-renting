@@ -132,7 +132,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     }
     googleLinkContainer.href = googleCalendarLink;
     googleLinkContainer.target = "_blank";
-    // googleLinkContainer.click();
+    googleLinkContainer.click();
     // setShowCalendarForm(false);
   };
   return (
@@ -283,7 +283,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
               <span className="mr-2 text-sm">姓名</span>
               <input
                 type="name"
-                className="border rounded inline=block w-1/2 focus:outline-sky-300 focus:outline-1 pl-1"
+                className="text-base border rounded inline=block w-1/2 focus:outline-sky-300 focus:outline-1 pl-1"
                 onChange={(e) => {
                   setReservationName(e.target.value);
                 }}
@@ -294,7 +294,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
               <span className="mr-2 text-sm flex-1 text-nowrap">備註</span>
               <input
                 type="text"
-                className="border rounded inline-block w-3/4 focus:outline-sky-300 focus:outline-1 pl-1"
+                className="text-base border rounded inline-block w-3/4 focus:outline-sky-300 focus:outline-1 pl-1"
                 onChange={(e) => {
                   setReservationText(e.target.value);
                 }}

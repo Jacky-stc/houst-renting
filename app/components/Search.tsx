@@ -45,9 +45,9 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
       | React.KeyboardEvent<HTMLInputElement>
       | React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    console.log(e);
     e.preventDefault();
     setLoading(true);
+    setHouseList(undefined);
     setErrorMessage("");
     let range;
     if (regionArray.includes(inputValue)) {
@@ -66,6 +66,9 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
         const data = await response.json();
         console.log(data.values);
         if (regionArray.includes(inputValue)) {
+          if (data.values && data.values.length > 1) {
+            data.values.shift();
+          }
           data.values.length !== 0
             ? setHouseList(data.values)
             : setErrorMessage("查詢不到物件，請重新查詢");

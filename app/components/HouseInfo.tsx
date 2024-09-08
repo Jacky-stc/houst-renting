@@ -96,18 +96,15 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   }
 
   const handleAddCalendar = () => {
-    console.log(
-      selectedDate.setHours(
-        parseInt(reservationHour),
-        parseInt(reservationMinute),
-      ),
+    selectedDate.setHours(
+      parseInt(reservationHour),
+      parseInt(reservationMinute),
     );
-    console.log(selectedDate.toISOString());
-    console.log(selectedDate.toISOString().slice(0, 4));
-    console.log(selectedDate.toISOString().slice(5, 7));
-    console.log(selectedDate.toISOString().slice(8, 10));
-    console.log(selectedDate.toISOString().slice(11, 13));
-    console.log(selectedDate.toISOString().slice(14, 16));
+    console.log(selectedDate);
+    const testDate = document.querySelector("#test");
+    if (testDate) {
+      testDate.textContent = selectedDate.toISOString();
+    }
     const UTCyear = selectedDate.toISOString().slice(0, 4);
     const UTCmonth = selectedDate.toISOString().slice(5, 7);
     const UTCday = selectedDate.toISOString().slice(8, 10);
@@ -131,10 +128,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     const googleLinkContainer = document.createElement("a");
     googleLinkContainer.href = googleCalendarLink;
     googleLinkContainer.target = "_blank";
-    googleLinkContainer.click();
-    setReservationName("");
-    setReservationText("");
-    setShowCalendarForm(false);
+    // googleLinkContainer.click();
+    // setShowCalendarForm(false);
   };
   return (
     <>
@@ -208,11 +203,13 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
           <div
             className={`${showCalendarForm ? "block bg-white z-50" : "hidden bg-white md:block"} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto bg-white -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}
           >
+            <div id="test"></div>
             <div>
               <DatePicker
                 showIcon
                 toggleCalendarOnIconClick
                 selected={selectedDate}
+                // readOnly
                 onChange={(date) => {
                   if (date) {
                     setSelectedDate(date);

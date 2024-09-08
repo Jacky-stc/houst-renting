@@ -127,8 +127,16 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     const googleCalendarLink = calendar.generateGoogleCalendarURL();
     const googleLinkContainer = document.createElement("a");
     const testDate2 = document.querySelector("#test2");
+    const testDate3 = document.querySelector("#test3");
+    const testDate4 = document.querySelector("#test4");
     if (testDate2) {
       testDate2.textContent = googleCalendarLink;
+    }
+    if (testDate3) {
+      testDate3.textContent = event.DTSTART;
+    }
+    if (testDate4) {
+      testDate4.textContent = event.DTEND;
     }
     googleLinkContainer.href = googleCalendarLink;
     googleLinkContainer.target = "_blank";
@@ -209,6 +217,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
           >
             <div id="test"></div>
             <div id="test2"></div>
+            <div id="test3"></div>
+            <div id="test4"></div>
             <div>
               <DatePicker
                 showIcon

@@ -100,11 +100,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
       parseInt(reservationHour),
       parseInt(reservationMinute),
     );
-    console.log(selectedDate);
-    const testDate = document.querySelector("#test");
-    if (testDate) {
-      testDate.textContent = selectedDate.toISOString();
-    }
     const UTCyear = selectedDate.toISOString().slice(0, 4);
     const UTCmonth = selectedDate.toISOString().slice(5, 7);
     const UTCday = selectedDate.toISOString().slice(8, 10);
@@ -126,18 +121,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     // 生成 Google Calendar 連結
     const googleCalendarLink = calendar.generateGoogleCalendarURL();
     const googleLinkContainer = document.createElement("a");
-    const testDate2 = document.querySelector("#test2");
-    const testDate3 = document.querySelector("#test3");
-    const testDate4 = document.querySelector("#test4");
-    if (testDate2) {
-      testDate2.textContent = googleCalendarLink;
-    }
-    if (testDate3) {
-      testDate3.textContent = event.DTSTART;
-    }
-    if (testDate4) {
-      testDate4.textContent = event.DTEND;
-    }
     googleLinkContainer.href = googleCalendarLink;
     googleLinkContainer.target = "_blank";
     googleLinkContainer.click();
@@ -215,10 +198,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
           <div
             className={`${showCalendarForm ? "block bg-white z-50" : "hidden bg-white md:block"} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto bg-white -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}
           >
-            <div id="test"></div>
-            <div id="test2"></div>
-            <div id="test3"></div>
-            <div id="test4"></div>
             <div>
               <DatePicker
                 showIcon

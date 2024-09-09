@@ -49,19 +49,21 @@ const Hamburger = () => {
                 <IoBookmarkOutline className="inline-block mr-2"></IoBookmarkOutline>
                 收藏物件
               </li>
-              <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer">
-                <IoMdGitCompare className="inline-block mr-2"></IoMdGitCompare>
-                回報表單
-              </li>
-              <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer">
-                <HiOutlineDocumentReport className="inline-block mr-2"></HiOutlineDocumentReport>
-                <a
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSezybj5GyUCYnEyp0-E7Pwn695zt1yN2VSnCPzbo_JnDL9VXg/viewform"
-                  target="_blank"
-                >
+              <a href="https://forms.gle/UXMyb7zS472xJw2P8" target="_blank">
+                <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer">
+                  <IoMdGitCompare className="inline-block mr-2"></IoMdGitCompare>
+                  回報表單
+                </li>
+              </a>
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSezybj5GyUCYnEyp0-E7Pwn695zt1yN2VSnCPzbo_JnDL9VXg/viewform"
+                target="_blank"
+              >
+                <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer">
+                  <HiOutlineDocumentReport className="inline-block mr-2"></HiOutlineDocumentReport>
                   開發表單
-                </a>
-              </li>
+                </li>
+              </a>
               <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer">
                 <IoIosLogOut className="inline-block mr-2"></IoIosLogOut>
                 登出

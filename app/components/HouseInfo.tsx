@@ -124,11 +124,15 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     //   // 建立 Calendar 實例
     const calendar = new Calendar(event);
     // 生成 Google Calendar 連結
-    const googleCalendarLink = calendar.generateGoogleCalendarURL();
-    const googleLinkContainer = document.createElement("a");
-    googleLinkContainer.href = googleCalendarLink;
-    googleLinkContainer.target = "_blank";
-    googleLinkContainer.click();
+    // const googleCalendarLink = calendar.generateGoogleCalendarURL();
+    // const googleLinkContainer = document.createElement("a");
+    // googleLinkContainer.href = googleCalendarLink;
+    // googleLinkContainer.target = "_blank";
+    // googleLinkContainer.click();
+    const icsLink = calendar.generateICS();
+    const icsLinkContainer = document.createElement("a");
+    icsLinkContainer.href = icsLink;
+    icsLinkContainer.click();
     // setShowCalendarForm(false);
   };
   const handleTest = () => {
@@ -137,6 +141,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
       DTEND: `20240913T133000Z`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
       SUMMARY: `預約看房`, // 標題
       DESCRIPTION: "test", // 描述,
+      LOCATION: "test",
       TZID: "Asia/Taipei", // 時區
     };
     const calendar = new Calendar(event);

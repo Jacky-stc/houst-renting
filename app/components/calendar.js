@@ -36,7 +36,7 @@ export class Calendar {
    */
   generateICS() {
     console.log(this.event);
-    const { DTSTART, DTEND, SUMMARY, DESCRIPTION, TZID } = this.event;
+    const { DTSTART, DTEND, SUMMARY, DESCRIPTION, LOCATION, TZID } = this.event;
     const icsMSG = `BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
@@ -44,6 +44,7 @@ DTSTART;VALUE=DATE;TZID=${TZID}:${DTSTART}
 DTEND;VALUE=DATE;TZID=${TZID}:${DTEND}
 SUMMARY:${SUMMARY}
 DESCRIPTION:${DESCRIPTION}
+LOCATION:${LOCATION}
 END:VEVENT
 END:VCALENDAR`;
     return "data:text/calendar;charset=utf-8," + encodeURIComponent(icsMSG);

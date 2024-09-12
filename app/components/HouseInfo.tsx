@@ -72,19 +72,17 @@ const handleCalendar = () => {
 };
 
 let hourArray: string[] = [];
-let minuteArray: string[] = [];
+let minuteArray: string[] = ["00", "10", "20", "30", "40", "50"];
 for (let i = 1; i <= 24; i++) {
   hourArray.push(i.toString());
-}
-for (let i = 0; i < 60; i++) {
-  minuteArray.push(i.toString());
 }
 
 const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [reservationDate, setReserVationDate] = useState<string>("");
-  const [reservationMinute, setReserVationMinute] = useState<string>("");
-  const [reservationHour, setReserVationHour] = useState<string>("");
+  const [reservationMinute, setReserVationMinute] = useState<string>("00");
+  const [reservationHour, setReserVationHour] = useState<string>(
+    new Date().getHours().toString(),
+  );
   const [reservationName, setReservationName] = useState<string>("");
   const [reservationText, setReservationText] = useState<string>("");
   const [showCalendarForm, setShowCalendarForm] = useState<Boolean>(false);
@@ -95,7 +93,9 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     includeTitle = "";
   }
 
+  console.log(reservationMinute);
   const handleAddCalendar = () => {
+    console.log(reservationMinute);
     selectedDate.setHours(
       parseInt(reservationHour),
       parseInt(reservationMinute),
@@ -111,7 +111,12 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
       DTSTART: `${UTCyear}${UTCmonth}${UTCday}T${UTChour}${UTCmin}00Z`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
       DTEND: `${UTCyear}${UTCmonth}${UTCday}T${UTChourPlus.length > 1 ? UTChourPlus : "0" + UTChourPlus}${UTCmin}00Z`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
       SUMMARY: `${reservationName}預約看房`, // 標題
-      DESCRIPTION: reservationText, // 描述,
+      DESCRIPTION:
+        rentingData.對話要點 +
+        "<br><br>" +
+        "<div>" +
+        reservationText +
+        "</div>", // 描述,
       LOCATION: rentingData.地址,
       TZID: "Asia/Taipei", // 時區
     };
@@ -249,6 +254,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
                   console.log(e.target.value);
                   setReserVationHour(e.target.value);
                 }}
+                value={reservationHour}
               >
                 {hourArray.map((hour) => (
                   <option key={hour}>{hour}</option>
@@ -261,6 +267,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
                   console.log(e.target.value);
                   setReserVationMinute(e.target.value);
                 }}
+                value={reservationMinute}
               >
                 {minuteArray.map((minute) => (
                   <option key={minute}>{minute}</option>

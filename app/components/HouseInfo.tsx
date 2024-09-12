@@ -131,9 +131,29 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     googleLinkContainer.click();
     // setShowCalendarForm(false);
   };
+  const handleTest = () => {
+    const event = {
+      DTSTART: `20240913T123000Z`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTEND: `20240913T133000Z`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+      SUMMARY: `預約看房`, // 標題
+      DESCRIPTION: "test", // 描述,
+      TZID: "Asia/Taipei", // 時區
+    };
+    const calendar = new Calendar(event);
+    const icsLink = calendar.generateICS();
+    console.log(icsLink);
+    const testLink = document.querySelector("#test") as HTMLAnchorElement;
+    if (testLink) {
+      testLink.href = icsLink;
+    }
+  };
   return (
     <>
       <div className="py-4 flex-1 ">
+        <button onClick={handleTest}>test</button>
+        <div>
+          <a id="test">testLink</a>
+        </div>
         <div className="my-4">
           <div className="inline-block align-sub text-3xl">
             {rentingData.編號}

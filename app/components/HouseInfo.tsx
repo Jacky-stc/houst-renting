@@ -106,17 +106,13 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     const UTChour = selectedDate.toISOString().slice(11, 13);
     const UTCmin = selectedDate.toISOString().slice(14, 16);
     const UTChourPlus = (parseInt(UTChour) + 1).toString();
+    const reservationHourPlus = (parseInt(reservationHour) + 1).toString();
 
     const event = {
-      DTSTART: `${UTCyear}${UTCmonth}${UTCday}T${UTChour}${UTCmin}00Z`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-      DTEND: `${UTCyear}${UTCmonth}${UTCday}T${UTChourPlus.length > 1 ? UTChourPlus : "0" + UTChourPlus}${UTCmin}00Z`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTSTART: `${UTCyear}${UTCmonth}${UTCday}T${reservationHour}${reservationMinute}00Z`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTEND: `${UTCyear}${UTCmonth}${UTCday}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00Z`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
       SUMMARY: `${reservationName}預約看房`, // 標題
-      DESCRIPTION:
-        rentingData.對話要點 +
-        "<br><br>" +
-        "<div>" +
-        reservationText +
-        "</div>", // 描述,
+      DESCRIPTION: rentingData.對話要點 + "，" + reservationText, // 描述,
       LOCATION: rentingData.地址,
       TZID: "Asia/Taipei", // 時區
     };
@@ -155,10 +151,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   return (
     <>
       <div className="py-4 flex-1 ">
-        <button onClick={handleTest}>test</button>
-        <div>
-          <a id="test">testLink</a>
-        </div>
         <div className="my-4">
           <div className="inline-block align-sub text-3xl">
             {rentingData.編號}

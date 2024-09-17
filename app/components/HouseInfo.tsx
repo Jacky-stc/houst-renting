@@ -109,8 +109,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     const reservationHourPlus = (parseInt(reservationHour) + 1).toString();
 
     const event = {
-      DTSTART: `${UTCyear}${UTCmonth}${UTCday}T${reservationHour}${reservationMinute}00Z`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-      DTEND: `${UTCyear}${UTCmonth}${UTCday}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00Z`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTSTART: `${UTCyear}${UTCmonth}${UTCday}T${reservationHour.length > 1 ? reservationHour : "0" + reservationHour}${reservationMinute}00`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTEND: `${UTCyear}${UTCmonth}${UTCday}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
       SUMMARY: `${reservationName}預約看房`, // 標題
       DESCRIPTION: rentingData.對話要點 + "，" + reservationText, // 描述,
       LOCATION: rentingData.地址,
@@ -126,6 +126,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     // googleLinkContainer.target = "_blank";
     // googleLinkContainer.click();
     const icsLink = calendar.generateICS();
+    console.log(icsLink);
     const icsLinkContainer = document.createElement("a");
     icsLinkContainer.href = icsLink;
     icsLinkContainer.click();
@@ -158,7 +159,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
           <span className="py-1 px-2 ml-2 rounded-xl text-xs bg-red-500 text-slate-100">
             {rentingData.物件狀態}
           </span>
-          <span className=" align-sub text-lg ml-4">
+          <span className=" align-sub sm:text-lg sm:ml-4 ml-1 text-base">
             {rentingData.租金} <span className="text-sm">元/月</span>
           </span>
         </div>
@@ -166,15 +167,23 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
           <div>
             <div className="my-2">
               <BsPeopleFill className="inline-block"></BsPeopleFill>
-              <span className="ml-1 mr-5 align-middle">
+              <span className="ml-1 sm:mr-5 mr-2 align-middle">
                 {rentingData.姓名}{" "}
               </span>
               <FaPhone className="inline-block"></FaPhone>
               <div className="inline-block ml-1 mr-5 align-middle">
-                {rentingData.電話}
+                <a href={`tel:+886${rentingData.電話.slice(1, 10)}`}>
+                  {rentingData.電話.slice(0, 4)}-{rentingData.電話.slice(4, 7)}-
+                  {rentingData.電話.slice(7, 10)}
+                </a>
               </div>
               <div className="my-1 text-xs text-gray-500">
-                {rentingData.地址}
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${rentingData.地址}`}
+                  target="_blank"
+                >
+                  {rentingData.地址}
+                </a>
               </div>
             </div>
             <div className="mt-6 mb-1">
@@ -335,7 +344,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
       </div>
       <div>
         <h2 className="mt-8 mb-2 text-lg font-bold">對話要點</h2>
-        <div className="rounded border w-full border-gray-800 p-3">
+        <div className="rounded border w-11/12 sm:w-full border-gray-800 p-3">
           {rentingData.對話要點}
         </div>
       </div>

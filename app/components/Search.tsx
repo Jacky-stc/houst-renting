@@ -129,9 +129,9 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
   };
 
   return (
-    <div className="mx-6 tracking-wide w-11/12 font-inter sm:w-auto flex-1">
+    <div className="mx-3 sm:mx-6 tracking-wide w-11/12 font-inter sm:w-auto flex-1">
       <div
-        className={`flex items-center px-2 py-1 w-full ml-auto sm:w-72 rounded ${inputFocus ? " border border-sky-400" : "border"}`}
+        className={`flex items-center px-2 py-1 w-11/12 sm:ml-auto sm:w-72 rounded ${inputFocus ? " border border-sky-400" : "border"}`}
       >
         <IoSearchOutline></IoSearchOutline>
         <div className="flex justify-between w-full sm:w-auto">

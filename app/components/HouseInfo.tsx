@@ -86,7 +86,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   const [reservationName, setReservationName] = useState<string>("");
   const [reservationText, setReservationText] = useState<string>("");
   const [showCalendarForm, setShowCalendarForm] = useState<Boolean>(false);
-  const [isMobile, setIsMobile] = useState<string>("");
+  const [isMobileText, setIsMobileText] = useState<string>("");
   let includeTitle = "";
   if (rentingData.含) {
     includeTitle = "含";
@@ -95,10 +95,41 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   }
 
   useEffect(() => {
-    const ismobile = navigator.userAgent;
-    console.log(ismobile);
-    setIsMobile(ismobile);
-  }, [isMobile]);
+    const isMobile = {
+      Android: function () {
+        return navigator.userAgent.match(/Android/i);
+      },
+      BlackBerry: function () {
+        return navigator.userAgent.match(/BlackBerry/i);
+      },
+      iOS: function () {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+      },
+      Opera: function () {
+        return navigator.userAgent.match(/Opera Mini/i);
+      },
+      Windows: function () {
+        return (
+          navigator.userAgent.match(/IEMobile/i) ||
+          navigator.userAgent.match(/WPDesktop/i)
+        );
+      },
+      any: function () {
+        return (
+          isMobile.Android() ||
+          isMobile.BlackBerry() ||
+          isMobile.iOS() ||
+          isMobile.Opera() ||
+          isMobile.Windows()
+        );
+      },
+    };
+    if (isMobile.any()) {
+      setIsMobileText("Z");
+    } else {
+      setIsMobileText("");
+    }
+  }, [isMobileText]);
 
   console.log(reservationMinute);
   const handleAddCalendar = () => {
@@ -116,8 +147,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     const reservationHourPlus = (parseInt(reservationHour) + 1).toString();
 
     const event = {
-      DTSTART: `${UTCyear}${UTCmonth}${UTCday}T${reservationHour.length > 1 ? reservationHour : "0" + reservationHour}${reservationMinute}00`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-      DTEND: `${UTCyear}${UTCmonth}${UTCday}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTSTART: `${UTCyear}${UTCmonth}${UTCday}T${reservationHour.length > 1 ? reservationHour : "0" + reservationHour}${reservationMinute}00${isMobileText}`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTEND: `${UTCyear}${UTCmonth}${UTCday}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00${isMobileText}`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
       SUMMARY: `${reservationName}預約看房`, // 標題
       DESCRIPTION: rentingData.對話要點 + "，" + reservationText, // 描述,
       LOCATION: rentingData.地址,
@@ -159,7 +190,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   return (
     <>
       <div className="py-4 flex-1 ">
-        {isMobile && <div>{isMobile}</div>}
         <div className="my-4">
           <div className="inline-block align-sub text-3xl">
             {rentingData.編號}

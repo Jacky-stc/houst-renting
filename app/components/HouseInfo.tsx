@@ -131,24 +131,17 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     }
   }, [isMobileText]);
 
-  console.log(reservationMinute);
   const handleAddCalendar = () => {
-    console.log(reservationMinute);
-    selectedDate.setHours(
-      parseInt(reservationHour),
-      parseInt(reservationMinute),
-    );
-    const UTCyear = selectedDate.toISOString().slice(0, 4);
-    const UTCmonth = selectedDate.toISOString().slice(5, 7);
-    const UTCday = selectedDate.toISOString().slice(8, 10);
-    const UTChour = selectedDate.toISOString().slice(11, 13);
-    const UTCmin = selectedDate.toISOString().slice(14, 16);
-    const UTChourPlus = (parseInt(UTChour) + 1).toString();
+    console.log(selectedDate);
+    const selectedDateString = selectedDate.toLocaleDateString().split("/");
+    const selectedYear = selectedDateString[0];
+    const selectedMonth = selectedDateString[1];
+    const selectedDay = selectedDateString[2];
     const reservationHourPlus = (parseInt(reservationHour) + 1).toString();
 
     const event = {
-      DTSTART: `${UTCyear}${UTCmonth}${UTCday}T${reservationHour.length > 1 ? reservationHour : "0" + reservationHour}${reservationMinute}00${isMobileText}`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-      DTEND: `${UTCyear}${UTCmonth}${UTCday}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00${isMobileText}`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTSTART: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : "0" + selectedMonth}${selectedDay.length > 1 ? selectedDay : "0" + selectedDay}T${reservationHour.length > 1 ? reservationHour : "0" + reservationHour}${reservationMinute}00${isMobileText}`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTEND: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : "0" + selectedMonth}${selectedDay.length > 1 ? selectedDay : "0" + selectedDay}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00${isMobileText}`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
       SUMMARY: `${reservationName}預約看房`, // 標題
       DESCRIPTION: rentingData.對話要點 + "，" + reservationText, // 描述,
       LOCATION: rentingData.地址,
@@ -167,7 +160,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     console.log(icsLink);
     const icsLinkContainer = document.createElement("a");
     icsLinkContainer.href = icsLink;
-    icsLinkContainer.click();
+    // icsLinkContainer.click();
     // setShowCalendarForm(false);
   };
   const handleTest = () => {

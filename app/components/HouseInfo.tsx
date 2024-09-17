@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RentingData } from "../types/search";
 import { FaLocationDot, FaPhone, FaRegCalendar } from "react-icons/fa6";
 import {
@@ -86,12 +86,19 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   const [reservationName, setReservationName] = useState<string>("");
   const [reservationText, setReservationText] = useState<string>("");
   const [showCalendarForm, setShowCalendarForm] = useState<Boolean>(false);
+  const [isMobile, setIsMobile] = useState<string>("");
   let includeTitle = "";
   if (rentingData.含) {
     includeTitle = "含";
   } else {
     includeTitle = "";
   }
+
+  useEffect(() => {
+    const ismobile = navigator.userAgent;
+    console.log(ismobile);
+    setIsMobile(ismobile);
+  }, [isMobile]);
 
   console.log(reservationMinute);
   const handleAddCalendar = () => {
@@ -152,6 +159,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   return (
     <>
       <div className="py-4 flex-1 ">
+        {isMobile && <div>{isMobile}</div>}
         <div className="my-4">
           <div className="inline-block align-sub text-3xl">
             {rentingData.編號}

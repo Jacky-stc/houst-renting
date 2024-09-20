@@ -1,75 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { RentingData } from "../types/search";
-import { FaLocationDot, FaPhone, FaRegCalendar } from "react-icons/fa6";
-import {
-  MdElectricBolt,
-  MdOutlineBed,
-  MdOutlineMeetingRoom,
-} from "react-icons/md";
-import {
-  BsFillDoorOpenFill,
-  BsHouseFill,
-  BsHouses,
-  BsPeopleFill,
-} from "react-icons/bs";
+import { FaPhone, FaRegCalendar } from "react-icons/fa6";
+import { MdElectricBolt } from "react-icons/md";
+import { BsFillDoorOpenFill, BsHouseFill, BsPeopleFill } from "react-icons/bs";
 import { LuDog } from "react-icons/lu";
 import { PiCookingPotBold } from "react-icons/pi";
-import { TbManFilled } from "react-icons/tb";
 import { FaRegCalendarAlt } from "react-icons/fa";
-import { GiElectric } from "react-icons/gi";
 import { Calendar } from "./calendar";
 import { BiSolidBed, BiSolidBuildingHouse } from "react-icons/bi";
 import DatePicker from "react-datepicker";
-import test from "node:test";
-import CalendarCard from "./CalendarCard";
 
 interface HouseInfoProps {
   rentingData: RentingData;
 }
-
-const handleCalendar = () => {
-  const event = {
-    DTSTART: "20240817T120000Z", // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-    DTEND: "20240817T130000Z", // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
-    SUMMARY: "會議", // 標題
-    DESCRIPTION: "團隊會議", // 描述
-    TZID: "Asia/Taipei", // 時區
-  };
-  // 建立 Calendar 實例
-  const calendar = new Calendar(event);
-
-  // 生成 iCal 連結
-  // const icalLink = calendar.generateICS();
-  // console.log('iCal 連結:', icalLink);
-  // const icalLinkNode = document.querySelector("#icalLink") as HTMLAnchorElement
-  // if(icalLinkNode){
-  //     icalLinkNode.textContent = icalLink
-  //     icalLinkNode.href = icalLink
-  // }
-  // const webCalLink = calendar.generateWEBCAL()
-  // console.log('webCal 連結:', webCalLink);
-  // const webCalLinkNode = document.querySelector("#webCalLink") as HTMLAnchorElement
-  // if(webCalLinkNode){
-  //     webCalLinkNode.textContent = webCalLink
-  //     webCalLinkNode.href = webCalLink
-  // }
-
-  // 生成 Google Calendar 連結
-  const googleCalendarLink = calendar.generateGoogleCalendarURL();
-  const googleLinkContainer = document.createElement("a");
-  googleLinkContainer.href = googleCalendarLink;
-  googleLinkContainer.click();
-  // console.log('Google Calendar 連結:', googleCalendarLink);
-  // const googleLink = document.querySelector("#googleLink") as HTMLAnchorElement
-  // if(googleLink){
-  //     googleLink.textContent = googleCalendarLink
-  //     googleLink.href = googleCalendarLink
-  // }
-
-  // 生成 Yahoo Calendar 連結
-  // const yahooCalendarLink = calendar.generateYahooCalendarURL();
-  // console.log('Yahoo Calendar 連結:', yahooCalendarLink);
-};
 
 let hourArray: string[] = [];
 let minuteArray: string[] = ["00", "10", "20", "30", "40", "50"];
@@ -151,16 +94,16 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     //   // 建立 Calendar 實例
     const calendar = new Calendar(event);
     // 生成 Google Calendar 連結
-    // const googleCalendarLink = calendar.generateGoogleCalendarURL();
-    // const googleLinkContainer = document.createElement("a");
-    // googleLinkContainer.href = googleCalendarLink;
-    // googleLinkContainer.target = "_blank";
-    // googleLinkContainer.click();
-    const icsLink = calendar.generateICS();
-    console.log(icsLink);
-    const icsLinkContainer = document.createElement("a");
-    icsLinkContainer.href = icsLink;
-    icsLinkContainer.click();
+    const googleCalendarLink = calendar.generateGoogleCalendarURL();
+    const googleLinkContainer = document.createElement("a");
+    googleLinkContainer.href = googleCalendarLink;
+    googleLinkContainer.target = "_blank";
+    googleLinkContainer.click();
+    // const icsLink = calendar.generateICS();
+    // console.log(icsLink);
+    // const icsLinkContainer = document.createElement("a");
+    // icsLinkContainer.href = icsLink;
+    // icsLinkContainer.click();
     // setShowCalendarForm(false);
   };
 
@@ -243,6 +186,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
           </div>
           <div
             className={`${showCalendarForm ? "block bg-white z-50" : "hidden bg-white md:block"} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto bg-white -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}
+            data-testid="calendar-form"
           >
             <div>
               <DatePicker
@@ -352,6 +296,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
           onClick={() => {
             setShowCalendarForm(!showCalendarForm);
           }}
+          data-testid="generate-calendar"
         >
           <FaRegCalendarAlt className="inline-block mr-2"></FaRegCalendarAlt>
           <span className="text-sm">建立行事曆</span>

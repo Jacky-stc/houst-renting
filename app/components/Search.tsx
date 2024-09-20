@@ -31,8 +31,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
   );
   const dispatch = useDispatch();
 
-  // const apiKey = "AIzaSyCuKxIujf0gFpdsKtcHZ8unFFwvFGO_8Mo";
-  // const sheetId = "1rQXKcxnCbR2MWho2N-DHW3zr7_C1G643Rxr3rtKeNSY";
   const regionList: { [key: string]: string } = {
     N: "文山區",
     A: "大安區",

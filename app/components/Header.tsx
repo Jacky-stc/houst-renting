@@ -1,5 +1,5 @@
 import React from "react";
-import Hamburger from "./Hamburger.jsx";
+import Hamburger from "./Hamburger";
 
 const Header = () => {
   return (

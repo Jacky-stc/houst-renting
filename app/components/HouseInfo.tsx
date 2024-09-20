@@ -83,8 +83,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     const reservationHourPlus = (parseInt(reservationHour) + 1).toString();
 
     const event = {
-      DTSTART: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : "0" + selectedMonth}${selectedDay.length > 1 ? selectedDay : "0" + selectedDay}T${reservationHour.length > 1 ? reservationHour : "0" + reservationHour}${reservationMinute}00${isMobileText}`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-      DTEND: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : "0" + selectedMonth}${selectedDay.length > 1 ? selectedDay : "0" + selectedDay}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00${isMobileText}`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTSTART: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : "0" + selectedMonth}${selectedDay.length > 1 ? selectedDay : "0" + selectedDay}T${reservationHour.length > 1 ? reservationHour : "0" + reservationHour}${reservationMinute}00Z`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTEND: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : "0" + selectedMonth}${selectedDay.length > 1 ? selectedDay : "0" + selectedDay}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00Z`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
       SUMMARY: `${reservationName}預約看房`, // 標題
       DESCRIPTION: rentingData.對話要點 + "，" + reservationText, // 描述,
       LOCATION: rentingData.地址,

@@ -1,7 +1,5 @@
-import Image from "next/image";
 import React from "react";
-import company_logo from "../../public/image/house-renting-logo2.png";
-import Hamburger from "./Hamburger";
+import Hamburger from "./Hamburger.jsx";
 
 const Header = () => {
   return (

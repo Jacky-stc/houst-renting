@@ -30,12 +30,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
   const [reservationText, setReservationText] = useState<string>("");
   const [showCalendarForm, setShowCalendarForm] = useState<Boolean>(false);
   const [isMobileText, setIsMobileText] = useState<string>("");
-  let includeTitle = "";
-  if (rentingData.含) {
-    includeTitle = "含";
-  } else {
-    includeTitle = "";
-  }
 
   useEffect(() => {
     const isMobile = {
@@ -115,7 +109,9 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
           <div className="inline-block align-sub text-3xl">
             {rentingData.編號}
           </div>
-          <span className="py-1 px-2 ml-2 rounded-xl text-xs bg-red-500 text-slate-100">
+          <span
+            className={`py-1 px-2 ml-2 rounded-xl text-xs ${rentingData.物件狀態 === "待出租" ? "bg-green-400" : "bg-red-500"} text-slate-100`}
+          >
             {rentingData.物件狀態}
           </span>
           <span className=" align-sub sm:text-lg sm:ml-4 ml-1 text-base">
@@ -157,7 +153,9 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
               </span>
               <div className="my-1 block md:hidden"></div>
               <BsHouseFill className="inline-block" color="green"></BsHouseFill>
-              <span className="ml-1 mr-5 align-middle">{rentingData.型態}</span>
+              <span className="ml-1 mr-5 align-middle">
+                {rentingData.建物型態}
+              </span>
               <BiSolidBuildingHouse
                 className="inline-block"
                 color="green"
@@ -176,12 +174,11 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
                 className="inline-block"
                 color="#df8a02"
               ></MdElectricBolt>
-              <span className="ml-1 mr-5 align-middle">{rentingData.電}</span>
+              <span className="ml-1 mr-5 align-middle">{rentingData.電費}</span>
             </div>
             <div className="my-2">
               <div className="text-xs text-gray-500">
-                備註：服務費{rentingData.服務費}，{includeTitle}
-                {rentingData.含}
+                備註：服務費{rentingData.服務費}
               </div>
             </div>
           </div>

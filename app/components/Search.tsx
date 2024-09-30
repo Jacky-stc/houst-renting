@@ -84,21 +84,20 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
               物件狀態: displayText[0][0],
               編號: displayText[0][1],
               開發日期: displayText[0][2],
-              服務費: displayText[0][3],
-              對話要點: displayText[0][4],
-              姓名: displayText[0][5],
-              電話: displayText[0][6],
-              區域: displayText[0][7],
-              地址: displayText[0][8],
-              租金: displayText[0][9],
-              含: displayText[0][10],
-              格局: displayText[0][11],
-              坪數: displayText[0][12],
-              型態: displayText[0][13],
-              現況: displayText[0][14],
-              電: displayText[0][15],
-              開伙: displayText[0][16],
-              寵物: displayText[0][17],
+              區域: displayText[0][3],
+              地址: displayText[0][4],
+              建物型態: displayText[0][5],
+              現況: displayText[0][6],
+              格局: displayText[0][7],
+              租金: displayText[0][8],
+              坪數: displayText[0][9],
+              姓名: displayText[0][10],
+              電話: displayText[0][11],
+              對話要點: displayText[0][12],
+              電費: displayText[0][13],
+              開伙: displayText[0][14],
+              寵物: displayText[0][15],
+              服務費: displayText[0][16],
             };
             console.log(rentingResource);
             setRentingData(rentingResource);
@@ -113,6 +112,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
         }
       } catch (error) {
         setErrorMessage("查詢不到物件，請重新查詢");
+        setLoading(false);
       }
     }
     getGoogleSheetData();

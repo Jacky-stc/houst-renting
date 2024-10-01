@@ -32,8 +32,27 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
   const dispatch = useDispatch();
 
   const regionList: { [key: string]: string } = {
-    N: "文山區",
+    B: "北投區",
+    X: "士林區",
+    N: "內湖區",
+    Z: "中山區",
+    T: "大同區",
+    S: "松山區",
+    W: "萬華區",
+    J: "中正區",
     A: "大安區",
+    Y: "信義區",
+    G: "南港區",
+    E: "文山區",
+    U: "三重區",
+    O: "蘆洲區",
+    D: "新莊區",
+    C: "板橋區",
+    H: "中和區",
+    R: "永和區",
+    I: "土城區",
+    K: "新店區",
+    Q: "汐止區",
   };
   const regionArray = Object.values(regionList);
   // Sheets 中要取得的資料範圍，格式如下
@@ -62,7 +81,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
       try {
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data.values);
         if (regionArray.includes(inputValue)) {
           if (data.values && data.values.length > 1) {
             data.values.shift();
@@ -70,7 +88,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
           data.values.length !== 0
             ? setHouseList(data.values)
             : setErrorMessage("查詢不到物件，請重新查詢");
-          console.log(houseList);
           setLoading(false);
         } else {
           const displayText = data.values.filter(

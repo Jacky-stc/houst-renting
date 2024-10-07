@@ -4,13 +4,13 @@ import { RentingData } from "../types/search";
 interface HouseListProps {
   houseObject: string[];
   setRentingData: React.Dispatch<React.SetStateAction<RentingData | undefined>>;
-  setHouseList: React.Dispatch<React.SetStateAction<string[][] | undefined>>;
+  setShowHouseList: React.Dispatch<React.SetStateAction<Boolean>>;
 }
 
 const HouseList: React.FC<HouseListProps> = ({
   houseObject,
   setRentingData,
-  setHouseList,
+  setShowHouseList,
 }) => {
   const houseInfo = {
     物件狀態: houseObject[0],
@@ -33,7 +33,7 @@ const HouseList: React.FC<HouseListProps> = ({
   };
   const handleClick = () => {
     setRentingData(houseInfo);
-    setHouseList(undefined);
+    setShowHouseList(false);
   };
   return (
     <div

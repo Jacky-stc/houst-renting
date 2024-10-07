@@ -12,6 +12,8 @@ import DatePicker from "react-datepicker";
 
 interface HouseInfoProps {
   rentingData: RentingData;
+  setRentingData: React.Dispatch<React.SetStateAction<RentingData | undefined>>;
+  setShowHouseList: React.Dispatch<React.SetStateAction<Boolean>>;
 }
 
 let hourArray: string[] = [];
@@ -20,7 +22,11 @@ for (let i = 1; i <= 24; i++) {
   hourArray.push(i.toString());
 }
 
-const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
+const HouseInfo: React.FC<HouseInfoProps> = ({
+  rentingData,
+  setRentingData,
+  setShowHouseList,
+}) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [reservationMinute, setReserVationMinute] = useState<string>("00");
   const [reservationHour, setReserVationHour] = useState<string>(
@@ -101,10 +107,34 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData }) => {
     // icsLinkContainer.click();
     // setShowCalendarForm(false);
   };
+  const handleReturn = () => {
+    setRentingData(undefined);
+    setShowHouseList(true);
+  };
 
   return (
     <>
       <div className="py-4 flex-1 ">
+        <div
+          className="w-fit border-b select-none hover:border-gray-700  border-white cursor-pointer"
+          onClick={handleReturn}
+        >
+          <svg
+            id="Capa_1"
+            width="12px"
+            height="12px"
+            viewBox="0 0 156.199 156.199"
+            className="inline-block"
+          >
+            <g>
+              <path
+                style={{ fill: "#030303" }}
+                d="M102.496,45.204h-2.499v-0.012l-77.613-0.368l32.958-32.959l-8.277-8.28L0,50.65l47.882,47.889   l8.28-8.28l-33.719-33.73l71.642,0.346v0.04h8.417c23.151,0,41.993,18.838,41.993,41.997c0,23.151-18.842,41.992-41.993,41.992H0   v11.711h102.496c29.613,0,53.703-24.09,53.703-53.703C156.199,69.293,132.109,45.204,102.496,45.204z"
+              />
+            </g>
+          </svg>
+          <span className="ml-1">返回</span>
+        </div>
         <div className="my-4">
           <div className="inline-block align-sub text-3xl">
             {rentingData.編號}

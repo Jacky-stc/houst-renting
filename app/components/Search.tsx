@@ -26,6 +26,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
   const [searchStatus, setSearchStatus] = useState<SearchStatus>({
     status: "default",
   });
+  const [showHouseList, setShowHouseList] = useState<Boolean>(false);
   const searchNumber = useSelector(
     (state: RootState) => state.search.searchNumber,
   );
@@ -89,6 +90,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
             ? setHouseList(data.values)
             : setErrorMessage("查詢不到物件，請重新查詢");
           setLoading(false);
+          setShowHouseList(true);
         } else {
           const displayText = data.values.filter(
             (item: Array<string>) => item[1] === inputValue,
@@ -195,16 +197,21 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
       )}
       {loading && <Loader></Loader>}
       {!loading && rentingData && (
-        <HouseInfo rentingData={rentingData}></HouseInfo>
+        <HouseInfo
+          rentingData={rentingData}
+          setRentingData={setRentingData}
+          setShowHouseList={setShowHouseList}
+        ></HouseInfo>
       )}
       {!loading &&
         houseList?.length !== 0 &&
+        showHouseList &&
         houseList?.map((houseObject) => (
           <HouseList
             houseObject={houseObject}
             key={houseObject[1]}
             setRentingData={setRentingData}
-            setHouseList={setHouseList}
+            setShowHouseList={setShowHouseList}
           ></HouseList>
         ))}
       {errorMessage && <div>{errorMessage}</div>}

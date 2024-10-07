@@ -120,20 +120,26 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
           onClick={handleReturn}
         >
           <svg
-            id="Capa_1"
-            width="12px"
-            height="12px"
-            viewBox="0 0 156.199 156.199"
-            className="inline-block"
+            fill="#000000"
+            width="20px"
+            height="20px"
+            viewBox="0 0 24 24"
+            className="inline"
           >
-            <g>
-              <path
-                style={{ fill: "#030303" }}
-                d="M102.496,45.204h-2.499v-0.012l-77.613-0.368l32.958-32.959l-8.277-8.28L0,50.65l47.882,47.889   l8.28-8.28l-33.719-33.73l71.642,0.346v0.04h8.417c23.151,0,41.993,18.838,41.993,41.997c0,23.151-18.842,41.992-41.993,41.992H0   v11.711h102.496c29.613,0,53.703-24.09,53.703-53.703C156.199,69.293,132.109,45.204,102.496,45.204z"
-              />
+            <g data-name="Layer 2">
+              <g data-name="arrow-back">
+                <rect
+                  width="24"
+                  height="24"
+                  transform="rotate(90 12 12)"
+                  opacity="0"
+                />
+
+                <path d="M19 11H7.14l3.63-4.36a1 1 0 1 0-1.54-1.28l-5 6a1.19 1.19 0 0 0-.09.15c0 .05 0 .08-.07.13A1 1 0 0 0 4 12a1 1 0 0 0 .07.36c0 .05 0 .08.07.13a1.19 1.19 0 0 0 .09.15l5 6A1 1 0 0 0 10 19a1 1 0 0 0 .64-.23 1 1 0 0 0 .13-1.41L7.14 13H19a1 1 0 0 0 0-2z" />
+              </g>
             </g>
           </svg>
-          <span className="ml-1">返回</span>
+          <span className="ml-1 sm:inline hidden">返回</span>
         </div>
         <div className="my-4">
           <div className="inline-block align-sub text-3xl">

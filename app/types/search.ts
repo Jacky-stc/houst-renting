@@ -16,6 +16,7 @@ export interface RentingData {
   開伙: string;
   寵物: string;
   服務費: string;
+  網址?: string;
 }
 
 export interface SearchStatus {

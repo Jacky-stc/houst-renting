@@ -117,6 +117,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
               開伙: displayText[0][14],
               寵物: displayText[0][15],
               服務費: displayText[0][16],
+              網址: displayText[0][17],
             };
             console.log(rentingResource);
             setRentingData(rentingResource);
@@ -201,6 +202,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
           rentingData={rentingData}
           setRentingData={setRentingData}
           setShowHouseList={setShowHouseList}
+          houseList={houseList}
         ></HouseInfo>
       )}
       {!loading &&

@@ -338,7 +338,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
       </div>
       <div>
         <h2 className="mt-8 mb-2 text-lg font-bold">對話要點</h2>
-        <div className="rounded border w-11/12 sm:w-full border-gray-800 p-3">
+        <div className="rounded border w-11/12 sm:w-full border-gray-800 p-3 break-words">
           {rentingData.對話要點}
         </div>
       </div>

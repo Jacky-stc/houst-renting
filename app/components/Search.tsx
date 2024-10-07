@@ -83,7 +83,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
         const response = await fetch(url);
         const data = await response.json();
         if (regionArray.includes(inputValue)) {
-          if (data.values && data.values.length > 1) {
+          if (data.values && data.values.length > 0) {
             data.values.shift();
           }
           data.values.length !== 0

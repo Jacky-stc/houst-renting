@@ -94,28 +94,32 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
         } else {
           console.log(data);
           const displayText = data.values.filter(
-            (item: Array<string>) => item[1] === inputValue,
+            (item: Array<string>) => item[3] === inputValue,
           );
           if (displayText.length > 0) {
             const rentingResource = {
               物件狀態: displayText[0][0],
-              編號: displayText[0][1],
-              開發日期: displayText[0][2],
-              區域: displayText[0][3],
-              地址: displayText[0][4],
-              建物型態: displayText[0][5],
-              現況: displayText[0][6],
-              格局: displayText[0][7],
-              租金: displayText[0][8],
-              坪數: displayText[0][9],
-              姓名: displayText[0][10],
-              電話: displayText[0][11],
-              對話要點: displayText[0][12],
-              電費: displayText[0][13],
-              開伙: displayText[0][14],
-              寵物: displayText[0][15],
-              服務費: displayText[0][16],
-              網址: displayText[0][17],
+              上架狀態: displayText[0][1],
+              業務編號: displayText[0][2],
+              編號: displayText[0][3],
+              開發日期: displayText[0][4],
+              區域: displayText[0][5],
+              地址: displayText[0][6],
+              建物型態: displayText[0][7],
+              現況: displayText[0][8],
+              格局: displayText[0][9],
+              租金: displayText[0][10],
+              坪數: displayText[0][11],
+              樓層: displayText[0][12],
+              姓名: displayText[0][13],
+              電話: displayText[0][14],
+              對話要點: displayText[0][15],
+              電費: displayText[0][16],
+              開伙: displayText[0][17],
+              寵物: displayText[0][18],
+              服務費: displayText[0][19],
+              屋主網址: displayText[0][20],
+              上架網址: displayText[0][21],
             };
             setRentingData(rentingResource);
             setSearchStatus({ status: "result" });

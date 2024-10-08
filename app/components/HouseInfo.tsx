@@ -221,10 +221,10 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
                 備註：服務費{rentingData.服務費}
               </div>
             </div>
-            {rentingData.網址 && (
+            {rentingData.屋主網址 && (
               <div className="mt-3">
                 <div className="px-1 py-2 bg-[#fff7e6] text-xs text-[#a16426] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
-                  <a href={`${rentingData.網址}`} target="_blank">
+                  <a href={`${rentingData.屋主網址}`} target="_blank">
                     <span>查看591物件</span>
                     <svg
                       width="16px"

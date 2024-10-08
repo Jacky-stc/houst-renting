@@ -92,13 +92,11 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
           setLoading(false);
           setShowHouseList(true);
         } else {
+          console.log(data);
           const displayText = data.values.filter(
             (item: Array<string>) => item[1] === inputValue,
           );
-          console.log(displayText);
           if (displayText.length > 0) {
-            console.log(displayText[0], "displaytext 0");
-            console.log(displayText[0][0]);
             const rentingResource = {
               物件狀態: displayText[0][0],
               編號: displayText[0][1],
@@ -119,12 +117,10 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
               服務費: displayText[0][16],
               網址: displayText[0][17],
             };
-            console.log(rentingResource);
             setRentingData(rentingResource);
             setSearchStatus({ status: "result" });
             setErrorMessage("");
             setLoading(false);
-            console.log(rentingData);
           } else {
             setSearchStatus({ status: "no result" });
             setLoading(false);

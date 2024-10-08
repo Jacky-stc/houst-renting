@@ -92,7 +92,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
       LOCATION: rentingData.地址,
       TZID: "Asia/Taipei", // 時區
     };
-    console.log(event);
     //   // 建立 Calendar 實例
     const calendar = new Calendar(event);
     // 生成 Google Calendar 連結
@@ -113,6 +112,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
     setRentingData(undefined);
     setShowHouseList(true);
   };
+  const formattedNumber: string = phoneNumberFormat(rentingData.電話) || "";
 
   return (
     <>
@@ -167,9 +167,9 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
               </span>
               <FaPhone className="inline-block"></FaPhone>
               <div className="inline-block ml-1 mr-5 align-middle">
-                <a href={`tel:+886${rentingData.電話.slice(1, 10)}`}>
-                  {rentingData.電話.slice(0, 4)}-{rentingData.電話.slice(4, 7)}-
-                  {rentingData.電話.slice(7, 10)}
+                <a href={`tel:+886${formattedNumber.slice(1, 10)}`}>
+                  {formattedNumber.slice(0, 4)}-{formattedNumber.slice(4, 7)}-
+                  {formattedNumber.slice(7)}
                 </a>
               </div>
               <div className="my-1 text-xs text-gray-500">
@@ -382,6 +382,14 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
       )}
     </>
   );
+};
+
+const phoneNumberFormat = (phone: string) => {
+  let formattedNumber;
+  if (phone.includes("-")) {
+    formattedNumber = phone.replaceAll("-", "");
+  }
+  return formattedNumber;
 };
 
 export default HouseInfo;

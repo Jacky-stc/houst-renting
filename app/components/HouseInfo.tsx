@@ -385,7 +385,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
 };
 
 const phoneNumberFormat = (phone: string) => {
-  let formattedNumber;
+  let formattedNumber = phone;
   if (phone.includes("-")) {
     formattedNumber = phone.replaceAll("-", "");
   }

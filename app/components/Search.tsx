@@ -92,7 +92,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
           setLoading(false);
           setShowHouseList(true);
         } else {
-          console.log(data);
           const displayText = data.values.filter(
             (item: Array<string>) => item[3] === inputValue,
           );
@@ -211,7 +210,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
         houseList?.map((houseObject) => (
           <HouseList
             houseObject={houseObject}
-            key={houseObject[1]}
+            key={houseObject[3]}
             setRentingData={setRentingData}
             setShowHouseList={setShowHouseList}
           ></HouseList>

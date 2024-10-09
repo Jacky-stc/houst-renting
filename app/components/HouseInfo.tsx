@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RentingData } from "../types/search";
-import { FaPhone, FaRegCalendar } from "react-icons/fa6";
+import { FaPhone } from "react-icons/fa6";
 import { MdElectricBolt } from "react-icons/md";
 import { BsFillDoorOpenFill, BsHouseFill, BsPeopleFill } from "react-icons/bs";
 import { LuDog } from "react-icons/lu";
@@ -9,6 +9,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { Calendar } from "./calendar";
 import { BiSolidBed, BiSolidBuildingHouse } from "react-icons/bi";
 import DatePicker from "react-datepicker";
+import { isMobile } from "@/lib/utils";
 
 interface HouseInfoProps {
   rentingData: RentingData;
@@ -40,35 +41,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   const [isMobileText, setIsMobileText] = useState<string>("");
 
   useEffect(() => {
-    const isMobile = {
-      Android: function () {
-        return navigator.userAgent.match(/Android/i);
-      },
-      BlackBerry: function () {
-        return navigator.userAgent.match(/BlackBerry/i);
-      },
-      iOS: function () {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-      },
-      Opera: function () {
-        return navigator.userAgent.match(/Opera Mini/i);
-      },
-      Windows: function () {
-        return (
-          navigator.userAgent.match(/IEMobile/i) ||
-          navigator.userAgent.match(/WPDesktop/i)
-        );
-      },
-      any: function () {
-        return (
-          isMobile.Android() ||
-          isMobile.BlackBerry() ||
-          isMobile.iOS() ||
-          isMobile.Opera() ||
-          isMobile.Windows()
-        );
-      },
-    };
     if (isMobile.any()) {
       setIsMobileText("Z");
     } else {
@@ -99,14 +71,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
     const googleLinkContainer = document.createElement("a");
     googleLinkContainer.href = googleCalendarLink;
     googleLinkContainer.target = "_blank";
-    console.log(googleCalendarLink);
     googleLinkContainer.click();
-    // const icsLink = calendar.generateICS();
-    // console.log(icsLink);
-    // const icsLinkContainer = document.createElement("a");
-    // icsLinkContainer.href = icsLink;
-    // icsLinkContainer.click();
-    // setShowCalendarForm(false);
   };
   const handleReturn = () => {
     setRentingData(undefined);

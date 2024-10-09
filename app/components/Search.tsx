@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import { changeSearchNumber } from "../../lib/features/search/searchSlice";
@@ -10,6 +10,7 @@ import { RentingData, SearchStatus } from "../types/search";
 import HouseInfo from "./HouseInfo";
 import Card from "./Card";
 import HouseList from "./HouseList";
+import { regionList, rentingDataFormat } from "@/lib/utils";
 
 interface Props {
   apiKey: string;
@@ -32,29 +33,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
   );
   const dispatch = useDispatch();
 
-  const regionList: { [key: string]: string } = {
-    B: "北投區",
-    X: "士林區",
-    N: "內湖區",
-    Z: "中山區",
-    T: "大同區",
-    S: "松山區",
-    W: "萬華區",
-    J: "中正區",
-    A: "大安區",
-    Y: "信義區",
-    G: "南港區",
-    E: "文山區",
-    U: "三重區",
-    O: "蘆洲區",
-    D: "新莊區",
-    C: "板橋區",
-    H: "中和區",
-    R: "永和區",
-    I: "土城區",
-    K: "新店區",
-    Q: "汐止區",
-  };
   const regionArray = Object.values(regionList);
   // Sheets 中要取得的資料範圍，格式如下
   // Sheets API 的 URL
@@ -92,34 +70,17 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
           setLoading(false);
           setShowHouseList(true);
         } else {
-          const displayText = data.values.filter(
+          const targetObject = data.values.filter(
             (item: Array<string>) => item[3] === inputValue,
           );
-          if (displayText.length > 0) {
-            const rentingResource = {
-              物件狀態: displayText[0][0],
-              上架狀態: displayText[0][1],
-              業務編號: displayText[0][2],
-              編號: displayText[0][3],
-              開發日期: displayText[0][4],
-              區域: displayText[0][5],
-              地址: displayText[0][6],
-              建物型態: displayText[0][7],
-              現況: displayText[0][8],
-              格局: displayText[0][9],
-              租金: displayText[0][10],
-              坪數: displayText[0][11],
-              樓層: displayText[0][12],
-              姓名: displayText[0][13],
-              電話: displayText[0][14],
-              對話要點: displayText[0][15],
-              電費: displayText[0][16],
-              開伙: displayText[0][17],
-              寵物: displayText[0][18],
-              服務費: displayText[0][19],
-              屋主網址: displayText[0][20],
-              上架網址: displayText[0][21],
-            };
+          const targetIndex = data.values.findIndex(
+            (item: Array<string>) => item[3] === inputValue,
+          );
+          if (targetObject.length > 0) {
+            const rentingResource = rentingDataFormat(
+              targetObject[0],
+              (targetIndex + 1).toString(),
+            );
             setRentingData(rentingResource);
             setSearchStatus({ status: "result" });
             setErrorMessage("");
@@ -207,12 +168,13 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
       {!loading &&
         houseList?.length !== 0 &&
         showHouseList &&
-        houseList?.map((houseObject) => (
+        houseList?.map((houseObject, index) => (
           <HouseList
             houseObject={houseObject}
             key={houseObject[3]}
             setRentingData={setRentingData}
             setShowHouseList={setShowHouseList}
+            index={index.toString()}
           ></HouseList>
         ))}
       {errorMessage && <div>{errorMessage}</div>}

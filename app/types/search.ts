@@ -18,6 +18,7 @@ export interface RentingData {
   服務費: string;
   屋主網址: string;
   上架網址?: string;
+  欄位: string;
 }
 
 export interface SearchStatus {

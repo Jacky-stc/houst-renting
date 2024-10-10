@@ -9,7 +9,8 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { Calendar } from "./calendar";
 import { BiSolidBed, BiSolidBuildingHouse } from "react-icons/bi";
 import DatePicker from "react-datepicker";
-import { isMobile } from "@/lib/utils";
+import { isMobile, phoneNumberFormat } from "@/lib/utils";
+import Loader from "./Loader";
 
 interface HouseInfoProps {
   rentingData: RentingData;
@@ -30,6 +31,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   setShowHouseList,
   houseList,
 }) => {
+  console.log(rentingData.上架狀態);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [reservationMinute, setReserVationMinute] = useState<string>("00");
   const [reservationHour, setReserVationHour] = useState<string>(
@@ -39,6 +41,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   const [reservationText, setReservationText] = useState<string>("");
   const [showCalendarForm, setShowCalendarForm] = useState<Boolean>(false);
   const [isMobileText, setIsMobileText] = useState<string>("");
+  const [showStatusChange, setShowStatusChange] = useState<Boolean>(false);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
 
   useEffect(() => {
     if (isMobile.any()) {
@@ -79,6 +83,15 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   };
   const formattedNumber: string = phoneNumberFormat(rentingData.電話) || "";
 
+  const handleRentingStatusChange = () => {
+    setIsLoading(true);
+    const changeRentingStatus = async () => {
+      const response = fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}`,
+      );
+    };
+  };
+
   return (
     <>
       <div className="py-4 flex-1 ">
@@ -110,12 +123,17 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
             <span className="ml-1 sm:inline hidden">返回</span>
           </div>
         )}
-        <div className="my-4">
+        <div
+          className={`my-4 pl-2 border-l-4 ${rentingData.上架狀態 === "已上架" ? "border-red-600" : "border-gray-500"}`}
+        >
           <div className="inline-block align-sub text-3xl">
             {rentingData.編號}
           </div>
           <span
-            className={`py-1 px-2 ml-2 rounded-xl text-xs ${rentingData.物件狀態 === "待出租" ? "bg-green-400" : "bg-red-500"} text-slate-100`}
+            className={`py-1 px-2 ml-2 rounded-xl text-xs select-none ${rentingData.物件狀態 === "待出租" ? "bg-green-400" : "bg-red-500"} text-slate-100`}
+            onClick={() => {
+              setShowStatusChange(true);
+            }}
           >
             {rentingData.物件狀態}
           </span>
@@ -345,16 +363,40 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
           }}
         ></div>
       )}
+      {showStatusChange && (
+        <>
+          <div
+            className="w-full h-full fixed top-0 right-0 left-0 bottom-0 bg-black/40 z-10 animate-[fade-in_0.15s_both] px-[auto] motion-reduce:transition-none motion-reduce:animate-none"
+            data-twe-dropdown-backdrop-ref=""
+            onClick={() => {
+              setShowStatusChange(false);
+            }}
+          ></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center w-56 h-fit bg-[#fff7E6] z-10 rounded p-2 text-center text-sm">
+            <div className="mt-3 mb-2">是否要變更上架狀態？</div>
+            <div className="mb-2 text-xs">目前狀態：{rentingData.上架狀態}</div>
+            {isLoading && <Loader></Loader>}
+            <div className="w-full flex items-center justify-center gap-5 mt-5">
+              <button
+                className="rounded border border-slate-900 px-2 py-1"
+                onClick={() => {
+                  setShowStatusChange(false);
+                }}
+              >
+                取消
+              </button>
+              <button
+                className="rounded bg-red-500 px-2 py-1 mx-2 text-slate-200"
+                onClick={handleRentingStatusChange}
+              >
+                變更
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
-};
-
-const phoneNumberFormat = (phone: string) => {
-  let formattedNumber = phone;
-  if (phone.includes("-")) {
-    formattedNumber = phone.replaceAll("-", "");
-  }
-  return formattedNumber;
 };
 
 export default HouseInfo;

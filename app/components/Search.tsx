@@ -174,7 +174,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
             key={houseObject[3]}
             setRentingData={setRentingData}
             setShowHouseList={setShowHouseList}
-            index={index.toString()}
+            index={(index + 2).toString()}
           ></HouseList>
         ))}
       {errorMessage && <div>{errorMessage}</div>}

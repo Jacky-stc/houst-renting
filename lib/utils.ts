@@ -57,6 +57,14 @@ export const isMobile = {
   },
 };
 
+export const phoneNumberFormat = (phone: string) => {
+  let formattedNumber = phone;
+  if (phone.includes("-")) {
+    formattedNumber = phone.replaceAll("-", "");
+  }
+  return formattedNumber;
+};
+
 export const regionList: { [key: string]: string } = {
   B: "北投區",
   X: "士林區",

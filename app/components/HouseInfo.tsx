@@ -201,7 +201,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
             </div>
             <div className="my-2">
               <div className="text-xs text-gray-500">
-                備註：服務費{rentingData.服務費}
+                備註：服務費{rentingData.服務費}，樓層{rentingData.樓層}
               </div>
             </div>
             {rentingData.屋主網址 && (

@@ -31,7 +31,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   setShowHouseList,
   houseList,
 }) => {
-  console.log(rentingData.上架狀態);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [reservationMinute, setReserVationMinute] = useState<string>("00");
   const [reservationHour, setReserVationHour] = useState<string>(
@@ -43,6 +42,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   const [isMobileText, setIsMobileText] = useState<string>("");
   const [showStatusChange, setShowStatusChange] = useState<Boolean>(false);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [showHintMessage, setShowHintMessage] = useState<Boolean>(false);
+  const [hintMessage, setHintMessage] = useState<string>("");
 
   useEffect(() => {
     if (isMobile.any()) {
@@ -81,15 +82,44 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
     setRentingData(undefined);
     setShowHouseList(true);
   };
-  const formattedNumber: string = phoneNumberFormat(rentingData.電話) || "";
+  const formattedNumber: string = phoneNumberFormat(rentingData.電話 || "");
 
   const handleRentingStatusChange = () => {
     setIsLoading(true);
-    const changeRentingStatus = async () => {
-      const response = fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}`,
-      );
+    setHintMessage("");
+    setShowHintMessage(false);
+    const reqBody = {
+      index: rentingData.欄位,
+      region: rentingData.區域,
+      rentingStatus: rentingData.上架狀態,
     };
+    const changeStatus = async () => {
+      try {
+        const response = await fetch("/api/change", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(reqBody),
+        });
+        const result = await response.json();
+        console.log(result);
+        console.log(response.status);
+        setIsLoading(false);
+        setHintMessage("更新成功!");
+        setShowHintMessage(true);
+        setRentingData((prevData) => ({
+          ...prevData,
+          上架狀態: result.rentingStatus,
+        }));
+      } catch (error) {
+        setIsLoading(false);
+        setHintMessage("更新失敗!");
+        setShowHintMessage(true);
+      }
+    };
+    changeStatus();
   };
 
   return (
@@ -370,23 +400,41 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
             data-twe-dropdown-backdrop-ref=""
             onClick={() => {
               setShowStatusChange(false);
+              setHintMessage("");
+              setShowHintMessage(false);
             }}
           ></div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center w-56 h-fit bg-[#fff7E6] z-10 rounded p-2 text-center text-sm">
             <div className="mt-3 mb-2">是否要變更上架狀態？</div>
-            <div className="mb-2 text-xs">目前狀態：{rentingData.上架狀態}</div>
+            <div className="mb-2 text-xs">
+              目前狀態：
+              <span
+                className={`${rentingData.上架狀態 === "已上架" ? "text-red-500" : "text-[#6b7280]"}`}
+              >
+                {rentingData.上架狀態}
+              </span>
+            </div>
+            {showHintMessage && (
+              <div
+                className={`text-xs ${hintMessage === "更新成功!" ? "text-red-500" : "text-gray-900"}`}
+              >
+                {hintMessage}
+              </div>
+            )}
             {isLoading && <Loader></Loader>}
             <div className="w-full flex items-center justify-center gap-5 mt-5">
               <button
-                className="rounded border border-slate-900 px-2 py-1"
+                className="rounded border border-slate-600 px-2 py-1 hover:bg-gray-300"
                 onClick={() => {
                   setShowStatusChange(false);
+                  setHintMessage("");
+                  setShowHintMessage(false);
                 }}
               >
                 取消
               </button>
               <button
-                className="rounded bg-red-500 px-2 py-1 mx-2 text-slate-200"
+                className="rounded bg-red-500 px-2 py-1 mx-2 text-slate-200 hover:bg-red-700"
                 onClick={handleRentingStatusChange}
               >
                 變更

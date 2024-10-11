@@ -1,27 +1,27 @@
 export interface RentingData {
-  物件狀態: string;
-  上架狀態: string;
-  業務編號: string;
-  編號: string;
-  開發日期: string;
-  區域: string;
-  地址: string;
-  建物型態: string;
-  現況: string;
-  格局: string;
-  租金: string;
-  坪數: string;
-  樓層: string;
-  姓名: string;
-  電話: string;
-  對話要點: string;
-  電費: string;
-  開伙: string;
-  寵物: string;
-  服務費: string;
-  屋主網址: string;
-  上架網址?: string;
-  欄位: string;
+  物件狀態?: string | undefined;
+  上架狀態?: string | undefined;
+  業務編號?: string | undefined;
+  編號?: string | undefined;
+  開發日期?: string | undefined;
+  區域?: string | undefined;
+  地址?: string | undefined;
+  建物型態?: string | undefined;
+  現況?: string | undefined;
+  格局?: string | undefined;
+  租金?: string | undefined;
+  坪數?: string | undefined;
+  樓層?: string | undefined;
+  姓名?: string | undefined;
+  電話?: string | undefined;
+  對話要點?: string | undefined;
+  電費?: string | undefined;
+  開伙?: string | undefined;
+  寵物?: string | undefined;
+  服務費?: string | undefined;
+  屋主網址?: string | undefined;
+  上架網址?: string | undefined;
+  欄位?: string | undefined;
 }
 
 export interface SearchStatus {

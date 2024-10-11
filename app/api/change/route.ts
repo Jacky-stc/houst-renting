@@ -9,6 +9,7 @@ interface requestBody {
 
 export async function POST(req: Request) {
   const body: requestBody = await req.json();
+  console.log(body);
   let updateStatus = "";
   if (body.rentingStatus === "未上架") {
     updateStatus = "已上架";
@@ -45,6 +46,14 @@ export async function POST(req: Request) {
       { status: 200 },
     );
   } catch (error) {
-    return NextResponse.json({ message: error }, { status: 500 });
+    console.error(error);
+    return NextResponse.json(
+      {
+        message: error,
+        email: process.env.GOOGLE_CLIENT_EMAIL,
+        key: process.env.GOOGLE_PRIVATE_KEY,
+      },
+      { status: 500 },
+    );
   }
 }

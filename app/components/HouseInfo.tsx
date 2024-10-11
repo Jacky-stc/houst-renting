@@ -106,13 +106,17 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
         const result = await response.json();
         console.log(result);
         console.log(response.status);
-        setIsLoading(false);
-        setHintMessage("更新成功!");
-        setShowHintMessage(true);
-        setRentingData((prevData) => ({
-          ...prevData,
-          上架狀態: result.rentingStatus,
-        }));
+        if (response.status === 200) {
+          setIsLoading(false);
+          setHintMessage("更新成功!");
+          setShowHintMessage(true);
+          setRentingData((prevData) => ({
+            ...prevData,
+            上架狀態: result.rentingStatus,
+          }));
+        } else {
+          throw new Error("failed");
+        }
       } catch (error) {
         setIsLoading(false);
         setHintMessage("更新失敗!");

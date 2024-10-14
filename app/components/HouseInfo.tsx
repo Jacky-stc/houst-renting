@@ -239,10 +239,35 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
               </div>
             </div>
             {rentingData.屋主網址 && (
-              <div className="mt-3">
+              <div className="mt-3 inline-block">
                 <div className="px-1 py-2 bg-[#fff7e6] text-xs text-[#a16426] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
                   <a href={`${rentingData.屋主網址}`} target="_blank">
-                    <span>查看591物件</span>
+                    <span>查看屋主物件</span>
+                    <svg
+                      width="16px"
+                      height="16px"
+                      viewBox="0 0 18 18"
+                      mirror-in-rtl="true"
+                      className="inline align-top mx-1"
+                    >
+                      <path
+                        fill="#a16426"
+                        d="M12.1.6a.944.944 0 0 0 .2 1.04l1.352 1.353L10.28 6.37a.956.956 0 0 0 1.35 1.35l3.382-3.38 1.352 1.352a.944.944 0 0 0 1.04.2.958.958 0 0 0 .596-.875V.96a.964.964 0 0 0-.96-.96h-4.057a.958.958 0 0 0-.883.6z"
+                      />
+                      <path
+                        fill="#a16426"
+                        d="M14 11v5a2.006 2.006 0 0 1-2 2H2a2.006 2.006 0 0 1-2-2V6a2.006 2.006 0 0 1 2-2h5a1 1 0 0 1 0 2H2v10h10v-5a1 1 0 0 1 2 0z"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
+            {rentingData.上架網址 && (
+              <div className="mt-3 inline-block ml-3">
+                <div className="px-1 py-2 bg-[#fff7e6] text-xs text-[#a16426] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
+                  <a href={`${rentingData.上架網址}`} target="_blank">
+                    <span>查看上架物件</span>
                     <svg
                       width="16px"
                       height="16px"

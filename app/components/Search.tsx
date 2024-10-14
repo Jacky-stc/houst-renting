@@ -17,17 +17,23 @@ interface Props {
   sheetId: string;
 }
 
+type houseList = {
+  value: string[];
+  index: number;
+}[];
+
 const Search: FC<Props> = ({ apiKey, sheetId }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [inputFocus, setInputFocus] = useState<Boolean>(false);
   const [rentingData, setRentingData] = useState<RentingData>();
-  const [houseList, setHouseList] = useState<string[][]>();
+  const [houseList, setHouseList] = useState<houseList>();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState<Boolean>(false);
   const [searchStatus, setSearchStatus] = useState<SearchStatus>({
     status: "default",
   });
   const [showHouseList, setShowHouseList] = useState<Boolean>(false);
+  const [isComposition, setIsComposition] = useState<Boolean>(false);
   const searchNumber = useSelector(
     (state: RootState) => state.search.searchNumber,
   );
@@ -45,35 +51,47 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
     setLoading(true);
     setHouseList(undefined);
     setErrorMessage("");
-    let range;
-    if (regionArray.includes(inputValue)) {
-      range = inputValue;
-    } else {
-      const regionCode = inputValue[0];
-      range = regionList[regionCode];
+    setRentingData(undefined);
+    setSearchStatus({ status: "loading" });
+
+    async function getSheetData(
+      sheetId: string,
+      range: string,
+      apiKey: string,
+    ) {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      // 由於在下方已經有設置搜尋內容的條件，基本上都會得到搜尋結果，所以就先不設置data.value === undefined或是400 bad request的情形
+      return data.values;
     }
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
     dispatch(changeSearchNumber(inputValue));
     async function getGoogleSheetData() {
-      setRentingData(undefined);
-      setSearchStatus({ status: "loading" });
       try {
-        const response = await fetch(url);
-        const data = await response.json();
         if (regionArray.includes(inputValue)) {
-          if (data.values && data.values.length > 0) {
-            data.values.shift();
-          }
-          data.values.length !== 0
-            ? setHouseList(data.values)
-            : setErrorMessage("查詢不到物件，請重新查詢");
+          const data: [] = await getSheetData(sheetId, inputValue, apiKey);
+          data.shift();
+          const houseListData = data.map((element: string[], index) => ({
+            value: element,
+            index: index,
+          }));
+          data.length !== 0
+            ? (() => {
+                setHouseList(houseListData);
+                setShowHouseList(true);
+              })()
+            : setSearchStatus({ status: "no result" });
           setLoading(false);
-          setShowHouseList(true);
-        } else {
-          const targetObject = data.values.filter(
+        } else if (Object.keys(regionList).includes(inputValue[0])) {
+          const data = await getSheetData(
+            sheetId,
+            regionList[inputValue[0]],
+            apiKey,
+          );
+          const targetObject = data.filter(
             (item: Array<string>) => item[3] === inputValue,
           );
-          const targetIndex = data.values.findIndex(
+          const targetIndex = data.findIndex(
             (item: Array<string>) => item[3] === inputValue,
           );
           if (targetObject.length > 0) {
@@ -89,15 +107,43 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
             setSearchStatus({ status: "no result" });
             setLoading(false);
           }
+        } else {
+          const data = await getSheetData(sheetId, "物件總表", apiKey);
+          const targetObject = data.filter((item: string[]) =>
+            item[6].includes(inputValue),
+          );
+          if (targetObject.length > 0) {
+            const targetRegion = targetObject[0][5];
+            const regionArray = data.filter(
+              (item: string[]) => item[5] === targetRegion,
+            );
+            const targetArray = regionArray
+              .map((element: string[], index: number) => ({
+                value: element,
+                index: index,
+              }))
+              .filter((item: { value: string[]; index: number }) =>
+                item.value[6].includes(inputValue),
+              );
+            setHouseList(targetArray);
+            setShowHouseList(true);
+            setLoading(false);
+          } else {
+            setSearchStatus({ status: "no result" });
+            setLoading(false);
+          }
         }
       } catch (error) {
-        setErrorMessage("查詢不到物件，請重新查詢");
+        setSearchStatus({ status: "no result" });
         setLoading(false);
       }
     }
     getGoogleSheetData();
   };
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isComposition) {
+      return;
+    }
     if (e.code === "Enter") {
       // 防止form submit redirect
       e.preventDefault();
@@ -134,6 +180,12 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
                 setInputFocus(false);
               }}
               onChange={(e) => setInputValue(e.target.value)}
+              onCompositionStart={() => {
+                setIsComposition(true);
+              }}
+              onCompositionEnd={(e) => {
+                setIsComposition(false);
+              }}
               onKeyDown={(e) => {
                 handleEnter(e);
               }}
@@ -168,13 +220,13 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
       {!loading &&
         houseList?.length !== 0 &&
         showHouseList &&
-        houseList?.map((houseObject, index) => (
+        houseList?.map((houseObject) => (
           <HouseList
-            houseObject={houseObject}
-            key={houseObject[3]}
+            houseObject={houseObject.value}
+            key={houseObject.value[3]}
             setRentingData={setRentingData}
             setShowHouseList={setShowHouseList}
-            index={(index + 2).toString()}
+            index={(houseObject.index + 2).toString()}
           ></HouseList>
         ))}
       {errorMessage && <div>{errorMessage}</div>}

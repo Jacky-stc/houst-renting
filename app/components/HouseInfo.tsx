@@ -16,7 +16,7 @@ interface HouseInfoProps {
   rentingData: RentingData;
   setRentingData: React.Dispatch<React.SetStateAction<RentingData | undefined>>;
   setShowHouseList: React.Dispatch<React.SetStateAction<Boolean>>;
-  houseList: string[][] | undefined;
+  houseList: { value: string[]; index: number }[] | undefined;
 }
 
 let hourArray: string[] = [];
@@ -235,7 +235,8 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
             </div>
             <div className="my-2">
               <div className="text-xs text-gray-500">
-                備註：服務費{rentingData.服務費}，樓層{rentingData.樓層}
+                備註：服務費：{rentingData.服務費}，樓層：{rentingData.樓層}
+                ，業務編號：{rentingData.業務編號}
               </div>
             </div>
             {rentingData.屋主網址 && (

@@ -54,7 +54,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   }, [isMobileText]);
 
   const handleAddCalendar = () => {
-    console.log(selectedDate);
     const selectedDateString = selectedDate.toLocaleDateString().split("/");
     const selectedYear = selectedDateString[0];
     const selectedMonth = selectedDateString[1];
@@ -64,7 +63,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
     const event = {
       DTSTART: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : "0" + selectedMonth}${selectedDay.length > 1 ? selectedDay : "0" + selectedDay}T${reservationHour.length > 1 ? reservationHour : "0" + reservationHour}${reservationMinute}00`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
       DTEND: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : "0" + selectedMonth}${selectedDay.length > 1 ? selectedDay : "0" + selectedDay}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
-      SUMMARY: `${reservationName}預約看房`, // 標題
+      SUMMARY: `${rentingData.編號} ${reservationName}預約看房`, // 標題
       DESCRIPTION: rentingData.對話要點 + "，" + reservationText, // 描述,
       LOCATION: rentingData.地址,
       TZID: "Asia/Taipei", // 時區
@@ -104,8 +103,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
           body: JSON.stringify(reqBody),
         });
         const result = await response.json();
-        console.log(result);
-        console.log(response.status);
         if (response.status === 200) {
           setIsLoading(false);
           setHintMessage("更新成功!");

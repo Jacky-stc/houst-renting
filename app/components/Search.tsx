@@ -27,7 +27,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
   const [inputFocus, setInputFocus] = useState<Boolean>(false);
   const [rentingData, setRentingData] = useState<RentingData>();
   const [houseList, setHouseList] = useState<houseList>();
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState<Boolean>(false);
   const [searchStatus, setSearchStatus] = useState<SearchStatus>({
     status: "default",
@@ -50,7 +49,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
     e.preventDefault();
     setLoading(true);
     setHouseList(undefined);
-    setErrorMessage("");
     setRentingData(undefined);
     setSearchStatus({ status: "loading" });
 
@@ -101,7 +99,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
             );
             setRentingData(rentingResource);
             setSearchStatus({ status: "result" });
-            setErrorMessage("");
             setLoading(false);
           } else {
             setSearchStatus({ status: "no result" });
@@ -217,6 +214,16 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
           houseList={houseList}
         ></HouseInfo>
       )}
+      {/* {showHouseList && (
+        <div className="text-xs my-3 text-gray-400">
+          <div className="w-1 h-4 rounded bg-red-600 inline-block align-middle ml-2 mr-2"></div>
+          <span>已上架</span>
+          <div className="w-1 h-4 rounded bg-green-400 inline-block align-middle ml-4 mr-2"></div>
+          <span>未上架</span>
+          <div className="w-1 h-4 rounded bg-gray-500 inline-block align-middle ml-4 mr-2"></div>
+          <span>已下架</span>
+        </div>
+      )} */}
       {!loading &&
         houseList?.length !== 0 &&
         showHouseList &&
@@ -229,7 +236,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
             index={(houseObject.index + 2).toString()}
           ></HouseList>
         ))}
-      {errorMessage && <div>{errorMessage}</div>}
     </div>
   );
 };

@@ -3,18 +3,28 @@ import { NextResponse } from "next/server";
 
 interface requestBody {
   index: string;
-  region: string;
-  rentingStatus: string;
+  rentingStatus: "已上架" | "未上架" | "待出租" | "已下架" | string;
 }
+
+const statusSwitchList = {
+  已上架: ["未上架", "B"],
+  未上架: ["已上架", "B"],
+  待出租: ["已下架", "A"],
+  已下架: ["待出租", "A"],
+};
 
 export async function POST(req: Request) {
   const body: requestBody = await req.json();
-  console.log(body);
   let updateStatus = "";
-  if (body.rentingStatus === "未上架") {
-    updateStatus = "已上架";
+  let column = "";
+  if (Object.keys(statusSwitchList).includes(body.rentingStatus)) {
+    updateStatus =
+      statusSwitchList[body.rentingStatus as keyof typeof statusSwitchList][0];
+    column =
+      statusSwitchList[body.rentingStatus as keyof typeof statusSwitchList][1];
   } else {
-    updateStatus = "未上架";
+    updateStatus = body.rentingStatus;
+    column = "V";
   }
   const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
   try {
@@ -35,13 +45,12 @@ export async function POST(req: Request) {
     });
     const response = await sheet.spreadsheets.values.update({
       spreadsheetId: process.env.SHEETID,
-      range: `${body.region}!B${body.index}`,
+      range: `物件總表!${column}${Number(body.index) + 2}`,
       valueInputOption: "RAW",
       requestBody: {
         values: [[updateStatus]],
       },
     });
-    console.log(response);
     return NextResponse.json(
       { message: "ok", rentingStatus: updateStatus },
       { status: 200 },

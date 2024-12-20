@@ -44,6 +44,9 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [showHintMessage, setShowHintMessage] = useState<Boolean>(false);
   const [hintMessage, setHintMessage] = useState<string>("");
+  const [uploadURL, setUploadURL] = useState<string>(
+    rentingData.上架網址 || "",
+  );
 
   useEffect(() => {
     if (isMobile.any()) {
@@ -83,14 +86,13 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   };
   const formattedNumber: string = phoneNumberFormat(rentingData.電話 || "");
 
-  const handleRentingStatusChange = () => {
+  const handleRentingStatusChange = (status: string) => {
     setIsLoading(true);
     setHintMessage("");
     setShowHintMessage(false);
     const reqBody = {
       index: rentingData.欄位,
-      region: rentingData.區域,
-      rentingStatus: rentingData.上架狀態,
+      rentingStatus: status,
     };
     const changeStatus = async () => {
       try {
@@ -107,10 +109,28 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
           setIsLoading(false);
           setHintMessage("更新成功!");
           setShowHintMessage(true);
-          setRentingData((prevData) => ({
-            ...prevData,
-            上架狀態: result.rentingStatus,
-          }));
+          if (
+            result.rentingStatus === "已上架" ||
+            result.rentingStatus === "未上架"
+          ) {
+            setRentingData((prevData) => ({
+              ...prevData,
+              上架狀態: result.rentingStatus,
+            }));
+          } else if (
+            result.rentingStatus === "待出租" ||
+            result.rentingStatus === "已下架"
+          ) {
+            setRentingData((prevData) => ({
+              ...prevData,
+              物件狀態: result.rentingStatus,
+            }));
+          } else {
+            setRentingData((prevData) => ({
+              ...prevData,
+              上架網址: result.rentingStatus,
+            }));
+          }
         } else {
           throw new Error("failed");
         }
@@ -431,26 +451,51 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
               setShowHintMessage(false);
             }}
           ></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center w-56 h-fit bg-[#fff7E6] z-10 rounded p-2 text-center text-sm">
-            <div className="mt-3 mb-2">是否要變更上架狀態？</div>
-            <div className="mb-2 text-xs">
-              目前狀態：
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center w-56 h-fit bg-[#fff7E6] z-10 rounded p-2 text-center text-sm">
+            <div className="mt-3 mb-2 font-bold text-start pl-3">上架狀態</div>
+            <div className="w-full text-xs flex items-center justify-between gap-5 mt-3 pl-3">
               <span
                 className={`${rentingData.上架狀態 === "已上架" ? "text-red-500" : "text-[#6b7280]"}`}
               >
                 {rentingData.上架狀態}
               </span>
-            </div>
-            {showHintMessage && (
-              <div
-                className={`text-xs ${hintMessage === "更新成功!" ? "text-red-500" : "text-gray-900"}`}
-              >
-                {hintMessage}
-              </div>
-            )}
-            {isLoading && <Loader></Loader>}
-            <div className="w-full flex items-center justify-center gap-5 mt-5">
               <button
+                className="rounded bg-red-500 px-2 py-1 mx-2 text-slate-200 hover:bg-red-700"
+                onClick={() => {
+                  handleRentingStatusChange(rentingData.上架狀態 || "未上架");
+                }}
+              >
+                變更
+              </button>
+            </div>
+            <hr className="mx-auto mt-4 mb-2 border-b border-gray-300 w-11/12"></hr>
+            <div className="mt-3 mb-2 font-bold text-start pl-3">出租狀態</div>
+            <div className="w-full text-xs flex items-center justify-between gap-5 mt-3 pl-3">
+              <span
+                className={`${rentingData.物件狀態 === "待出租" ? "text-red-500" : "text-[#6b7280]"}`}
+              >
+                {rentingData.物件狀態}
+              </span>
+              <button
+                className="rounded bg-red-500 px-2 py-1 mx-2 text-slate-200 hover:bg-red-700"
+                onClick={() => {
+                  handleRentingStatusChange(rentingData.物件狀態 || "待出租");
+                }}
+              >
+                變更
+              </button>
+            </div>
+            <hr className="mx-auto mt-4 mb-2 border-b border-gray-300 w-11/12"></hr>
+            <div className="mt-3 mb-2 font-bold text-start pl-3">上架網址</div>
+            <div className="w-full flex items-center justify-between gap-5 mt-3 mb-5 text-xs">
+              <input
+                className=" w-[56%] ml-3 border border-gray-300 focus:outline-slate-500 px-2 py-1"
+                value={uploadURL}
+                onChange={(e) => {
+                  setUploadURL(e.target.value);
+                }}
+              ></input>
+              {/* <button
                 className="rounded border border-slate-600 px-2 py-1 hover:bg-gray-300"
                 onClick={() => {
                   setShowStatusChange(false);
@@ -459,14 +504,24 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
                 }}
               >
                 取消
-              </button>
+              </button> */}
               <button
                 className="rounded bg-red-500 px-2 py-1 mx-2 text-slate-200 hover:bg-red-700"
-                onClick={handleRentingStatusChange}
+                onClick={() => {
+                  handleRentingStatusChange(uploadURL);
+                }}
               >
                 變更
               </button>
             </div>
+            {showHintMessage && (
+              <div
+                className={`text-xs ${hintMessage === "更新成功!" ? "text-red-500" : "text-gray-900"} my-2`}
+              >
+                {hintMessage}
+              </div>
+            )}
+            {isLoading && <Loader></Loader>}
           </div>
         </>
       )}

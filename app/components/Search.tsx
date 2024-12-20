@@ -1,8 +1,5 @@
 "use client";
 import React, { FC, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../lib/store";
-import { changeSearchNumber } from "../../lib/features/search/searchSlice";
 import { IoSearchOutline } from "react-icons/io5";
 import Loader from "./Loader";
 
@@ -33,10 +30,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
   });
   const [showHouseList, setShowHouseList] = useState<Boolean>(false);
   const [isComposition, setIsComposition] = useState<Boolean>(false);
-  const searchNumber = useSelector(
-    (state: RootState) => state.search.searchNumber,
-  );
-  const dispatch = useDispatch();
 
   const regionArray = Object.values(regionList);
   // Sheets 中要取得的資料範圍，格式如下
@@ -63,16 +56,21 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
       // 由於在下方已經有設置搜尋內容的條件，基本上都會得到搜尋結果，所以就先不設置data.value === undefined或是400 bad request的情形
       return data.values;
     }
-    dispatch(changeSearchNumber(inputValue));
     async function getGoogleSheetData() {
       try {
-        if (regionArray.includes(inputValue)) {
-          const data: [] = await getSheetData(sheetId, inputValue, apiKey);
-          data.shift();
-          const houseListData = data.map((element: string[], index) => ({
+        const data: [] = await getSheetData(sheetId, "物件總表", apiKey);
+        data.shift();
+        let houseListData = data
+          .map((element: string[], index) => ({
             value: element,
             index: index,
-          }));
+          }))
+          .reverse();
+        console.log(houseListData);
+        if (regionArray.includes(inputValue)) {
+          houseListData = houseListData.filter(
+            (data) => data.value[5] === inputValue,
+          );
           data.length !== 0
             ? (() => {
                 setHouseList(houseListData);
@@ -81,21 +79,13 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
             : setSearchStatus({ status: "no result" });
           setLoading(false);
         } else if (Object.keys(regionList).includes(inputValue[0])) {
-          const data = await getSheetData(
-            sheetId,
-            regionList[inputValue[0]],
-            apiKey,
-          );
-          const targetObject = data.filter(
-            (item: Array<string>) => item[3] === inputValue,
-          );
-          const targetIndex = data.findIndex(
-            (item: Array<string>) => item[3] === inputValue,
+          const targetObject = houseListData.filter(
+            (item) => item.value[3] === inputValue,
           );
           if (targetObject.length > 0) {
             const rentingResource = rentingDataFormat(
-              targetObject[0],
-              (targetIndex + 1).toString(),
+              targetObject[0].value,
+              targetObject[0].index.toString(),
             );
             setRentingData(rentingResource);
             setSearchStatus({ status: "result" });
@@ -105,23 +95,10 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
             setLoading(false);
           }
         } else {
-          const data = await getSheetData(sheetId, "物件總表", apiKey);
-          const targetObject = data.filter((item: string[]) =>
-            item[6].includes(inputValue),
+          const targetArray = houseListData.filter((item) =>
+            item.value[6].includes(inputValue),
           );
-          if (targetObject.length > 0) {
-            const targetRegion = targetObject[0][5];
-            const regionArray = data.filter(
-              (item: string[]) => item[5] === targetRegion,
-            );
-            const targetArray = regionArray
-              .map((element: string[], index: number) => ({
-                value: element,
-                index: index,
-              }))
-              .filter((item: { value: string[]; index: number }) =>
-                item.value[6].includes(inputValue),
-              );
+          if (targetArray.length > 0) {
             setHouseList(targetArray);
             setShowHouseList(true);
             setLoading(false);
@@ -214,16 +191,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
           houseList={houseList}
         ></HouseInfo>
       )}
-      {/* {showHouseList && (
-        <div className="text-xs my-3 text-gray-400">
-          <div className="w-1 h-4 rounded bg-red-600 inline-block align-middle ml-2 mr-2"></div>
-          <span>已上架</span>
-          <div className="w-1 h-4 rounded bg-green-400 inline-block align-middle ml-4 mr-2"></div>
-          <span>未上架</span>
-          <div className="w-1 h-4 rounded bg-gray-500 inline-block align-middle ml-4 mr-2"></div>
-          <span>已下架</span>
-        </div>
-      )} */}
       {!loading &&
         houseList?.length !== 0 &&
         showHouseList &&

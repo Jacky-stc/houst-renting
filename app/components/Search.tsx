@@ -200,7 +200,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
             key={houseObject.value[3]}
             setRentingData={setRentingData}
             setShowHouseList={setShowHouseList}
-            index={(houseObject.index + 2).toString()}
+            index={houseObject.index.toString()}
           ></HouseList>
         ))}
     </div>

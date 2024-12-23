@@ -28,15 +28,17 @@ const HouseList: React.FC<HouseListProps> = ({
       <div className="flex flex-row">
         <div className="inline-block align-sub text-xl">{houseInfo.編號}</div>
         <span
-          className={`py-1 px-2 ml-2 rounded-xl text-xs ${houseInfo.物件狀態 === "待出租" ? "bg-green-400" : "bg-red-500"} text-slate-100`}
+          className={`py-1 px-2 ml-2 rounded-xl text-xs min-w-[60px] ${houseInfo.物件狀態 === "待出租" ? "bg-green-400" : "bg-red-500"} text-slate-100`}
         >
           {houseInfo.物件狀態}
         </span>
-        <span className=" align-sub text-lg ml-4">
+        <span className="max-w-[350px] align-sub text-lg ml-4 text-ellipsis whitespace-nowrap overflow-hidden">
           {houseInfo.租金} <span className="text-sm">元/月</span>
         </span>
       </div>
-      <div className="mt-2 text-xs text-gray-500">{houseInfo.地址}</div>
+      <div className="mt-2 text-xs text-gray-500 text-ellipsis whitespace-nowrap overflow-hidden">
+        {houseInfo.地址}
+      </div>
     </div>
   );
 };

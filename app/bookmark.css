@@ -1,5 +1,5 @@
 .bookmark:hover > svg > path{
-    fill: red;
+    transform: scale(1.2);
 }
 .in-bookmark > svg > path{
     fill: red;

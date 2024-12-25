@@ -60,8 +60,6 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         message: error,
-        email: process.env.GOOGLE_CLIENT_EMAIL,
-        key: privateKey,
       },
       { status: 500 },
     );

@@ -1,24 +1,36 @@
 import React from "react";
 import { RentingData } from "../types/search";
 import { rentingDataFormat } from "@/lib/utils";
+import { IoBookmarkOutline } from "react-icons/io5";
+import { useBookmarkStore, useDisplayData } from "../store";
 
 interface HouseListProps {
   houseObject: string[];
   setRentingData: React.Dispatch<React.SetStateAction<RentingData | undefined>>;
-  setShowHouseList: React.Dispatch<React.SetStateAction<Boolean>>;
   index: string;
 }
 
 const HouseList: React.FC<HouseListProps> = ({
   houseObject,
   setRentingData,
-  setShowHouseList,
   index,
 }) => {
   const houseInfo = rentingDataFormat(houseObject, index);
+  const bookmarkList = useBookmarkStore((state) => state.bookmarkList);
+  const toggleBookmarkList = useBookmarkStore(
+    (state) => state.toggleBookmarkList,
+  );
+  const changeDisplayData = useDisplayData((state) => state.changeDisplayData);
+
   const handleClick = () => {
     setRentingData(houseInfo);
-    setShowHouseList(false);
+    console.log(houseInfo);
+    changeDisplayData("");
+  };
+
+  const handleAddBookmark = (e: React.MouseEvent<SVGElement>) => {
+    e.stopPropagation();
+    toggleBookmarkList(houseInfo.欄位);
   };
   return (
     <div
@@ -35,6 +47,15 @@ const HouseList: React.FC<HouseListProps> = ({
         <span className="max-w-[350px] align-sub text-lg ml-4 text-ellipsis whitespace-nowrap overflow-hidden">
           {houseInfo.租金} <span className="text-sm">元/月</span>
         </span>
+        <div
+          className={`flex ml-auto items-center p-1.5 bookmark ${bookmarkList.has(houseInfo.欄位) ? "in-bookmark" : ""}`}
+        >
+          <IoBookmarkOutline
+            onClick={(e) => {
+              handleAddBookmark(e);
+            }}
+          ></IoBookmarkOutline>
+        </div>
       </div>
       <div className="mt-2 text-xs text-gray-500 text-ellipsis whitespace-nowrap overflow-hidden">
         {houseInfo.地址}

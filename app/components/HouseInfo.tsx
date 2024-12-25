@@ -11,11 +11,11 @@ import { BiSolidBed, BiSolidBuildingHouse } from "react-icons/bi";
 import DatePicker from "react-datepicker";
 import { isMobile, phoneNumberFormat } from "@/lib/utils";
 import Loader from "./Loader";
+import { useDisplayData } from "../store";
 
 interface HouseInfoProps {
   rentingData: RentingData;
   setRentingData: React.Dispatch<React.SetStateAction<RentingData | undefined>>;
-  setShowHouseList: React.Dispatch<React.SetStateAction<Boolean>>;
   houseList: { value: string[]; index: number }[] | undefined;
 }
 
@@ -28,7 +28,6 @@ for (let i = 1; i <= 24; i++) {
 const HouseInfo: React.FC<HouseInfoProps> = ({
   rentingData,
   setRentingData,
-  setShowHouseList,
   houseList,
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -47,6 +46,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   const [uploadURL, setUploadURL] = useState<string>(
     rentingData.上架網址 || "",
   );
+  const changeDisplayData = useDisplayData((state) => state.changeDisplayData);
 
   useEffect(() => {
     if (isMobile.any()) {
@@ -82,7 +82,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
   };
   const handleReturn = () => {
     setRentingData(undefined);
-    setShowHouseList(true);
+    changeDisplayData("showHouseList");
   };
   const formattedNumber: string = phoneNumberFormat(rentingData.電話 || "");
 

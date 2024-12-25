@@ -1,0 +1,46 @@
+.bookmark:hover > svg > path{
+    fill: red;
+}
+.in-bookmark > svg > path{
+    fill: red;
+}
+.snowFlakes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* 防止影響互動 */
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px; /* 初始位置在視窗上方 */
+  color: #fff; /* 雪花顏色 */
+  opacity: 0.8;
+  border-radius: 50%;
+  animation-name: fall, sway;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  text-shadow: 0 0 5px #000;
+}
+
+@keyframes fall {
+  0% {
+    top: -10px;
+  }
+  100% {
+    top: 100vh; /* 掉到視窗底部 */
+  }
+}
+
+@keyframes sway {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px); /* 左右搖動 */
+  }
+}

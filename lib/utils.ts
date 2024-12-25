@@ -88,3 +88,11 @@ export const regionList: { [key: string]: string } = {
   K: "新店區",
   Q: "汐止區",
 };
+
+export async function getSheetData(sheetId: string, apiKey: string) {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/物件總表?key=${apiKey}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  // 由於在下方已經有設置搜尋內容的條件，基本上都會得到搜尋結果，所以就先不設置data.value === undefined或是400 bad request的情形
+  return data.values;
+}

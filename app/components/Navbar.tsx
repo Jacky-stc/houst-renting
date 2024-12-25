@@ -30,6 +30,7 @@ const Navbar: FC<Props> = ({ apiKey, sheetId }) => {
 
   const toPageBookmark = async () => {
     setIsLoading(true);
+    setHouseList([]);
     setPageNow("Bookmark");
     setSearchStatus("loading");
     const data: [] = await getSheetData(sheetId, apiKey);

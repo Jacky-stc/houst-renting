@@ -48,7 +48,7 @@ const HouseList: React.FC<HouseListProps> = ({
           {houseInfo.租金} <span className="text-sm">元/月</span>
         </span>
         <div
-          className={`flex ml-auto items-center p-1.5 bookmark ${bookmarkList.has(houseInfo.欄位) ? "in-bookmark" : ""}`}
+          className={`flex ml-auto items-center p-1.5 bookmark ${bookmarkList.has(houseInfo.欄位) ? "in-bookmark" : ""} active:scale-75`}
         >
           <IoBookmarkOutline
             onClick={(e) => {

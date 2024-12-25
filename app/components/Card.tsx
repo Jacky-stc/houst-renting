@@ -43,7 +43,7 @@ const Card: React.FC = () => {
       {searchStatus === "no bookmark" && (
         <>
           <div className="w-4/5 sm:w-1/2 flex justify-center">
-            <img src="image/santa.png" width={"60%"}></img>
+            <img src="image/santa.png" alt="santa image" width={"60%"}></img>
           </div>
           <div className="text-center py-4 sm:text-start sm:pt-0 flex flex-col justify-center sm:gap-10">
             <h1 className="font-bold text-2xl sm:text-3xl text-[#ff3838]">

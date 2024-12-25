@@ -36,6 +36,7 @@ const Hamburger: FC<Props> = ({ apiKey, sheetId }) => {
     }
     setIsOpen(!isOpen);
     setIsLoading(true);
+    setHouseList([]);
     setPageNow("Bookmark");
     setSearchStatus("loading");
     const data: [] = await getSheetData(sheetId, apiKey);

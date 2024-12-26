@@ -3,13 +3,12 @@ import React, { FC, useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import Loader from "./Loader";
 
-import { RentingData, SearchStatus } from "../types/search";
+import { RentingData } from "../types/search";
 import HouseInfo from "./HouseInfo";
 import Card from "./Card";
 import HouseList from "./HouseList";
 import { getSheetData, regionList, rentingDataFormat } from "@/lib/utils";
 import {
-  useBookmarkStore,
   useDisplayData,
   useLoading,
   usePageNow,
@@ -39,7 +38,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
   const setHouseList = useSearchingData((state) => state.setHouseList);
   const isLoading = useLoading((state) => state.isLoading);
   const setIsLoading = useLoading((state) => state.setIsLoading);
-  const pageNow = usePageNow((state) => state.pageNow);
   const setPageNow = usePageNow((state) => state.setPageNow);
 
   const regionArray = Object.values(regionList);
@@ -49,8 +47,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
     }
   });
 
-  // Sheets 中要取得的資料範圍，格式如下
-  // Sheets API 的 URL
   const handleSearch = (
     e:
       | React.KeyboardEvent<HTMLInputElement>
@@ -102,7 +98,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
               targetObject[0].index.toString(),
             );
             setRentingData(rentingResource);
-            setSearchStatus("result");
+            setSearchStatus("houseInfo");
             setIsLoading(false);
           } else {
             setSearchStatus("no result");
@@ -114,7 +110,6 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
           );
           if (targetArray.length > 0) {
             setHouseList(targetArray);
-            // setShowHouseList(true);
             changeDisplayData("showHouseList");
             setIsLoading(false);
           } else {
@@ -198,7 +193,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
         searchStatus === "no result" ||
         searchStatus === "no bookmark") && <Card></Card>}
       {isLoading && <Loader></Loader>}
-      {!isLoading && rentingData && (
+      {!isLoading && rentingData && searchStatus === "houseInfo" && (
         <HouseInfo
           rentingData={rentingData}
           setRentingData={setRentingData}

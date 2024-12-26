@@ -2,7 +2,7 @@ import React from "react";
 import { RentingData } from "../types/search";
 import { rentingDataFormat } from "@/lib/utils";
 import { IoBookmarkOutline } from "react-icons/io5";
-import { useBookmarkStore, useDisplayData } from "../store";
+import { useBookmarkStore, useDisplayData, useSearchStatus } from "../store";
 
 interface HouseListProps {
   houseObject: string[];
@@ -21,10 +21,11 @@ const HouseList: React.FC<HouseListProps> = ({
     (state) => state.toggleBookmarkList,
   );
   const changeDisplayData = useDisplayData((state) => state.changeDisplayData);
+  const setSearchStatus = useSearchStatus((state) => state.setSearchStatus);
 
   const handleClick = () => {
     setRentingData(houseInfo);
-    console.log(houseInfo);
+    setSearchStatus("houseInfo");
     changeDisplayData("");
   };
 

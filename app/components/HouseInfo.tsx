@@ -372,7 +372,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
               <select
                 className="inline-block border border-gray-300 text-gray-900 text-sm rounded-lg py-1.5 px-2.5 my-1"
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setReserVationMinute(e.target.value);
                 }}
                 value={reservationMinute}
@@ -443,7 +442,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
       {showStatusChange && (
         <>
           <div
-            className="w-full h-full fixed top-0 right-0 left-0 bottom-0 bg-black/40 z-10 animate-[fade-in_0.15s_both] px-[auto] motion-reduce:transition-none motion-reduce:animate-none"
+            className="w-full h-full fixed top-0 right-0 left-0 bottom-0 bg-black/40 dark:bg-gray-700/40 z-10 animate-[fade-in_0.15s_both] px-[auto] motion-reduce:transition-none motion-reduce:animate-none"
             data-twe-dropdown-backdrop-ref=""
             onClick={() => {
               setShowStatusChange(false);
@@ -451,7 +450,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
               setShowHintMessage(false);
             }}
           ></div>
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center w-56 h-fit bg-[#fff7E6] z-10 rounded p-2 text-center text-sm">
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center w-56 h-fit bg-[#fff7E6] dark:bg-[#161616] z-10 rounded p-2 text-center text-sm">
             <div className="mt-3 mb-2 font-bold text-start pl-3">上架狀態</div>
             <div className="w-full text-xs flex items-center justify-between gap-5 mt-3 pl-3">
               <span

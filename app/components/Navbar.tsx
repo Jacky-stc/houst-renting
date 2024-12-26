@@ -43,9 +43,7 @@ const Navbar: FC<Props> = ({ apiKey, sheetId }) => {
     houseListData = houseListData.filter((data) =>
       bookmarkList.has(data.index.toString()),
     );
-    console.log(houseListData);
     if (houseListData.length === 0) {
-      console.log("yes");
       setSearchStatus("no bookmark");
     } else {
       setHouseList(houseListData);

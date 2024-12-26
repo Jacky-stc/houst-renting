@@ -15,7 +15,9 @@ import {
   usePageNow,
   useSearchingData,
   useSearchStatus,
+  useToggleTheme,
 } from "../store";
+import Snow from "./Snow";
 
 interface Props {
   apiKey: string;
@@ -28,6 +30,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
   const [rentingData, setRentingData] = useState<RentingData>();
   const [isComposition, setIsComposition] = useState<Boolean>(false);
 
+  const theme = useToggleTheme((state) => state.theme);
   const searchStatus = useSearchStatus((state) => state.searchStatus);
   const setSearchStatus = useSearchStatus((state) => state.setSearchStatus);
   const displayData = useDisplayData((state) => state.displayData);
@@ -40,6 +43,11 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
   const setPageNow = usePageNow((state) => state.setPageNow);
 
   const regionArray = Object.values(regionList);
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    }
+  });
 
   // Sheets 中要取得的資料範圍，格式如下
   // Sheets API 的 URL
@@ -135,6 +143,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
 
   return (
     <div className="mx-3 sm:mx-6 tracking-wide w-11/12 font-inter sm:w-auto flex-1">
+      {theme === "dark" && <Snow></Snow>}
       <div
         className={`flex items-center px-2 py-1 w-11/12 sm:ml-auto sm:w-72 rounded ${inputFocus ? " border border-sky-400" : "border"}`}
       >
@@ -170,7 +179,7 @@ const Search: FC<Props> = ({ apiKey, sheetId }) => {
               onKeyDown={(e) => {
                 handleEnter(e);
               }}
-              className="rounded-sm px-2 py-1 mx-1 w-full sm:w-52 focus:outline-0 outline-0"
+              className="bg-transparent rounded-sm px-2 py-1 mx-1 w-full sm:w-52 focus:outline-0 outline-0"
               placeholder="輸入物件編號或區域"
               spellCheck="false"
             ></input>

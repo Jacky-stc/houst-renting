@@ -32,6 +32,11 @@ interface UsePageNow {
   setPageNow: (page: string) => void;
 }
 
+interface UseToggleTheme {
+  theme: string;
+  setTheme: (theme: string) => void;
+}
+
 export const useBookmarkStore = create<UseBookmarkStore>()(
   persist(
     (set) => ({
@@ -109,3 +114,18 @@ export const usePageNow = create<UsePageNow>((set) => ({
       pageNow: page,
     })),
 }));
+
+export const useToggleTheme = create<UseToggleTheme>()(
+  persist(
+    (set) => ({
+      theme: "light",
+      setTheme: (theme: string) =>
+        set(() => ({
+          theme: theme,
+        })),
+    }),
+    {
+      name: "theme",
+    },
+  ),
+);

@@ -63,7 +63,7 @@ const Navbar: FC<Props> = ({ apiKey, sheetId }) => {
     <nav className="w-30 border-r border-slate-400 hidden lg:block">
       <ul className="mx-4">
         <li
-          className={`relative my-2 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer ${pageNow === "Home" && "bg-[#0831fe26]"}`}
+          className={`relative my-2 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer ${pageNow === "Home" && "bg-[#0831fe26] dark:bg-gray-700"}`}
           onClick={toPageHome}
         >
           <VscSearch className="inline-block mr-2"></VscSearch>物件查詢
@@ -76,7 +76,7 @@ const Navbar: FC<Props> = ({ apiKey, sheetId }) => {
           )}
         </li>
         <li
-          className={`relative my-2 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer ${pageNow === "Bookmark" && "bg-[#0831fe26]"}`}
+          className={`relative my-2 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer ${pageNow === "Bookmark" && "bg-[#0831fe26] dark:bg-gray-700"}`}
           onClick={toPageBookmark}
         >
           <IoBookmarkOutline className="inline-block mr-2"></IoBookmarkOutline>
@@ -90,13 +90,13 @@ const Navbar: FC<Props> = ({ apiKey, sheetId }) => {
           )}
         </li>
         <a href="https://forms.gle/Z3og9gGzQ9sANZfF7" target="_blank">
-          <li className="my-2 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer">
+          <li className="my-2 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer">
             <IoMdGitCompare className="inline-block mr-2"></IoMdGitCompare>
             回報表單
           </li>
         </a>
         <a href="https://forms.gle/gk9ybxm464FiXLMw9" target="_blank">
-          <li className="my-2 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer">
+          <li className="my-2 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer">
             <HiOutlineDocumentReport className="inline-block mr-2"></HiOutlineDocumentReport>
             開發表單
           </li>

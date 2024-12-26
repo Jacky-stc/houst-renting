@@ -34,7 +34,7 @@ const HouseList: React.FC<HouseListProps> = ({
   };
   return (
     <div
-      className={`flex flex-col my-2 pt-4 pb-2 px-4 rounded shadow-md hover:bg-slate-300 cursor-pointer border-l-4 ${houseInfo.上架狀態 === "已上架" ? "border-red-600" : "border-gray-500"}`}
+      className={`flex flex-col my-2 pt-4 pb-2 px-4 rounded shadow-md dark:bg-[#2b2b2be6] dark:hover:brightness-125 hover:bg-slate-300 cursor-pointer border-l-4 ${houseInfo.上架狀態 === "已上架" ? "border-red-600" : "border-gray-500"}`}
       onClick={handleClick}
     >
       <div className="flex flex-row">

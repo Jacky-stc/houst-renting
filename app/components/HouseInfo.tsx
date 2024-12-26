@@ -152,7 +152,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
             onClick={handleReturn}
           >
             <svg
-              fill="#000000"
+              fill="currentColor"
               width="20px"
               height="20px"
               viewBox="0 0 24 24"
@@ -258,7 +258,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
             </div>
             {rentingData.屋主網址 && (
               <div className="mt-3 inline-block">
-                <div className="px-1 py-2 bg-[#fff7e6] text-xs text-[#a16426] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
+                <div className="px-1 py-2 bg-[#fff7e6] dark:bg-[#2f2613] text-xs text-[#a16426] dark:text-[#ffc58a] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
                   <a href={`${rentingData.屋主網址}`} target="_blank">
                     <span>查看屋主物件</span>
                     <svg
@@ -283,7 +283,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
             )}
             {rentingData.上架網址 && (
               <div className="mt-3 inline-block ml-3">
-                <div className="px-1 py-2 bg-[#fff7e6] text-xs text-[#a16426] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
+                <div className="px-1 py-2 bg-[#fff7e6] dark:bg-[#2f2613] text-xs text-[#a16426] dark:text-[#ffc58a] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
                   <a href={`${rentingData.上架網址}`} target="_blank">
                     <span>查看上架物件</span>
                     <svg
@@ -308,7 +308,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
             )}
           </div>
           <div
-            className={`${showCalendarForm ? "block bg-white z-50" : "hidden bg-white md:block"} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto bg-white -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}
+            className={`${showCalendarForm ? "block bg-white dark:bg-[#0f0f14fa] z-50" : "hidden bg-white dark:bg-[#0f0f14fa] md:block"} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}
             data-testid="calendar-form"
           >
             <div>
@@ -427,7 +427,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
       </div>
       <div>
         <h2 className="mt-8 mb-2 text-lg font-bold">對話要點</h2>
-        <div className="rounded border w-11/12 sm:w-full border-gray-800 p-3 break-words">
+        <div className="rounded border w-11/12 sm:w-full border-gray-800 dark:border-gray-200 p-3 break-words">
           {rentingData.對話要點}
         </div>
       </div>
@@ -495,16 +495,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({
                   setUploadURL(e.target.value);
                 }}
               ></input>
-              {/* <button
-                className="rounded border border-slate-600 px-2 py-1 hover:bg-gray-300"
-                onClick={() => {
-                  setShowStatusChange(false);
-                  setHintMessage("");
-                  setShowHintMessage(false);
-                }}
-              >
-                取消
-              </button> */}
               <button
                 className="rounded bg-red-500 px-2 py-1 mx-2 text-slate-200 hover:bg-red-700"
                 onClick={() => {

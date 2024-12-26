@@ -1,5 +1,6 @@
 import React from "react";
 import Hamburger from "./Hamburger";
+import ToggleButton from "./ToggleButton";
 
 const Header = () => {
   const apiKey: string = process.env.APIKEY || "";
@@ -14,7 +15,10 @@ const Header = () => {
             className="w-28 sm:w-44"
           />
         </div>
-        <Hamburger apiKey={apiKey} sheetId={sheetId}></Hamburger>
+        <div className="flex gap-8">
+          <ToggleButton></ToggleButton>
+          <Hamburger apiKey={apiKey} sheetId={sheetId}></Hamburger>
+        </div>
       </nav>
     </header>
   );

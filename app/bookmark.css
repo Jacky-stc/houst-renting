@@ -17,7 +17,7 @@
 
 .snowflake {
   position: absolute;
-  top: -10px; /* 初始位置在視窗上方 */
+  top: -20px; /* 初始位置在視窗上方 */
   color: #fff; /* 雪花顏色 */
   opacity: 0.8;
   border-radius: 50%;

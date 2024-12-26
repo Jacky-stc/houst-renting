@@ -80,7 +80,7 @@ const Hamburger: FC<Props> = ({ apiKey, sheetId }) => {
         aria-label="hamburger menu button"
       >
         <span
-          className={`bg-slate-700 block transition-all duration-300 ease-out 
+          className={`bg-slate-700 dark:bg-slate-200 block transition-all duration-300 ease-out 
                             h-0.5 w-6 rounded-sm ${
                               isOpen
                                 ? "rotate-45 translate-y-1"
@@ -88,11 +88,11 @@ const Hamburger: FC<Props> = ({ apiKey, sheetId }) => {
                             }`}
         ></span>
         <span
-          className={`bg-slate-700 block transition-all duration-300 ease-out 
+          className={`bg-slate-700 dark:bg-slate-200 block transition-all duration-300 ease-out 
                             h-0.5 w-6 rounded-sm my-0.5 ${isOpen ? "opacity-0" : "opacity-100"}`}
         ></span>
         <span
-          className={`bg-slate-700 block transition-all duration-300 ease-out 
+          className={`bg-slate-700 dark:bg-slate-200 block transition-all duration-300 ease-out 
                             h-0.5 w-6 rounded-sm ${
                               isOpen
                                 ? "-rotate-45 -translate-y-1"
@@ -101,11 +101,11 @@ const Hamburger: FC<Props> = ({ apiKey, sheetId }) => {
         ></span>
       </button>
       {isOpen && (
-        <div className="absolute w-screen h-screen bg-white opacity-95 top-0 right-0 block z-10 lg:hidden">
-          <nav className="w-30 border-r border-slate-400 py-24">
+        <div className="absolute w-screen h-screen bg-white dark:bg-black opacity-95 top-0 right-0 block z-10 lg:hidden">
+          <nav className="w-30 py-24">
             <ul className="mx-4">
               <li
-                className={`relative my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer ${pageNow === "Home" && "bg-[#0831fe26]"}`}
+                className={`relative my-4 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer ${pageNow === "Home" && "bg-[#0831fe26] dark:bg-gray-700"}`}
                 onClick={toPageHome}
               >
                 <VscSearch className="inline-block mr-2"></VscSearch>物件查詢
@@ -118,7 +118,7 @@ const Hamburger: FC<Props> = ({ apiKey, sheetId }) => {
                 )}
               </li>
               <li
-                className={`relative my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer ${pageNow === "Bookmark" && "bg-[#0831fe26]"}`}
+                className={`relative my-4 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer ${pageNow === "Bookmark" && "bg-[#0831fe26] dark:bg-gray-700"}`}
                 onClick={toPageBookmark}
               >
                 <IoBookmarkOutline className="inline-block mr-2"></IoBookmarkOutline>
@@ -132,21 +132,17 @@ const Hamburger: FC<Props> = ({ apiKey, sheetId }) => {
                 )}
               </li>
               <a href="https://forms.gle/Z3og9gGzQ9sANZfF7" target="_blank">
-                <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer">
+                <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer">
                   <IoMdGitCompare className="inline-block mr-2"></IoMdGitCompare>
                   回報表單
                 </li>
               </a>
               <a href="https://forms.gle/gk9ybxm464FiXLMw9" target="_blank">
-                <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer">
+                <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer">
                   <HiOutlineDocumentReport className="inline-block mr-2"></HiOutlineDocumentReport>
                   開發表單
                 </li>
               </a>
-              <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] cursor-pointer">
-                <IoIosLogOut className="inline-block mr-2"></IoIosLogOut>
-                登出
-              </li>
             </ul>
           </nav>
         </div>

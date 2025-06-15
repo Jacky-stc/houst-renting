@@ -1,71 +1,41 @@
 "use client";
 import React, { FC, useState } from "react";
-import { HiOutlineDocumentReport } from "react-icons/hi";
-import { IoIosLogOut, IoMdGitCompare } from "react-icons/io";
-import { IoBookmarkOutline } from "react-icons/io5";
-import { VscSearch } from "react-icons/vsc";
-import {
-  useBookmarkStore,
-  useDisplayData,
-  useLoading,
-  usePageNow,
-  useSearchingData,
-  useSearchStatus,
-} from "../store";
-import { getSheetData } from "@/lib/utils";
+import { IoPerson } from "react-icons/io5";
+import { useRentingData } from "../../store/useRentingData";
+import { toPageHome, toPageMyHouseList } from "../../lib/navigation";
+import usePersonStore from "@/app/store/usePersonStore";
+import { BiSolidReport, BiSolidSearchAlt2 } from "react-icons/bi";
+import { TbMessageReportFilled } from "react-icons/tb";
 
-interface Props {
-  apiKey: string;
-  sheetId: string;
-}
-
-const Hamburger: FC<Props> = ({ apiKey, sheetId }) => {
+const Hamburger: FC = () => {
   const [isOpen, setIsOpen] = useState<Boolean>(false);
 
-  const changeDisplayData = useDisplayData((state) => state.changeDisplayData);
-  const bookmarkList = useBookmarkStore((state) => state.bookmarkList);
-  const setHouseList = useSearchingData((state) => state.setHouseList);
-  const setSearchStatus = useSearchStatus((state) => state.setSearchStatus);
-  const setIsLoading = useLoading((state) => state.setIsLoading);
-  const pageNow = usePageNow((state) => state.pageNow);
-  const setPageNow = usePageNow((state) => state.setPageNow);
+  const pageNow = useRentingData((s) => s.pageNow);
 
-  const toPageBookmark = async () => {
-    if (pageNow === "Bookmark") {
+  const personName = usePersonStore((s) => s.person);
+  const goToPageMyHouseList = () => {
+    if (pageNow === "MyHouseList") {
       return;
     }
-    setIsOpen(!isOpen);
-    setIsLoading(true);
-    setHouseList([]);
-    setPageNow("Bookmark");
-    setSearchStatus("loading");
-    const data: [] = await getSheetData(sheetId, apiKey);
-    let houseListData = data
-      .map((element: string[], index: number) => ({
-        value: element,
-        index: index,
-      }))
-      .reverse();
-    houseListData = houseListData.filter((data) =>
-      bookmarkList.has(data.index.toString()),
-    );
-    if (houseListData.length === 0) {
-      setSearchStatus("no bookmark");
-    } else {
-      setHouseList(houseListData);
+    useRentingData.setState({
+      pageNow: "MyHouseList",
+      rentingData: null,
+      rentingList: [],
+    });
+    setIsOpen(false);
+    if (personName === "") {
+      useRentingData.setState({ searchStatus: "noPersonName" });
+      return;
     }
-    changeDisplayData("showBookmarkList");
-    setIsLoading(false);
+    toPageMyHouseList();
   };
 
-  const toPageHome = () => {
+  const toHomePage = () => {
     if (pageNow === "Home") {
       return;
     }
     setIsOpen(!isOpen);
-    setHouseList([]);
-    setPageNow("Home");
-    setSearchStatus("default");
+    toPageHome();
   };
 
   const handleClick = () => {
@@ -106,9 +76,10 @@ const Hamburger: FC<Props> = ({ apiKey, sheetId }) => {
             <ul className="mx-4">
               <li
                 className={`relative my-4 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer ${pageNow === "Home" && "bg-[#0831fe26] dark:bg-gray-700"}`}
-                onClick={toPageHome}
+                onClick={toHomePage}
               >
-                <VscSearch className="inline-block mr-2"></VscSearch>物件查詢
+                <BiSolidSearchAlt2 className="inline-block mr-2"></BiSolidSearchAlt2>
+                物件查詢
                 {pageNow === "Home" && (
                   <img
                     src="image/santa-hat.png"
@@ -118,12 +89,12 @@ const Hamburger: FC<Props> = ({ apiKey, sheetId }) => {
                 )}
               </li>
               <li
-                className={`relative my-4 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer ${pageNow === "Bookmark" && "bg-[#0831fe26] dark:bg-gray-700"}`}
-                onClick={toPageBookmark}
+                className={`relative my-4 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer ${pageNow === "MyHouseList" && "bg-[#0831fe26] dark:bg-gray-700"}`}
+                onClick={goToPageMyHouseList}
               >
-                <IoBookmarkOutline className="inline-block mr-2"></IoBookmarkOutline>
-                收藏物件
-                {pageNow === "Bookmark" && (
+                <IoPerson className="inline-block mr-2"></IoPerson>
+                我的物件
+                {pageNow === "MyHouseList" && (
                   <img
                     src="image/santa-hat.png"
                     alt="santa hat image"
@@ -133,13 +104,13 @@ const Hamburger: FC<Props> = ({ apiKey, sheetId }) => {
               </li>
               <a href="https://forms.gle/Z3og9gGzQ9sANZfF7" target="_blank">
                 <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer">
-                  <IoMdGitCompare className="inline-block mr-2"></IoMdGitCompare>
+                  <TbMessageReportFilled className="inline-block mr-2"></TbMessageReportFilled>
                   回報表單
                 </li>
               </a>
               <a href="https://forms.gle/gk9ybxm464FiXLMw9" target="_blank">
                 <li className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer">
-                  <HiOutlineDocumentReport className="inline-block mr-2"></HiOutlineDocumentReport>
+                  <BiSolidReport className="inline-block mr-2"></BiSolidReport>
                   開發表單
                 </li>
               </a>

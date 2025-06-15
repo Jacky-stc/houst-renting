@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./reactDatePicker.css";
-import "./bookmark.css";
+import "./snow.css";
 // #070910
 
 const inter = Inter({ subsets: ["latin"] });

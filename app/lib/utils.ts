@@ -88,11 +88,10 @@ export const regionList: { [key: string]: string } = {
   K: "新店區",
   Q: "汐止區",
 };
-
-export async function getSheetData(sheetId: string, apiKey: string) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/物件總表?key=${apiKey}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  // 由於在下方已經有設置搜尋內容的條件，基本上都會得到搜尋結果，所以就先不設置data.value === undefined或是400 bad request的情形
-  return data.values;
-}
+export const personBGColor = {
+  承恩: "linear-gradient(90deg, rgb(69 130 167) 0%, rgb(87 93 159) 50%, rgb(56 56 168) 100%)",
+  黑: "linear-gradient(to right, #485563, #29323c)",
+  K: "linear-gradient(90deg, rgb(175 19 19) 0%, rgb(186 47 47) 50%, rgb(255 113 47) 100%)",
+  理查: "linear-gradient(90deg, rgb(101 69 34) 0%, rgb(168 141 106) 50%, rgb(171 156 149) 100%)",
+  阿聖: "linear-gradient(to right, #780206, #061161)",
+};

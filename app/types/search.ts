@@ -24,6 +24,14 @@ export interface RentingData {
   欄位?: string | undefined;
 }
 
-export interface SearchStatus {
-  status: "default" | "loading" | "result" | "no result";
+export type SearchStatus =
+  | "default"
+  | "loading"
+  | "result"
+  | "no result"
+  | "noPersonName";
+
+export interface HouseListData {
+  value: string[];
+  index: number;
 }

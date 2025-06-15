@@ -1,17 +1,19 @@
-
-@import url('https://fonts.googleapis.com/css2?family=SUSE:wght@100..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Sevillana&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html.dark {
-    --tw-bg-opacity: 1;
-    background-color: #09090efa;
-    color: #efefef;
+  --tw-bg-opacity: 1;
+  background-color: #09090efa;
+  color: #efefef;
 }
-input{
-    background-color: transparent;
+input {
+  background-color: transparent;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

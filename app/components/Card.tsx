@@ -1,10 +1,12 @@
 import React from "react";
-import { useSearchStatus } from "../store";
+import { useRentingData } from "../store/useRentingData";
+import Loader from "./Loader";
 
 const Card: React.FC = () => {
-  const searchStatus = useSearchStatus((state) => state.searchStatus);
+  const searchStatus = useRentingData((s) => s.searchStatus);
   return (
     <div className="flex justify-evenly pt-16 sm:pt-20 flex-col items-center sm:flex-row sm:items-stretch">
+      {searchStatus === "loading" && <Loader />}
       {searchStatus === "default" && (
         <>
           <div className="w-4/5 sm:w-1/2">
@@ -40,17 +42,17 @@ const Card: React.FC = () => {
           </div>
         </>
       )}
-      {searchStatus === "no bookmark" && (
+      {searchStatus === "noPersonName" && (
         <>
           <div className="w-4/5 sm:w-1/2 flex justify-center">
             <img src="image/santa.png" alt="santa image" width={"60%"}></img>
           </div>
           <div className="text-center py-4 sm:text-start sm:pt-0 flex flex-col justify-center sm:gap-10">
             <h1 className="font-bold text-2xl sm:text-3xl text-[#ff3838]">
-              尚無收藏
+              尚無業務姓名
             </h1>
             <div className="text-xs sm:text-sm pt-2 text-[#b45a50]">
-              請點選物件列表中的收藏圖示，將物件加入收藏清單
+              請點選上方選單選擇業務姓名
             </div>
           </div>
         </>

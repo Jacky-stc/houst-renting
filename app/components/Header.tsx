@@ -1,10 +1,10 @@
+"use client";
 import React from "react";
-import Hamburger from "./Hamburger";
+import Hamburger from "./nav/Hamburger";
 import ToggleButton from "./ToggleButton";
+import { toPageHome } from "../lib/navigation";
 
 const Header = () => {
-  const apiKey: string = process.env.APIKEY || "";
-  const sheetId: string = process.env.SHEETID || "";
   return (
     <header>
       <nav className="px-4 sm:px-12 py-6 flex items-center justify-between">
@@ -12,12 +12,13 @@ const Header = () => {
           <img
             alt="company logo"
             src="image/house-renting.png"
-            className="w-28 sm:w-44"
+            className="w-28 sm:w-44 cursor-pointer"
+            onClick={toPageHome}
           />
         </div>
         <div className="flex gap-8">
           <ToggleButton></ToggleButton>
-          <Hamburger apiKey={apiKey} sheetId={sheetId}></Hamburger>
+          <Hamburger></Hamburger>
         </div>
       </nav>
     </header>

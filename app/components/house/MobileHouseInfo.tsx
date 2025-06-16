@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import useDrag from "../lib/useDrag";
-import HouseInfo from "./house/HouseInfo";
-import { useRentingData } from "../store/useRentingData";
 import { useShallow } from "zustand/shallow";
+import useDrag from "@/app/lib/useDrag";
+import { useRentingData } from "@/app/store/useRentingData";
+import HouseInfo from "./HouseInfo";
 
 const MobileHouseInfo = () => {
   const targetRef = useRef<HTMLDivElement>(null);

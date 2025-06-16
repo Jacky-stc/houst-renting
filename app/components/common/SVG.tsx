@@ -142,6 +142,7 @@ export const DateSVG = () => {
       width="1em"
       height="1em"
       viewBox="0 0 48 48"
+      className=" react-datepicker__calendar-icon "
     >
       <mask id="ipSApplication0">
         <g fill="none" stroke="#fff" strokeLinejoin="round" strokeWidth="4">

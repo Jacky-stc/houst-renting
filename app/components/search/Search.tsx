@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import HouseInfo from "../HouseInfo";
+import HouseInfo from "../house/HouseInfo";
 import Card from "../Card";
 import HouseList from "../house/HouseList";
 import { useToggleTheme } from "../../store";
-import Snow from "../Snow";
+import Snow from "../common/Snow";
 import { useRentingData } from "@/app/store/useRentingData";
 import { useShallow } from "zustand/shallow";
 import SearchInput from "./SearchInput";

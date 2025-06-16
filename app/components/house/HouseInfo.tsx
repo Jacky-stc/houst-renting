@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { RentingData } from "../types/search";
+import { RentingData } from "../../types/search";
 import { FaPhone } from "react-icons/fa6";
 import { MdElectricBolt } from "react-icons/md";
 import { BsFillDoorOpenFill, BsHouseFill, BsPeopleFill } from "react-icons/bs";
 import { LuDog } from "react-icons/lu";
 import { PiCookingPotBold } from "react-icons/pi";
 import { FaRegCalendarAlt } from "react-icons/fa";
-import { Calendar } from "./calendar";
+import { Calendar } from "../calendar";
 import { BiSolidBed, BiSolidBuildingHouse } from "react-icons/bi";
 import DatePicker from "react-datepicker";
-import { isMobile, phoneNumberFormat } from "../lib/utils";
-import Loader from "./Loader";
-import { useRentingData } from "../store/useRentingData";
+import { isMobile, phoneNumberFormat } from "../../lib/utils";
+import { useRentingData } from "../../store/useRentingData";
 import { TbMessageReportFilled } from "react-icons/tb";
+import ChangeDataModal from "../common/ChangeDataModal";
+import { DateSVG, OpenNewPageSVG, ReturnSVG } from "../common/SVG";
 
 interface HouseInfoProps {
   rentingData: RentingData;
@@ -33,16 +34,9 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
   );
   const [reservationName, setReservationName] = useState<string>("");
   const [reservationText, setReservationText] = useState<string>("");
-  const [showCalendarForm, setShowCalendarForm] = useState<Boolean>(false);
+  const [showCalendarForm, setShowCalendarForm] = useState<boolean>(false);
   const [isMobileText, setIsMobileText] = useState<string>("");
-  const [showStatusChange, setShowStatusChange] = useState<Boolean>(false);
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
-  const [showHintMessage, setShowHintMessage] = useState<Boolean>(false);
-  const [hintMessage, setHintMessage] = useState<string>("");
-  const [uploadURL, setUploadURL] = useState<string>(
-    rentingData.上架網址 || "",
-  );
-  const [price, setPrice] = useState<string>("");
+  const [showStatusChange, setShowStatusChange] = useState<boolean>(false);
 
   useEffect(() => {
     if (isMobile.any()) {
@@ -51,6 +45,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
       setIsMobileText("");
     }
   }, [isMobileText]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -86,99 +81,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
   };
   const formattedNumber: string = phoneNumberFormat(rentingData.電話 || "");
 
-  const handleRentingStatusChange = (status: string) => {
-    setIsLoading(true);
-    setHintMessage("");
-    setShowHintMessage(false);
-    const reqBody = {
-      index: rentingData.欄位,
-      rentingStatus: status,
-    };
-    const changeStatus = async () => {
-      try {
-        const response = await fetch("/api/change", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(reqBody),
-        });
-        const result = await response.json();
-        if (response.status === 200) {
-          setIsLoading(false);
-          setHintMessage("更新成功!");
-          setShowHintMessage(true);
-          if (
-            result.rentingStatus === "待出租" ||
-            result.rentingStatus === "已下架"
-          ) {
-            useRentingData.setState((state) => ({
-              rentingData: {
-                ...state.rentingData,
-                物件狀態: result.rentingStatus,
-              },
-            }));
-          } else {
-            useRentingData.setState((state) => ({
-              rentingData: {
-                ...state.rentingData,
-                上架網址: result.rentingStatus,
-              },
-            }));
-          }
-        } else {
-          throw new Error("failed");
-        }
-      } catch (error) {
-        setIsLoading(false);
-        setHintMessage("更新失敗!");
-        setShowHintMessage(true);
-      }
-    };
-    changeStatus();
-  };
-  const handlePriceChange = (price: string) => {
-    setIsLoading(true);
-    setHintMessage("");
-    setShowHintMessage(false);
-    const reqBody = {
-      index: rentingData.欄位,
-      price: price,
-    };
-    const changeStatus = async () => {
-      try {
-        const response = await fetch("/api/changePrice", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(reqBody),
-        });
-        const result = await response.json();
-        if (response.status === 200) {
-          setIsLoading(false);
-          setHintMessage("更新成功!");
-          setShowHintMessage(true);
-          useRentingData.setState((state) => ({
-            rentingData: {
-              ...state.rentingData,
-              租金: result.price,
-            },
-          }));
-        } else {
-          throw new Error("failed");
-        }
-      } catch (error) {
-        setIsLoading(false);
-        setHintMessage("更新失敗!");
-        setShowHintMessage(true);
-      }
-    };
-    changeStatus();
-  };
-
   return (
     <div className="px-4">
       <div className="py-4 flex-1">
@@ -187,31 +89,12 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
             className="w-fit border-b select-none hover:border-gray-700  border-white cursor-pointer"
             onClick={handleReturn}
           >
-            <svg
-              fill="currentColor"
-              width="20px"
-              height="20px"
-              viewBox="0 0 24 24"
-              className="inline"
-            >
-              <g data-name="Layer 2">
-                <g data-name="arrow-back">
-                  <rect
-                    width="24"
-                    height="24"
-                    transform="rotate(90 12 12)"
-                    opacity="0"
-                  />
-
-                  <path d="M19 11H7.14l3.63-4.36a1 1 0 1 0-1.54-1.28l-5 6a1.19 1.19 0 0 0-.09.15c0 .05 0 .08-.07.13A1 1 0 0 0 4 12a1 1 0 0 0 .07.36c0 .05 0 .08.07.13a1.19 1.19 0 0 0 .09.15l5 6A1 1 0 0 0 10 19a1 1 0 0 0 .64-.23 1 1 0 0 0 .13-1.41L7.14 13H19a1 1 0 0 0 0-2z" />
-                </g>
-              </g>
-            </svg>
+            <ReturnSVG />
             <span className="ml-1 sm:inline hidden">返回</span>
           </div>
         )}
         <div
-          className={`my-4 pl-2 border-l-4 ${rentingData.上架狀態 === "已上架" ? "border-red-600" : "border-gray-500"}`}
+          className={`my-4 pl-2 border-l-4 ${rentingData.上架網址 ? "border-red-600" : "border-gray-500"}`}
         >
           <div className="inline-block align-sub text-3xl">
             {rentingData.編號}
@@ -231,11 +114,11 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
         <div className="tracking-wider flex justify-between flex-col md:flex-row">
           <div>
             <div className="my-2">
-              <BsPeopleFill className="inline-block"></BsPeopleFill>
+              <BsPeopleFill className="inline-block" />
               <span className="ml-1 sm:mr-5 mr-2 align-middle">
                 {rentingData.姓名}{" "}
               </span>
-              <FaPhone className="inline-block"></FaPhone>
+              <FaPhone className="inline-block" />
               <div className="inline-block ml-1 mr-5 align-middle">
                 <a href={`tel:+886${formattedNumber.slice(1, 10)}`}>
                   {formattedNumber.slice(0, 4)}-{formattedNumber.slice(4, 7)}-
@@ -252,38 +135,26 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
               </div>
             </div>
             <div className="mt-6 mb-1">
-              <BiSolidBed className="inline-block" color="green"></BiSolidBed>
+              <BiSolidBed className="inline-block" color="green" />
               <span className="ml-1 mr-5 align-middle">{rentingData.格局}</span>
-              <BsFillDoorOpenFill
-                className="inline-block"
-                color="green"
-              ></BsFillDoorOpenFill>
+              <BsFillDoorOpenFill className="inline-block" color="green" />
               <span className="ml-1 mr-5 align-middle">
                 {rentingData.坪數}坪
               </span>
               <div className="my-1 block md:hidden"></div>
-              <BsHouseFill className="inline-block" color="green"></BsHouseFill>
+              <BsHouseFill className="inline-block" color="green" />
               <span className="ml-1 mr-5 align-middle">
                 {rentingData.建物型態}
               </span>
-              <BiSolidBuildingHouse
-                className="inline-block"
-                color="green"
-              ></BiSolidBuildingHouse>
+              <BiSolidBuildingHouse className="inline-block" color="green" />
               <span className="ml-1 mr-5 align-middle">{rentingData.現況}</span>
             </div>
             <div className="mb-6">
               <LuDog className="inline-block" color="#df8a02"></LuDog>
               <span className="ml-1 mr-5 align-middle">{rentingData.寵物}</span>
-              <PiCookingPotBold
-                className="inline-block"
-                color="#df8a02"
-              ></PiCookingPotBold>
+              <PiCookingPotBold className="inline-block" color="#df8a02" />
               <span className="ml-1 mr-5 align-middle">{rentingData.開伙}</span>
-              <MdElectricBolt
-                className="inline-block"
-                color="#df8a02"
-              ></MdElectricBolt>
+              <MdElectricBolt className="inline-block" color="#df8a02" />
               <span className="ml-1 mr-5 align-middle">{rentingData.電費}</span>
             </div>
             <div className="my-2">
@@ -297,22 +168,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
                 <div className="px-1 py-2 bg-[#fff7e6] dark:bg-[#2f2613] text-xs text-[#a16426] dark:text-[#ffc58a] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
                   <a href={`${rentingData.屋主網址}`} target="_blank">
                     <span>查看屋主物件</span>
-                    <svg
-                      width="16px"
-                      height="16px"
-                      viewBox="0 0 18 18"
-                      mirror-in-rtl="true"
-                      className="inline align-top mx-1"
-                    >
-                      <path
-                        fill="#a16426"
-                        d="M12.1.6a.944.944 0 0 0 .2 1.04l1.352 1.353L10.28 6.37a.956.956 0 0 0 1.35 1.35l3.382-3.38 1.352 1.352a.944.944 0 0 0 1.04.2.958.958 0 0 0 .596-.875V.96a.964.964 0 0 0-.96-.96h-4.057a.958.958 0 0 0-.883.6z"
-                      />
-                      <path
-                        fill="#a16426"
-                        d="M14 11v5a2.006 2.006 0 0 1-2 2H2a2.006 2.006 0 0 1-2-2V6a2.006 2.006 0 0 1 2-2h5a1 1 0 0 1 0 2H2v10h10v-5a1 1 0 0 1 2 0z"
-                      />
-                    </svg>
+                    <OpenNewPageSVG />
                   </a>
                 </div>
               </div>
@@ -322,22 +178,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
                 <div className="px-1 py-2 bg-[#fff7e6] dark:bg-[#2f2613] text-xs text-[#a16426] dark:text-[#ffc58a] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
                   <a href={`${rentingData.上架網址}`} target="_blank">
                     <span>查看上架物件</span>
-                    <svg
-                      width="16px"
-                      height="16px"
-                      viewBox="0 0 18 18"
-                      mirror-in-rtl="true"
-                      className="inline align-top mx-1"
-                    >
-                      <path
-                        fill="#a16426"
-                        d="M12.1.6a.944.944 0 0 0 .2 1.04l1.352 1.353L10.28 6.37a.956.956 0 0 0 1.35 1.35l3.382-3.38 1.352 1.352a.944.944 0 0 0 1.04.2.958.958 0 0 0 .596-.875V.96a.964.964 0 0 0-.96-.96h-4.057a.958.958 0 0 0-.883.6z"
-                      />
-                      <path
-                        fill="#a16426"
-                        d="M14 11v5a2.006 2.006 0 0 1-2 2H2a2.006 2.006 0 0 1-2-2V6a2.006 2.006 0 0 1 2-2h5a1 1 0 0 1 0 2H2v10h10v-5a1 1 0 0 1 2 0z"
-                      />
-                    </svg>
+                    <OpenNewPageSVG />
                   </a>
                 </div>
               </div>
@@ -358,37 +199,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
                     setSelectedDate(date);
                   }
                 }}
-                icon={
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 48 48"
-                  >
-                    <mask id="ipSApplication0">
-                      <g
-                        fill="none"
-                        stroke="#fff"
-                        strokeLinejoin="round"
-                        strokeWidth="4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          d="M40.04 22v20h-32V22"
-                        ></path>
-                        <path
-                          fill="#fff"
-                          d="M5.842 13.777C4.312 17.737 7.263 22 11.51 22c3.314 0 6.019-2.686 6.019-6a6 6 0 0 0 6 6h1.018a6 6 0 0 0 6-6c0 3.314 2.706 6 6.02 6c4.248 0 7.201-4.265 5.67-8.228L39.234 6H8.845l-3.003 7.777Z"
-                        ></path>
-                      </g>
-                    </mask>
-                    <path
-                      fill="currentColor"
-                      d="M0 0h48v48H0z"
-                      mask="url(#ipSApplication0)"
-                    ></path>
-                  </svg>
-                }
+                icon={<DateSVG />}
               />
             </div>
             <div>
@@ -485,81 +296,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
         ></div>
       )}
       {showStatusChange && (
-        <>
-          <div
-            className="w-full h-full fixed top-0 right-0 left-0 bottom-0 bg-black/40 dark:bg-gray-700/40 z-10 animate-[fade-in_0.15s_both] px-[auto] motion-reduce:transition-none motion-reduce:animate-none"
-            data-twe-dropdown-backdrop-ref=""
-            onClick={() => {
-              setShowStatusChange(false);
-              setHintMessage("");
-              setShowHintMessage(false);
-            }}
-          ></div>
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center w-56 h-fit bg-[#fff7E6] dark:bg-[#161616] z-10 rounded p-2 text-center text-sm">
-            <div className="mt-3 mb-2 font-bold text-start pl-3">價格</div>
-            <div className="w-full flex items-center justify-between gap-5 mt-3 mb-5 text-xs">
-              <input
-                className=" w-[56%] ml-3 border border-gray-300 focus:outline-slate-500 px-2 py-1"
-                value={price}
-                onChange={(e) => {
-                  setPrice(e.target.value);
-                }}
-              ></input>
-              <button
-                className="rounded bg-red-500 px-2 py-1 mx-2 text-slate-200 hover:bg-red-700"
-                onClick={() => {
-                  handlePriceChange(price);
-                }}
-              >
-                變更
-              </button>
-            </div>
-            <hr className="mx-auto mt-4 mb-2 border-b border-gray-300 w-11/12"></hr>
-            <div className="mt-3 mb-2 font-bold text-start pl-3">出租狀態</div>
-            <div className="w-full text-xs flex items-center justify-between gap-5 mt-3 pl-3">
-              <span
-                className={`${rentingData.物件狀態 === "待出租" ? "text-red-500" : "text-[#6b7280]"}`}
-              >
-                {rentingData.物件狀態}
-              </span>
-              <button
-                className="rounded bg-red-500 px-2 py-1 mx-2 text-slate-200 hover:bg-red-700"
-                onClick={() => {
-                  handleRentingStatusChange(rentingData.物件狀態 || "待出租");
-                }}
-              >
-                變更
-              </button>
-            </div>
-            <hr className="mx-auto mt-4 mb-2 border-b border-gray-300 w-11/12"></hr>
-            <div className="mt-3 mb-2 font-bold text-start pl-3">上架網址</div>
-            <div className="w-full flex items-center justify-between gap-5 mt-3 mb-5 text-xs">
-              <input
-                className=" w-[56%] ml-3 border border-gray-300 focus:outline-slate-500 px-2 py-1"
-                value={uploadURL}
-                onChange={(e) => {
-                  setUploadURL(e.target.value);
-                }}
-              ></input>
-              <button
-                className="rounded bg-red-500 px-2 py-1 mx-2 text-slate-200 hover:bg-red-700"
-                onClick={() => {
-                  handleRentingStatusChange(uploadURL);
-                }}
-              >
-                變更
-              </button>
-            </div>
-            {showHintMessage && (
-              <div
-                className={`text-xs ${hintMessage === "更新成功!" ? "text-red-500" : "text-gray-900"} my-2`}
-              >
-                {hintMessage}
-              </div>
-            )}
-            {isLoading && <Loader></Loader>}
-          </div>
-        </>
+        <ChangeDataModal setShowStatusChange={setShowStatusChange} />
       )}
     </div>
   );

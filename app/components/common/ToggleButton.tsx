@@ -1,6 +1,6 @@
 "use client";
+import { useToggleTheme } from "@/app/store";
 import React, { useEffect } from "react";
-import { useToggleTheme } from "../store";
 
 const ToggleButton = () => {
   const theme = useToggleTheme((state) => state.theme);

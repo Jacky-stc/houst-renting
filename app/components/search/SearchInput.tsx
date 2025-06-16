@@ -15,7 +15,7 @@ const SearchInput = () => {
   };
   return (
     <div
-      className={`flex mx-auto items-center text-[0.9rem] px-2 py-1 w-[95%] sm:ml-auto sm:mr-4 sm:w-72 rounded-2xl ${inputFocus ? " border border-sky-400" : "border"}`}
+      className={`flex mx-auto items-center px-2 py-1 w-[92%] md:text-[0.9rem] sm:ml-auto sm:mr-4 sm:w-72 rounded-2xl ${inputFocus ? " border border-sky-400" : "border"}`}
     >
       <IoSearchOutline></IoSearchOutline>
       <div className="flex justify-between w-full sm:w-auto">

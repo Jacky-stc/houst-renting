@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 
 const Snow = React.memo(() => {
-  const snowArr = useMemo(() => Array(30).fill("❅"), []);
+  const snowArr = useMemo(() => Array(15).fill("❅"), []);
 
   // 在 useMemo 中生成每個雪花的隨機樣式
   const snowStyles = useMemo(() => {

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import useDrag from "../lib/useDrag";
-import HouseInfo from "./HouseInfo";
+import HouseInfo from "./house/HouseInfo";
 import { useRentingData } from "../store/useRentingData";
 import { useShallow } from "zustand/shallow";
 

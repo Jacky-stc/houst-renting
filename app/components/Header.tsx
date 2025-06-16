@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Hamburger from "./nav/Hamburger";
-import ToggleButton from "./ToggleButton";
+import ToggleButton from "./common/ToggleButton";
 import { toPageHome } from "../lib/navigation";
 
 const Header = () => {

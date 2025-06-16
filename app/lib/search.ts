@@ -46,15 +46,11 @@ export const handleSearch = async (inputValue: string) => {
     rentingData: null,
   });
   const HouseListData = await getGoogleSheetData();
-  if (inputValue.toLowerCase().startsWith("r")) {
+  if (Object.keys(regionList).includes(inputValue.slice(0, 1))) {
     const formatedData = HouseListData.map((item) =>
       rentingDataFormat(item.value, item.index.toString()),
     );
-    const targetObject = formatedData.find(
-      (item) =>
-        typeof item.上架網址 === "string" &&
-        item.上架網址.includes(inputValue.slice(1)),
-    );
+    const targetObject = formatedData.find((item) => item.編號 === inputValue);
     if (targetObject) {
       useRentingData.setState({
         rentingData: targetObject,
@@ -65,6 +61,35 @@ export const handleSearch = async (inputValue: string) => {
       useRentingData.setState({
         searchStatus: "no result",
       });
+      return;
+    }
+  }
+  if (/^\d+$/.test(inputValue)) {
+    const targetObject = HouseListData.filter(
+      (item) =>
+        typeof item.value[21] === "string" &&
+        item.value[21].includes(inputValue),
+    );
+    if (targetObject.length > 1) {
+      useRentingData.setState({
+        rentingList: targetObject,
+        searchStatus: "result",
+      });
+      return;
+    } else if (targetObject.length === 1) {
+      useRentingData.setState({
+        rentingData: rentingDataFormat(
+          targetObject[0].value,
+          targetObject[0].index.toString(),
+        ),
+        searchStatus: "result",
+      });
+      return;
+    } else {
+      useRentingData.setState({
+        searchStatus: "no result",
+      });
+      return;
     }
   }
   const filterData = getFilterData(inputValue, HouseListData);

@@ -3,8 +3,9 @@ import React from "react";
 import Hamburger from "./nav/Hamburger";
 import ToggleButton from "./common/ToggleButton";
 import { toPageHome } from "../lib/navigation";
+import { Session } from "next-auth";
 
-const Header = () => {
+const Header = ({ session }: { session: Session | null }) => {
   return (
     <header>
       <nav className="px-4 sm:px-12 py-6 flex items-center justify-between">
@@ -18,7 +19,7 @@ const Header = () => {
         </div>
         <div className="flex gap-8">
           <ToggleButton></ToggleButton>
-          <Hamburger></Hamburger>
+          {session?.user && <Hamburger></Hamburger>}
         </div>
       </nav>
     </header>

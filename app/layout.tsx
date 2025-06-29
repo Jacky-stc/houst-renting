@@ -1,13 +1,11 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./reactDatePicker.css";
 import "./snow.css";
-// #070910
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "柏瑞房地產物件查詢系統",
   description: "用於查詢與柏瑞房地產合作之房屋物件資料",
   generator: "Next.js",

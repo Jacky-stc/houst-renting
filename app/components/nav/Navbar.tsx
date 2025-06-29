@@ -6,6 +6,8 @@ import { toPageHome, toPageMyHouseList } from "../../lib/navigation";
 import { TbMessageReportFilled } from "react-icons/tb";
 import { BiSolidReport, BiSolidSearchAlt2 } from "react-icons/bi";
 import usePersonStore from "@/app/store/usePersonStore";
+import { RiLogoutBoxRFill } from "react-icons/ri";
+import { signOut } from "next-auth/react";
 
 const Navbar = () => {
   const pageNow = useRentingData((s) => s.pageNow);
@@ -69,6 +71,15 @@ const Navbar = () => {
             開發表單
           </li>
         </a>
+        <li
+          className="my-2 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer"
+          onClick={() => {
+            signOut();
+          }}
+        >
+          <RiLogoutBoxRFill className="inline-block mr-2"></RiLogoutBoxRFill>
+          登出
+        </li>
       </ul>
     </nav>
   );

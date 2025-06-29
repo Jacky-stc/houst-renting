@@ -6,6 +6,8 @@ import { toPageHome, toPageMyHouseList } from "../../lib/navigation";
 import usePersonStore from "@/app/store/usePersonStore";
 import { BiSolidReport, BiSolidSearchAlt2 } from "react-icons/bi";
 import { TbMessageReportFilled } from "react-icons/tb";
+import { RiLogoutBoxRFill } from "react-icons/ri";
+import { signOut } from "next-auth/react";
 
 const Hamburger: FC = () => {
   const [isOpen, setIsOpen] = useState<Boolean>(false);
@@ -114,6 +116,15 @@ const Hamburger: FC = () => {
                   開發表單
                 </li>
               </a>
+              <li
+                className="my-4 px-10 py-2 rounded hover:bg-[#0831fe26] dark:hover:bg-gray-700 cursor-pointer"
+                onClick={() => {
+                  signOut();
+                }}
+              >
+                <RiLogoutBoxRFill className="inline-block mr-2"></RiLogoutBoxRFill>
+                登出
+              </li>
             </ul>
           </nav>
         </div>

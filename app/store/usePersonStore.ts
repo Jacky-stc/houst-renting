@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 
 interface PersonStore {
   person: string;
-  setPerson: (newPerson: string) => void;
+  setPerson: (_newPerson: string) => void;
 }
 
 const usePersonStore = create<PersonStore>()(

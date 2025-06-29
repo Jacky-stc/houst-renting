@@ -1,3 +1,4 @@
+"use client";
 import React, { FC } from "react";
 import HouseInfo from "../house/HouseInfo";
 import Card from "../Card";

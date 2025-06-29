@@ -10,7 +10,7 @@ interface useRentingDataType {
   searchStatus: SearchStatus;
   pageNow: PageNow;
   personName: string;
-  setRentingList: (rentingList: HouseListData[]) => void;
+  setRentingList: (_rentingList: HouseListData[]) => void;
 }
 export const useRentingData = create<useRentingDataType>(() => ({
   isLoading: false,

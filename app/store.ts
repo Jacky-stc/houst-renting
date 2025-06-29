@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 
 interface UseToggleTheme {
   theme: string;
-  setTheme: (theme: string) => void;
+  setTheme: (_theme: string) => void;
 }
 
 export const useToggleTheme = create<UseToggleTheme>()(

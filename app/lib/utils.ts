@@ -22,6 +22,8 @@ export const rentingDataFormat = (data: string[], index: string) => {
     服務費: data[19],
     屋主網址: data[20],
     上架網址: data[21],
+    Instagram: data[22],
+    Threads: data[23],
     欄位: index,
   };
   return rentingObject;

@@ -22,6 +22,8 @@ export interface RentingData {
   屋主網址?: string | undefined;
   上架網址?: string | undefined;
   欄位?: string | undefined;
+  Instagram?: string | undefined;
+  Threads?: string | undefined;
 }
 
 export type SearchStatus =

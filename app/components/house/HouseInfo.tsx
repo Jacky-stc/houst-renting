@@ -13,7 +13,13 @@ import { isMobile, phoneNumberFormat } from "../../lib/utils";
 import { useRentingData } from "../../store/useRentingData";
 import { TbMessageReportFilled } from "react-icons/tb";
 import ChangeDataModal from "../common/ChangeDataModal";
-import { DateSVG, OpenNewPageSVG, ReturnSVG } from "../common/SVG";
+import {
+  DateSVG,
+  InstagramSVG,
+  OpenNewPageSVG,
+  ReturnSVG,
+  ThreadsSVG,
+} from "../common/SVG";
 
 interface HouseInfoProps {
   rentingData: RentingData;
@@ -30,7 +36,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [reservationMinute, setReserVationMinute] = useState<string>("00");
   const [reservationHour, setReserVationHour] = useState<string>(
-    new Date().getHours().toString(),
+    new Date().getHours().toString()
   );
   const [reservationName, setReservationName] = useState<string>("");
   const [reservationText, setReservationText] = useState<string>("");
@@ -164,7 +170,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
               </div>
             </div>
             {rentingData.屋主網址 && (
-              <div className="mt-3 inline-block">
+              <div className="mt-3 inline-block mr-3">
                 <div className="px-1 py-2 bg-[#fff7e6] dark:bg-[#2f2613] text-xs text-[#a16426] dark:text-[#ffc58a] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
                   <a href={`${rentingData.屋主網址}`} target="_blank">
                     <span>查看屋主物件</span>
@@ -174,7 +180,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
               </div>
             )}
             {rentingData.上架網址 && (
-              <div className="mt-3 inline-block ml-3">
+              <div className="mt-3 inline-block">
                 <div className="px-1 py-2 bg-[#fff7e6] dark:bg-[#2f2613] text-xs text-[#a16426] dark:text-[#ffc58a] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
                   <a href={`${rentingData.上架網址}`} target="_blank">
                     <span>查看上架物件</span>
@@ -183,6 +189,26 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
                 </div>
               </div>
             )}
+            <div className="flex">
+              {rentingData.Instagram && (
+                <div className="mt-3 inline-block mr-3">
+                  <div className="w-10 select-none cursor-pointer ">
+                    <a href={rentingData.Instagram} target="_blank">
+                      <InstagramSVG />
+                    </a>
+                  </div>
+                </div>
+              )}
+              {rentingData.Threads && (
+                <div className="mt-3 mr-3 w-10 h-10 flex justify-center items-center">
+                  <div className="w-10 select-none cursor-pointer ">
+                    <a href={rentingData.Threads} target="_blank">
+                      <ThreadsSVG />
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           <div
             className={`${showCalendarForm ? "block bg-white dark:bg-[#0f0f14fa] z-50" : "hidden bg-white dark:bg-[#0f0f14fa] md:block"} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}

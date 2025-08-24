@@ -1,31 +1,24 @@
+import { ChangeType } from "@/app/components/common/ChangeDataModal";
 import { google } from "googleapis";
 import { NextResponse } from "next/server";
 
 interface requestBody {
   index: string;
-  rentingStatus: "已上架" | "未上架" | "待出租" | "已下架" | string;
+  type: ChangeType;
+  changeContent: string;
 }
 
-const statusSwitchList = {
-  已上架: ["未上架", "B"],
-  未上架: ["已上架", "B"],
-  待出租: ["已下架", "A"],
-  已下架: ["待出租", "A"],
+const ColumnList = {
+  price: "K",
+  status: "A",
+  uploadURL: "V",
+  instagram: "W",
+  threads: "X",
 };
 
 export async function POST(req: Request) {
   const body: requestBody = await req.json();
-  let updateStatus = "";
-  let column = "";
-  if (Object.keys(statusSwitchList).includes(body.rentingStatus)) {
-    updateStatus =
-      statusSwitchList[body.rentingStatus as keyof typeof statusSwitchList][0];
-    column =
-      statusSwitchList[body.rentingStatus as keyof typeof statusSwitchList][1];
-  } else {
-    updateStatus = body.rentingStatus;
-    column = "V";
-  }
+  const column = ColumnList[body.type];
   const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
   try {
     const auth = new google.auth.GoogleAuth({
@@ -48,11 +41,11 @@ export async function POST(req: Request) {
       range: `物件總表!${column}${Number(body.index) + 2}`,
       valueInputOption: "RAW",
       requestBody: {
-        values: [[updateStatus]],
+        values: [[body.changeContent]],
       },
     });
     return NextResponse.json(
-      { message: "ok", rentingStatus: updateStatus },
+      { message: "ok", type: body.type, changeContent: body.changeContent },
       { status: 200 },
     );
   } catch (error) {

@@ -201,7 +201,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
               )}
               {rentingData.Threads && (
                 <div className="mt-3 mr-3 w-10 h-10 flex justify-center items-center">
-                  <div className="w-10 select-none cursor-pointer ">
+                  <div className="w-[1.8rem] select-none cursor-pointer ">
                     <a href={rentingData.Threads} target="_blank">
                       <ThreadsSVG />
                     </a>

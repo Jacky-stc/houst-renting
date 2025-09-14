@@ -1,3 +1,5 @@
+import { PersonName } from "../store/usePersonStore";
+
 export const rentingDataFormat = (data: string[], index: string) => {
   const rentingObject = {
     物件狀態: data[0],
@@ -89,11 +91,31 @@ export const regionList: { [key: string]: string } = {
   I: "土城區",
   K: "新店區",
   Q: "汐止區",
+  L: "樹林區",
 };
-export const personBGColor = {
-  承恩: "linear-gradient(90deg, rgb(69 130 167) 0%, rgb(87 93 159) 50%, rgb(56 56 168) 100%)",
-  黑: "linear-gradient(to right, #485563, #29323c)",
-  K: "linear-gradient(90deg, rgb(175 19 19) 0%, rgb(186 47 47) 50%, rgb(255 113 47) 100%)",
-  理查: "linear-gradient(90deg, rgb(101 69 34) 0%, rgb(168 141 106) 50%, rgb(171 156 149) 100%)",
-  阿聖: "linear-gradient(to right, #780206, #061161)",
-};
+
+export const personList: { name: PersonName; BGColor: string }[] = [
+  {
+    name: "承恩",
+    BGColor:
+      "linear-gradient(90deg, rgb(69 130 167) 0%, rgb(87 93 159) 50%, rgb(56 56 168) 100%)",
+  },
+  { name: "黑", BGColor: "linear-gradient(to right, #485563, #29323c)" },
+  {
+    name: "K",
+    BGColor:
+      "linear-gradient(90deg, rgb(175 19 19) 0%, rgb(186 47 47) 50%, rgb(255 113 47) 100%)",
+  },
+  {
+    name: "查",
+    BGColor:
+      "linear-gradient(90deg, rgb(101 69 34) 0%, rgb(168 141 106) 50%, rgb(171 156 149) 100%)",
+  },
+  { name: "阿聖", BGColor: "linear-gradient(to right, #780206, #061161)" },
+  {
+    name: "至倫",
+    BGColor: "linear-gradient(to right, #aa4b6b, #6b6b83, #3b8d99)",
+  },
+  { name: "小豪", BGColor: "linear-gradient(to right, #1a2980, #26d0ce)" },
+  { name: "岳", BGColor: "linear-gradient(to right, #134e5e, #71b280)" },
+];

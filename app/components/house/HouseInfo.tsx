@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { RentingData } from "../../types/search";
-import { FaPhone } from "react-icons/fa6";
-import { MdElectricBolt } from "react-icons/md";
-import { BsFillDoorOpenFill, BsHouseFill, BsPeopleFill } from "react-icons/bs";
-import { LuDog } from "react-icons/lu";
-import { PiCookingPotBold } from "react-icons/pi";
-import { FaRegCalendarAlt } from "react-icons/fa";
-import { Calendar } from "../calendar";
-import { BiSolidBed, BiSolidBuildingHouse } from "react-icons/bi";
-import DatePicker from "react-datepicker";
-import { isMobile, phoneNumberFormat } from "../../lib/utils";
-import { useRentingData } from "../../store/useRentingData";
-import { TbMessageReportFilled } from "react-icons/tb";
-import ChangeDataModal from "../common/ChangeDataModal";
-import {
-  DateSVG,
-  InstagramSVG,
-  OpenNewPageSVG,
-  ReturnSVG,
-  ThreadsSVG,
-} from "../common/SVG";
+import React, { useEffect, useState } from 'react';
+import { RentingData } from '../../types/search';
+import { FaPhone } from 'react-icons/fa6';
+import { MdElectricBolt } from 'react-icons/md';
+import { BsFillDoorOpenFill, BsHouseFill, BsPeopleFill } from 'react-icons/bs';
+import { LuDog } from 'react-icons/lu';
+import { PiCookingPotBold } from 'react-icons/pi';
+import { FaRegCalendarAlt } from 'react-icons/fa';
+import { Calendar } from '../calendar';
+import { BiSolidBed, BiSolidBuildingHouse } from 'react-icons/bi';
+import DatePicker from 'react-datepicker';
+import { isMobile, phoneNumberFormat } from '../../lib/utils';
+import { useRentingData } from '../../store/useRentingData';
+import { TbMessageReportFilled } from 'react-icons/tb';
+import ChangeDataModal from '../common/ChangeDataModal';
+import { DateSVG, FaceBookSVG, InstagramSVG, OpenNewPageSVG, ReturnSVG, ThreadsSVG } from '../common/SVG';
 
 interface HouseInfoProps {
   rentingData: RentingData;
@@ -27,28 +21,26 @@ interface HouseInfoProps {
 }
 
 const hourArray: string[] = [];
-const minuteArray: string[] = ["00", "10", "20", "30", "40", "50"];
+const minuteArray: string[] = ['00', '10', '20', '30', '40', '50'];
 for (let i = 1; i <= 24; i++) {
   hourArray.push(i.toString());
 }
 
 const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [reservationMinute, setReserVationMinute] = useState<string>("00");
-  const [reservationHour, setReserVationHour] = useState<string>(
-    new Date().getHours().toString()
-  );
-  const [reservationName, setReservationName] = useState<string>("");
-  const [reservationText, setReservationText] = useState<string>("");
+  const [reservationMinute, setReserVationMinute] = useState<string>('00');
+  const [reservationHour, setReserVationHour] = useState<string>(new Date().getHours().toString());
+  const [reservationName, setReservationName] = useState<string>('');
+  const [reservationText, setReservationText] = useState<string>('');
   const [showCalendarForm, setShowCalendarForm] = useState<boolean>(false);
-  const [isMobileText, setIsMobileText] = useState<string>("");
+  const [isMobileText, setIsMobileText] = useState<string>('');
   const [showStatusChange, setShowStatusChange] = useState<boolean>(false);
 
   useEffect(() => {
     if (isMobile.any()) {
-      setIsMobileText("Z");
+      setIsMobileText('Z');
     } else {
-      setIsMobileText("");
+      setIsMobileText('');
     }
   }, [isMobileText]);
 
@@ -57,56 +49,49 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
   }, []);
 
   const handleAddCalendar = () => {
-    const selectedDateString = selectedDate.toLocaleDateString().split("/");
+    const selectedDateString = selectedDate.toLocaleDateString().split('/');
     const selectedYear = selectedDateString[0];
     const selectedMonth = selectedDateString[1];
     const selectedDay = selectedDateString[2];
     const reservationHourPlus = (parseInt(reservationHour) + 1).toString();
 
     const event = {
-      DTSTART: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : "0" + selectedMonth}${selectedDay.length > 1 ? selectedDay : "0" + selectedDay}T${reservationHour.length > 1 ? reservationHour : "0" + reservationHour}${reservationMinute}00`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-      DTEND: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : "0" + selectedMonth}${selectedDay.length > 1 ? selectedDay : "0" + selectedDay}T${reservationHourPlus.length > 1 ? reservationHourPlus : "0" + reservationHourPlus}${reservationMinute}00`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTSTART: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : '0' + selectedMonth}${selectedDay.length > 1 ? selectedDay : '0' + selectedDay}T${reservationHour.length > 1 ? reservationHour : '0' + reservationHour}${reservationMinute}00`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
+      DTEND: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : '0' + selectedMonth}${selectedDay.length > 1 ? selectedDay : '0' + selectedDay}T${reservationHourPlus.length > 1 ? reservationHourPlus : '0' + reservationHourPlus}${reservationMinute}00`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
       SUMMARY: `${rentingData.編號} ${reservationName}預約看房`, // 標題
-      DESCRIPTION: rentingData.對話要點 + "，" + reservationText, // 描述,
+      DESCRIPTION: rentingData.對話要點 + '，' + reservationText, // 描述,
       LOCATION: rentingData.地址,
-      TZID: "Asia/Taipei", // 時區
+      TZID: 'Asia/Taipei', // 時區
     };
     //   // 建立 Calendar 實例
     const calendar = new Calendar(event);
     // 生成 Google Calendar 連結
     const googleCalendarLink = calendar.generateGoogleCalendarURL();
-    const googleLinkContainer = document.createElement("a");
+    const googleLinkContainer = document.createElement('a');
     googleLinkContainer.href = googleCalendarLink;
-    googleLinkContainer.target = "_blank";
+    googleLinkContainer.target = '_blank';
     googleLinkContainer.click();
   };
   const handleReturn = () => {
-    useRentingData.setState({
-      rentingData: null,
-    });
+    useRentingData.setState({ rentingData: null });
   };
-  const formattedNumber: string = phoneNumberFormat(rentingData.電話 || "");
+  const formattedNumber: string = phoneNumberFormat(rentingData.電話 || '');
+  const isInstagram = rentingData.Instagram?.includes('instagram');
+  const isFaceBook = rentingData.Instagram?.includes('facebook');
 
   return (
     <div className="px-4">
       <div className="py-4 flex-1">
         {houseList && houseList.length > 0 && (
-          <div
-            className="w-fit border-b select-none hover:border-gray-700  border-white cursor-pointer"
-            onClick={handleReturn}
-          >
+          <div className="w-fit border-b select-none hover:border-gray-700  border-white cursor-pointer" onClick={handleReturn}>
             <ReturnSVG />
             <span className="ml-1 sm:inline hidden">返回</span>
           </div>
         )}
-        <div
-          className={`my-4 pl-2 border-l-4 ${rentingData.上架網址 ? "border-red-600" : "border-gray-500"}`}
-        >
-          <div className="inline-block align-sub text-3xl">
-            {rentingData.編號}
-          </div>
+        <div className={`my-4 pl-2 border-l-4 ${rentingData.上架網址 ? 'border-red-600' : 'border-gray-500'}`}>
+          <div className="inline-block align-sub text-3xl">{rentingData.編號}</div>
           <span
-            className={`py-1 px-2 ml-2 rounded-xl text-xs select-none ${rentingData.物件狀態 === "待出租" ? "bg-green-400" : "bg-red-500"} text-slate-100`}
+            className={`py-1 px-2 ml-2 rounded-xl text-xs select-none ${rentingData.物件狀態 === '待出租' ? 'bg-green-400' : 'bg-red-500'} text-slate-100`}
             onClick={() => {
               setShowStatusChange(true);
             }}
@@ -121,21 +106,15 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
           <div>
             <div className="my-2">
               <BsPeopleFill className="inline-block" />
-              <span className="ml-1 sm:mr-5 mr-2 align-middle">
-                {rentingData.姓名}{" "}
-              </span>
+              <span className="ml-1 sm:mr-5 mr-2 align-middle">{rentingData.姓名} </span>
               <FaPhone className="inline-block" />
               <div className="inline-block ml-1 mr-5 align-middle">
                 <a href={`tel:+886${formattedNumber.slice(1, 10)}`}>
-                  {formattedNumber.slice(0, 4)}-{formattedNumber.slice(4, 7)}-
-                  {formattedNumber.slice(7)}
+                  {formattedNumber.slice(0, 4)}-{formattedNumber.slice(4, 7)}-{formattedNumber.slice(7)}
                 </a>
               </div>
               <div className="my-1 text-xs text-gray-500">
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${rentingData.地址}`}
-                  target="_blank"
-                >
+                <a href={`https://www.google.com/maps/search/?api=1&query=${rentingData.地址}`} target="_blank">
                   {rentingData.地址}
                 </a>
               </div>
@@ -144,14 +123,10 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
               <BiSolidBed className="inline-block" color="green" />
               <span className="ml-1 mr-5 align-middle">{rentingData.格局}</span>
               <BsFillDoorOpenFill className="inline-block" color="green" />
-              <span className="ml-1 mr-5 align-middle">
-                {rentingData.坪數}坪
-              </span>
+              <span className="ml-1 mr-5 align-middle">{rentingData.坪數}坪</span>
               <div className="my-1 block md:hidden"></div>
               <BsHouseFill className="inline-block" color="green" />
-              <span className="ml-1 mr-5 align-middle">
-                {rentingData.建物型態}
-              </span>
+              <span className="ml-1 mr-5 align-middle">{rentingData.建物型態}</span>
               <BiSolidBuildingHouse className="inline-block" color="green" />
               <span className="ml-1 mr-5 align-middle">{rentingData.現況}</span>
             </div>
@@ -191,17 +166,18 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
             )}
             <div className="flex">
               {rentingData.Instagram && (
-                <div className="mt-3 inline-block mr-3">
-                  <div className="w-10 select-none cursor-pointer ">
+                <div className="mt-3 w-12 h-12 inline-block mr-3">
+                  <div className="w-12 select-none cursor-pointer ">
                     <a href={rentingData.Instagram} target="_blank">
-                      <InstagramSVG />
+                      {isInstagram && <InstagramSVG />}
+                      {isFaceBook && <FaceBookSVG />}
                     </a>
                   </div>
                 </div>
               )}
               {rentingData.Threads && (
-                <div className="mt-3 mr-3 w-10 h-10 flex justify-center items-center">
-                  <div className="w-[1.8rem] select-none cursor-pointer ">
+                <div className="mt-3 mr-3 w-12 h-12 flex justify-center items-center">
+                  <div className="w-12 select-none cursor-pointer ">
                     <a href={rentingData.Threads} target="_blank">
                       <ThreadsSVG />
                     </a>
@@ -211,7 +187,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
             </div>
           </div>
           <div
-            className={`${showCalendarForm ? "block bg-white dark:bg-[#0f0f14fa] z-50" : "hidden bg-white dark:bg-[#0f0f14fa] md:block"} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}
+            className={`${showCalendarForm ? 'block bg-white dark:bg-[#0f0f14fa] z-50' : 'hidden bg-white dark:bg-[#0f0f14fa] md:block'} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}
             data-testid="calendar-form"
           >
             <div>
@@ -308,9 +284,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
       </div>
       <div>
         <h2 className="mt-8 mb-2 text-lg font-bold">對話要點</h2>
-        <div className="rounded border w-11/12 sm:w-full border-gray-800 dark:border-gray-200 p-3 break-words">
-          {rentingData.對話要點}
-        </div>
+        <div className="rounded border w-11/12 sm:w-full border-gray-800 dark:border-gray-200 p-3 break-words">{rentingData.對話要點}</div>
       </div>
       {showCalendarForm && (
         <div
@@ -321,9 +295,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
           }}
         ></div>
       )}
-      {showStatusChange && (
-        <ChangeDataModal setShowStatusChange={setShowStatusChange} />
-      )}
+      {showStatusChange && <ChangeDataModal setShowStatusChange={setShowStatusChange} />}
     </div>
   );
 };

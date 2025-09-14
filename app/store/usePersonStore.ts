@@ -14,12 +14,13 @@ export type PersonName =
   | "承恩"
   | "至倫"
   | "小豪"
-  | "岳";
+  | "岳"
+  | "";
 
 const usePersonStore = create<PersonStore>()(
   persist(
     (set) => ({
-      person: "阿聖",
+      person: "",
       setPerson: (newPerson: PersonName) => {
         set({ person: newPerson });
       },

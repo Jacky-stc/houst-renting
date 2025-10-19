@@ -6,7 +6,8 @@ import { useState } from 'react';
 const SearchName = () => {
   const [isOpen, setIsOpen] = useState<Boolean>(false);
   const personName = usePersonStore((s) => s.person);
-  const filteredPersonList = personList.filter((person) => person.name !== '查' && person.name !== '承恩');
+  const leavePersonList = new Set(['查', '承恩', '小豪']);
+  const filteredPersonList = personList.filter((person) => !leavePersonList.has(person.name));
   const BGColor = personList.find((person) => person.name === personName)?.BGColor || 'gray';
 
   const PersonNameItem = ({ name }: { name: PersonName }) => {

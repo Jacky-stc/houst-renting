@@ -26,6 +26,8 @@ for (let i = 1; i <= 24; i++) {
   hourArray.push(i.toString());
 }
 
+type RentContentType = '水費' | '網路' | '第四台' | '瓦斯' | '管理費';
+
 const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [reservationMinute, setReserVationMinute] = useState<string>('00');
@@ -35,6 +37,14 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
   const [showCalendarForm, setShowCalendarForm] = useState<boolean>(false);
   const [isMobileText, setIsMobileText] = useState<string>('');
   const [showStatusChange, setShowStatusChange] = useState<boolean>(false);
+  const rentContent = rentingData.租金包含?.split(',');
+  const rentContentList: Record<RentContentType, boolean> = {
+    水費: rentContent?.includes('水費') || false,
+    網路: rentContent?.includes('網路') || false,
+    第四台: rentContent?.includes('第四台') || false,
+    瓦斯: rentContent?.includes('瓦斯') || false,
+    管理費: rentContent?.includes('管理費') || false,
+  };
 
   useEffect(() => {
     if (isMobile.any()) {
@@ -138,6 +148,17 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
               <MdElectricBolt className="inline-block" color="#df8a02" />
               <span className="ml-1 mr-5 align-middle">{rentingData.電費}</span>
             </div>
+            <div className="flex mb-6">
+              {(Object.keys(rentContentList) as RentContentType[]).map((item, index) => (
+                <div key={index}>
+                  <div
+                    className={`rounded text-xs py-1 px-3 mr-2 ${rentContentList[item] ? 'bg-[#fff7e6] text-[#a16426]' : 'bg-gray-200 text-gray-400'}`}
+                  >
+                    {item}
+                  </div>
+                </div>
+              ))}
+            </div>
             <div className="my-2">
               <div className="text-xs text-gray-500">
                 備註：服務費：{rentingData.服務費}，樓層：{rentingData.樓層}
@@ -146,7 +167,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
             </div>
             {rentingData.屋主網址 && (
               <div className="mt-3 inline-block mr-3">
-                <div className="px-1 py-2 bg-[#fff7e6] dark:bg-[#2f2613] text-xs text-[#a16426] dark:text-[#ffc58a] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
+                <div className="px-3 py-2 bg-[#fff7e6] dark:bg-[#2f2613] text-xs text-[#a16426] dark:text-[#ffc58a] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
                   <a href={`${rentingData.屋主網址}`} target="_blank">
                     <span>查看屋主物件</span>
                     <OpenNewPageSVG />
@@ -156,7 +177,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
             )}
             {rentingData.上架網址 && (
               <div className="mt-3 inline-block">
-                <div className="px-1 py-2 bg-[#fff7e6] dark:bg-[#2f2613] text-xs text-[#a16426] dark:text-[#ffc58a] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
+                <div className="px-3 py-2 bg-[#fff7e6] dark:bg-[#2f2613] text-xs text-[#a16426] dark:text-[#ffc58a] w-fit rounded select-none cursor-pointer hover:bg-[#f7c968]">
                   <a href={`${rentingData.上架網址}`} target="_blank">
                     <span>查看上架物件</span>
                     <OpenNewPageSVG />

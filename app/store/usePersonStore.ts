@@ -6,7 +6,7 @@ interface PersonStore {
   setPerson: (_newPerson: PersonName) => void;
 }
 
-export type PersonName = '阿聖' | 'K' | '黑' | '查' | '承恩' | '至倫' | '小豪' | '岳' | '威翔' | '';
+export type PersonName = '阿聖' | 'K' | '黑' | '查' | '承恩' | '至倫' | '小豪' | '';
 
 const usePersonStore = create<PersonStore>()(
   persist(

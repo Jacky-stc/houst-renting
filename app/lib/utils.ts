@@ -106,6 +106,4 @@ export const personList: { name: PersonName; BGColor: string }[] = [
     BGColor: 'linear-gradient(to right, #aa4b6b, #6b6b83, #3b8d99)',
   },
   { name: '小豪', BGColor: 'linear-gradient(to right, #1a2980, #26d0ce)' },
-  { name: '岳', BGColor: 'linear-gradient(to right, #134e5e, #71b280)' },
-  { name: '威翔', BGColor: 'linear-gradient(to right, #5c258d, #4389a2)' },
 ];

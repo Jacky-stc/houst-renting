@@ -1,9 +1,20 @@
-import moment from "moment";
+import moment from 'moment';
+
+interface CalendarEvent {
+  DTSTART: string;
+  DTEND: string;
+  SUMMARY: string;
+  DESCRIPTION: string;
+  LOCATION?: string;
+  TZID: string;
+}
 
 /**
  * 產生日曆事件連結的工具類別
  */
 export class Calendar {
+  event: CalendarEvent;
+
   /**
    * @param {Object} event - 事件資訊
    * @param {String} event.DTSTART - 開始時間 (格式：YYYYMMDDTHHMMSSZ)
@@ -12,7 +23,7 @@ export class Calendar {
    * @param {String} event.DESCRIPTION - 描述
    * @param {String} event.TZID - 時區 (例如：Asia/Taipei)
    */
-  constructor(event) {
+  constructor(event: CalendarEvent) {
     this.event = {
       ...event,
       DTSTART: formatTime(event.DTSTART),
@@ -79,7 +90,7 @@ export class Calendar {
   // }
 }
 
-export function formatTime(time) {
-  console.log(moment(time).utc().format("YYYYMMDDTHHmmss") + "Z");
-  return moment(time).utc().format("YYYYMMDDTHHmmss") + "Z";
+export function formatTime(time: string): string {
+  console.log(moment(time).utc().format('YYYYMMDDTHHmmss') + 'Z');
+  return moment(time).utc().format('YYYYMMDDTHHmmss') + 'Z';
 }

@@ -6,36 +6,24 @@ import { BsFillDoorOpenFill, BsHouseFill, BsPeopleFill } from 'react-icons/bs';
 import { LuDog } from 'react-icons/lu';
 import { PiCookingPotBold } from 'react-icons/pi';
 import { FaRegCalendarAlt } from 'react-icons/fa';
-import { Calendar } from '../calendar';
 import { BiSolidBed, BiSolidBuildingHouse } from 'react-icons/bi';
-import DatePicker from 'react-datepicker';
-import { isMobile, phoneNumberFormat } from '../../lib/utils';
+import { phoneNumberFormat } from '../../lib/utils';
 import { useRentingData } from '../../store/useRentingData';
 import { TbMessageReportFilled } from 'react-icons/tb';
 import ChangeDataModal from '../common/ChangeDataModal';
-import { DateSVG, FaceBookSVG, InstagramSVG, OpenNewPageSVG, ReturnSVG, ThreadsSVG } from '../common/SVG';
+import { FaceBookSVG, InstagramSVG, OpenNewPageSVG, ReturnSVG, ThreadsSVG } from '../common/SVG';
+import { HouseConfig } from './HouseConfig';
+import { CalendarForm } from './CalendarForm';
 
 interface HouseInfoProps {
   rentingData: RentingData;
   houseList: { value: string[]; index: number }[] | undefined;
 }
 
-const hourArray: string[] = [];
-const minuteArray: string[] = ['00', '10', '20', '30', '40', '50'];
-for (let i = 1; i <= 24; i++) {
-  hourArray.push(i.toString());
-}
-
 type RentContentType = '水費' | '網路' | '第四台' | '瓦斯' | '管理費';
 
 const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [reservationMinute, setReserVationMinute] = useState<string>('00');
-  const [reservationHour, setReserVationHour] = useState<string>(new Date().getHours().toString());
-  const [reservationName, setReservationName] = useState<string>('');
-  const [reservationText, setReservationText] = useState<string>('');
   const [showCalendarForm, setShowCalendarForm] = useState<boolean>(false);
-  const [isMobileText, setIsMobileText] = useState<string>('');
   const [showStatusChange, setShowStatusChange] = useState<boolean>(false);
   const rentContent = rentingData.租金包含?.split(',');
   const rentContentList: Record<RentContentType, boolean> = {
@@ -46,48 +34,32 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
     管理費: rentContent?.includes('管理費') || false,
   };
 
-  useEffect(() => {
-    if (isMobile.any()) {
-      setIsMobileText('Z');
-    } else {
-      setIsMobileText('');
-    }
-  }, [isMobileText]);
+  const houseConfig = [
+    { icon: BiSolidBed, text: rentingData.格局 },
+    { icon: BsFillDoorOpenFill, text: `${rentingData.坪數}坪` },
+    { icon: BsHouseFill, text: rentingData.建物型態 },
+    { icon: BiSolidBuildingHouse, text: rentingData.現況 },
+    { icon: LuDog, text: rentingData.寵物 },
+    { icon: PiCookingPotBold, text: rentingData.開伙 },
+    { icon: MdElectricBolt, text: rentingData.電費 },
+  ];
+
+  const handleReturn = () => {
+    useRentingData.setState({ rentingData: null });
+  };
+
+  const closePopUp = () => {
+    setShowCalendarForm(false);
+    setShowStatusChange(false);
+  };
+
+  const formattedNumber: string = phoneNumberFormat(rentingData.電話 || '');
+  const isInstagram = rentingData.Instagram?.includes('instagram');
+  const isFaceBook = rentingData.Instagram?.includes('facebook');
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const handleAddCalendar = () => {
-    const selectedDateString = selectedDate.toLocaleDateString().split('/');
-    const selectedYear = selectedDateString[0];
-    const selectedMonth = selectedDateString[1];
-    const selectedDay = selectedDateString[2];
-    const reservationHourPlus = (parseInt(reservationHour) + 1).toString();
-
-    const event = {
-      DTSTART: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : '0' + selectedMonth}${selectedDay.length > 1 ? selectedDay : '0' + selectedDay}T${reservationHour.length > 1 ? reservationHour : '0' + reservationHour}${reservationMinute}00`, // 開始時間 (格式：YYYYMMDDTHHMMSSZ)
-      DTEND: `${selectedYear}${selectedMonth.length > 1 ? selectedMonth : '0' + selectedMonth}${selectedDay.length > 1 ? selectedDay : '0' + selectedDay}T${reservationHourPlus.length > 1 ? reservationHourPlus : '0' + reservationHourPlus}${reservationMinute}00`, // 結束時間 (格式：YYYYMMDDTHHMMSSZ)
-      SUMMARY: `${rentingData.編號} ${reservationName}預約看房`, // 標題
-      DESCRIPTION: rentingData.對話要點 + '，' + reservationText, // 描述,
-      LOCATION: rentingData.地址,
-      TZID: 'Asia/Taipei', // 時區
-    };
-    //   // 建立 Calendar 實例
-    const calendar = new Calendar(event);
-    // 生成 Google Calendar 連結
-    const googleCalendarLink = calendar.generateGoogleCalendarURL();
-    const googleLinkContainer = document.createElement('a');
-    googleLinkContainer.href = googleCalendarLink;
-    googleLinkContainer.target = '_blank';
-    googleLinkContainer.click();
-  };
-  const handleReturn = () => {
-    useRentingData.setState({ rentingData: null });
-  };
-  const formattedNumber: string = phoneNumberFormat(rentingData.電話 || '');
-  const isInstagram = rentingData.Instagram?.includes('instagram');
-  const isFaceBook = rentingData.Instagram?.includes('facebook');
 
   return (
     <div className="px-4">
@@ -108,7 +80,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
           >
             {rentingData.物件狀態}
           </span>
-          <span className=" align-sub sm:text-lg sm:ml-4 ml-1 text-base">
+          <span className=" align-sub sm:text-lg sm:ml-4 ml-1 text-base whitespace-nowrap">
             {rentingData.租金} <span className="text-sm">元/月</span>
           </span>
         </div>
@@ -129,32 +101,14 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
                 </a>
               </div>
             </div>
-            <div className="mt-6 mb-1">
-              <BiSolidBed className="inline-block" color="green" />
-              <span className="ml-1 mr-5 align-middle">{rentingData.格局}</span>
-              <BsFillDoorOpenFill className="inline-block" color="green" />
-              <span className="ml-1 mr-5 align-middle">{rentingData.坪數}坪</span>
-              <BsHouseFill className="inline-block" color="green" />
-              <span className="ml-1 mr-5 align-middle">{rentingData.建物型態}</span>
-              <BiSolidBuildingHouse className="inline-block" color="green" />
-              <span className="ml-1 mr-5 align-middle">{rentingData.現況}</span>
-            </div>
-            <div className="mb-6">
-              <LuDog className="inline-block" color="#df8a02"></LuDog>
-              <span className="ml-1 mr-5 align-middle">{rentingData.寵物}</span>
-              <PiCookingPotBold className="inline-block" color="#df8a02" />
-              <span className="ml-1 mr-5 align-middle">{rentingData.開伙}</span>
-              <MdElectricBolt className="inline-block" color="#df8a02" />
-              <span className="ml-1 mr-5 align-middle">{rentingData.電費}</span>
-            </div>
-            <div className="flex mb-6">
-              {(Object.keys(rentContentList) as RentContentType[]).map((item, index) => (
-                <div key={index}>
-                  <div
-                    className={`rounded text-xs py-1 px-3 mr-2 ${rentContentList[item] ? 'bg-[#fff7e6] text-[#a16426]' : 'bg-gray-200 text-gray-400'}`}
-                  >
-                    {item}
-                  </div>
+            <HouseConfig houseConfig={houseConfig} />
+            <div className="flex mb-6 flex-wrap gap-y-3 whitespace-nowrap">
+              {(Object.keys(rentContentList) as RentContentType[]).map((item) => (
+                <div
+                  key={item}
+                  className={`rounded text-xs py-1 px-3 mr-2 ${rentContentList[item] ? 'bg-[#fff7e6] text-[#a16426]' : 'bg-gray-200 text-gray-400'}`}
+                >
+                  {item}
                 </div>
               ))}
             </div>
@@ -206,81 +160,7 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
               )}
             </div>
           </div>
-          <div
-            className={`${showCalendarForm ? 'block bg-white dark:bg-[#0f0f14fa] z-50' : 'hidden bg-white dark:bg-[#0f0f14fa] md:block'} border rounded border-sky-200 p-4 w-[300px] absolute top-1/2 left-1/2 md:top-auto md:left-auto -translate-y-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:relative md:w-auto text-sm`}
-            data-testid="calendar-form"
-          >
-            <div>
-              <DatePicker
-                showIcon
-                toggleCalendarOnIconClick
-                selected={selectedDate}
-                // readOnly
-                onChange={(date) => {
-                  if (date) {
-                    setSelectedDate(date);
-                  }
-                }}
-                icon={<DateSVG />}
-              />
-            </div>
-            <div>
-              <select
-                className="inline-block border border-gray-300 text-gray-900 text-sm rounded-lg  py-1.5 px-2.5 my-1"
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setReserVationHour(e.target.value);
-                }}
-                value={reservationHour}
-              >
-                {hourArray.map((hour) => (
-                  <option key={hour}>{hour}</option>
-                ))}
-              </select>
-              <span className="mx-1">時</span>
-              <select
-                className="inline-block border border-gray-300 text-gray-900 text-sm rounded-lg py-1.5 px-2.5 my-1"
-                onChange={(e) => {
-                  setReserVationMinute(e.target.value);
-                }}
-                value={reservationMinute}
-              >
-                {minuteArray.map((minute) => (
-                  <option key={minute}>{minute}</option>
-                ))}
-              </select>
-              <span className="mx-1">分</span>
-            </div>
-            <div className="my-2">
-              <span className="mr-2 text-sm">姓名</span>
-              <input
-                type="name"
-                className="text-base border rounded inline=block w-1/2 focus:outline-sky-300 focus:outline-1 pl-1"
-                onChange={(e) => {
-                  setReservationName(e.target.value);
-                }}
-                value={reservationName}
-              ></input>
-            </div>
-            <div className="my-2">
-              <span className="mr-2 text-sm flex-1 text-nowrap">備註</span>
-              <input
-                type="text"
-                className="text-base border rounded inline-block w-3/4 focus:outline-sky-300 focus:outline-1 pl-1"
-                onChange={(e) => {
-                  setReservationText(e.target.value);
-                }}
-                value={reservationText}
-              ></input>
-            </div>
-            <button
-              className="block  border rounded border-gray-500 py-2 md:py-1 px-8 mx-auto mt-8 md:mt-4 hover:bg-slate-200"
-              onClick={handleAddCalendar}
-            >
-              <FaRegCalendarAlt className="inline-block mr-2"></FaRegCalendarAlt>
-              <span className="text-sm">添加到行事曆</span>
-            </button>
-          </div>
+          <CalendarForm rentingData={rentingData} showCalendarForm={showCalendarForm} />
         </div>
         <a
           target="_blank"
@@ -306,16 +186,13 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
         <h2 className="mt-8 mb-2 text-lg font-bold">對話要點</h2>
         <div className="rounded border w-11/12 sm:w-full border-gray-800 dark:border-gray-200 p-3 break-words">{rentingData.對話要點}</div>
       </div>
-      {showCalendarForm && (
+      {(showCalendarForm || showStatusChange) && (
         <div
-          className="block md:hidden w-full h-full fixed top-0 right-0 left-0 bottom-0 bg-black/40 z-10 animate-[fade-in_0.15s_both] px-[auto] motion-reduce:transition-none motion-reduce:animate-none"
-          data-twe-dropdown-backdrop-ref=""
-          onClick={() => {
-            setShowCalendarForm(false);
-          }}
+          className="w-full h-full fixed top-0 right-0 left-0 bottom-0 bg-black/40 dark:bg-gray-700/40 z-10 animate-[fade-in_0.15s_both] px-[auto] motion-reduce:transition-none motion-reduce:animate-none"
+          onClick={closePopUp}
         ></div>
       )}
-      {showStatusChange && <ChangeDataModal setShowStatusChange={setShowStatusChange} />}
+      {showStatusChange && <ChangeDataModal />}
     </div>
   );
 };

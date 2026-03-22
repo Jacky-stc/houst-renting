@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { IconType } from 'react-icons';
+import { IconType } from 'react-icons/lib';
 
 export const HouseConfig = memo(({ houseConfig }: { houseConfig: { icon: IconType; text: string }[] }) => {
   if (!houseConfig) return null;

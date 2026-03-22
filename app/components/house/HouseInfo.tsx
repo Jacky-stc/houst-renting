@@ -134,7 +134,6 @@ const HouseInfo: React.FC<HouseInfoProps> = ({ rentingData, houseList }) => {
               <span className="ml-1 mr-5 align-middle">{rentingData.格局}</span>
               <BsFillDoorOpenFill className="inline-block" color="green" />
               <span className="ml-1 mr-5 align-middle">{rentingData.坪數}坪</span>
-              <div className="my-1 block md:hidden"></div>
               <BsHouseFill className="inline-block" color="green" />
               <span className="ml-1 mr-5 align-middle">{rentingData.建物型態}</span>
               <BiSolidBuildingHouse className="inline-block" color="green" />

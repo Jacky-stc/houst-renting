@@ -27,7 +27,6 @@ const Search: FC = () => {
   if (!rentingList) return null;
 
   const sortedRentingList = rentingList.sort((a, b) => b.value[0].localeCompare(a.value[0]));
-  console.log(sortedRentingList);
 
   return (
     <div className="relative overflow-hidden tracking-wide w-11/12 font-inter sm:w-auto flex-1">
@@ -44,7 +43,6 @@ const Search: FC = () => {
             <HouseList houseObject={houseObject.value} key={houseObject.index} index={houseObject.index.toString()}></HouseList>
           ))}
       </div>
-      {/* {isMobile.any() && <MobileHouseInfo></MobileHouseInfo>} */}
     </div>
   );
 };

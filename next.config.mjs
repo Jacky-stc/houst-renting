@@ -10,6 +10,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: process.env.SKIP_TYPECHECK === 'true',
   },
+  turbopack: {},
   // Note: watcher ignores and swc options removed for Next 15 compatibility
 };
 

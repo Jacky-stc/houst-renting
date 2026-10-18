@@ -13,8 +13,17 @@ export const getGoogleSheetData = async () => {
     value: element,
     index: index,
   }));
-  houseListData.sort((a, b) => a.value[4].localeCompare(b.value[4]));
-  return houseListData.reverse();
+  const filteredHouseListData = houseListData.filter((item) => item.value.length > 0);
+  filteredHouseListData.sort((a, b) => {
+    const dateA = a?.value?.[4];
+    const dateB = b?.value?.[4];
+
+    if (!dateA) return 1;
+    if (!dateB) return -1;
+
+    return dateA.localeCompare(dateB);
+  });
+  return filteredHouseListData.reverse();
 };
 
 const getFilterData = (inputValue: string, HouseListData: HouseListData[]) => {
